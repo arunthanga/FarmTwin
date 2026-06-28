@@ -63,6 +63,9 @@ saved, stress days avoided, and projected yield. The working MVP in
   binding constraint, not water availability.
 - World Bank KERA / AgriNext (2026) is actively funding and distributing exactly
   this category to FPOs.
+- Kerala's startup procurement pathway (via KSUM) allows direct departmental
+  procurement up to Rs.50 lakh without tender for eligible startups, creating a
+  practical early B2G adoption channel.
 - Cheap soil/weather sensing + free ET/weather data make a software-led,
   hardware-light product viable.
 

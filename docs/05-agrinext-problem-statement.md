@@ -48,6 +48,9 @@ strengthens FPOs as the adoption anchor.
 - Ready to run a real on-ground pilot (founder's farm + FPO members).
 - Hardware-light, affordable, scalable -> meets "proven, affordable, scalable".
 - Produces measurable outcomes (water saved, yield protected) for MoUs.
+- Clear B2G route in Kerala: for eligible KSUM startups, departments can procure
+  up to Rs.50 lakh without tender under the current Government-as-a-Marketplace
+  pathway, then scale through limited-tender procurement for higher values.
 
 **Ask from AgriNext:**
 - Pilot funding (up to Rs.25 lakh) for cluster-scale deployment.
