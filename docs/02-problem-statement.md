@@ -78,6 +78,8 @@ saved, stress days avoided, and projected yield. The working MVP in
   binding constraint, not water availability.
 - World Bank KERA / AgriNext (2026) is actively funding and distributing exactly
   this category to FPOs.
+- Kerala **GAAM** policy lets departments buy from KSUM startups **up to Rs.50L
+  ex-GST without tender** — a credible B2G scale path once the pilot is proven.
 - Cheap soil/weather sensing + free ET/weather data make a software-led,
   hardware-light product viable.
 

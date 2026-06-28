@@ -10,6 +10,7 @@ flowchart LR
   pg --> sf["Seed Fund / Seed Loan<br/>up to Rs.15L"]
   sf --> su["Scale-up Seed Fund<br/>up to Rs.25L"]
   su --> pa["KERA Productive Alliance<br/>up to Rs.2cr (FPC alliance)"]
+  an --> gaam["GAAM B2G revenue<br/>up to Rs.50L ex-GST, no tender"]
 ```
 
 ## Stage-gated plan
@@ -48,4 +49,5 @@ the table but also do not double-count.
 1. Month 0-2: Idea Grant filed; KSUM Unique ID; AgriNext registration.
 2. Month 2-6: pilot data; 1 FPO MoU; Idea Grant disbursed; incorporate; DPIIT.
 3. Month 6-12: Productisation Grant; AgriNext pilot funding; first paid FPO.
-4. Month 12-18: Seed Fund against orders; line up Scale-up criteria (Rs.25L).
+4. Month 12-18: Seed Fund against orders; GAAM district deployment pipeline;
+   line up Scale-up criteria (Rs.25L).

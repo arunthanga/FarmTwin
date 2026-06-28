@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FarmTwin — Pitch Deck</title>
+<style>
+  :root {
+    --bg: #0c1116; --panel: #141c24; --line: #27333f;
+    --text: #e6edf3; --muted: #8b9bab; --accent: #36c2a3; --accent2: #3b82f6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .deck { height: 100vh; position: relative; }
+  .slide {
+    display: none; height: 100vh; padding: 48px 64px 80px;
+    flex-direction: column; justify-content: center;
+    animation: fade .35s ease;
+  }
+  .slide.active { display: flex; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin-bottom: 12px; }
+  h2 { font-size: clamp(1.4rem, 3vw, 2rem); color: var(--accent); margin-bottom: 20px; font-weight: 600; }
+  p, li { font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 1.55; color: var(--text); }
+  .sub { color: var(--muted); font-size: clamp(.95rem, 1.5vw, 1.1rem); margin-top: 8px; }
+  ul { margin: 16px 0 0 24px; }
+  li { margin: 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: clamp(.9rem, 1.5vw, 1.05rem); }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: .8rem; letter-spacing: .5px; }
+  .tag { display: inline-block; background: var(--panel); border: 1px solid var(--line);
+    color: var(--accent); border-radius: 999px; padding: 4px 14px; font-size: .85rem; margin-top: 16px; }
+  .quote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 20px 0;
+    font-style: italic; color: var(--muted); font-size: clamp(1rem, 1.8vw, 1.2rem); }
+  .highlight { color: var(--accent); font-weight: 700; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 12px; }
+  @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } .slide { padding: 32px 24px 72px; } }
+  .nav {
+    position: fixed; bottom: 0; left: 0; right: 0; display: flex; align-items: center;
+    justify-content: space-between; padding: 14px 24px; background: rgba(12,17,22,.92);
+    border-top: 1px solid var(--line); backdrop-filter: blur(8px); z-index: 10;
+  }
+  .nav button {
+    background: var(--panel); color: var(--text); border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 16px; font-size: 14px; cursor: pointer;
+  }
+  .nav button:hover { border-color: var(--accent); color: var(--accent); }
+  .nav .counter { color: var(--muted); font-size: 13px; }
+  .progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); transition: width .3s; z-index: 10; }
+  kbd { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 2px 6px; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="deck" id="deck">
+
+  <section class="slide active" data-title="Title">
+    <h1>FarmTwin</h1>
+    <h2>Simulation-driven farm digital twin</h2>
+    <p class="sub">KSUM Idea Grant · AgriNext / KERA · GAAM B2G</p>
+    <p class="sub">Eruthempathy, Chittur (Palakkad) · 15-acre live pilot</p>
+    <span class="tag">Farm Digital Twin · MVP</span>
+  </section>
+
+  <section class="slide" data-title="Problem">
+    <h2>The problem</h2>
+    <p>Kerala's <span class="highlight">rain-shadow belt</span> (~1,000 mm/yr vs 3,000 mm average) just received canal water (2025 Moolathara → ~3,575 ha).</p>
+    <p class="quote">Water arrived. Scheduling is now the bottleneck.</p>
+    <ul>
+      <li>Farmers irrigate by <strong>calendar/habit</strong>, not crop-and-soil need</li>
+      <li>Krishi Bhavan advice is <strong>generic</strong> — no per-zone, day-by-day answer</li>
+      <li>FPOs lack a <strong>cluster water-budget</strong> layer across 650+ ha</li>
+    </ul>
+  </section>
+
+  <section class="slide" data-title="Pain">
+    <h2>Quantified pain</h2>
+    <table>
+      <thead><tr><th>Impact</th><th>Magnitude</th></tr></thead>
+      <tbody>
+        <tr><td>Water wasted (flood vs need-based)</td><td class="highlight">30–50%</td></tr>
+        <tr><td>Yield lost to mistimed irrigation</td><td class="highlight">10–25%</td></tr>
+        <tr><td>Labour reducible with precision</td><td class="highlight">~30%</td></tr>
+      </tbody>
+    </table>
+    <p class="sub" style="margin-top:20px">1,500+ vegetable farmers · 650 ha · Chittur cluster · Nallepilly market</p>
+  </section>
+
+  <section class="slide" data-title="Solution">
+    <h2>Solution — FarmTwin</h2>
+    <p>A <span class="highlight">farm digital twin</span>: mesh the field into zones; run a daily <span class="highlight">water-balance + crop-growth solver</span>; optimize irrigation under a yield constraint.</p>
+    <p class="quote">Irrigate or not, how many litres, where, today — and why.</p>
+    <p class="sub">Hardware-light · IP is the simulation engine · Working MVP at <code>mvp/index.html</code></p>
+  </section>
+
+  <section class="slide" data-title="Demo">
+    <h2>Live demo headline</h2>
+    <ul>
+      <li><span class="highlight">≥30% water saved</span> (twin-optimized vs flood, 90-day season)</li>
+      <li>Scenario engine: flood · uniform drip · optimized · heat wave · dry spell</li>
+      <li>FPO dashboard: water budget · stress map · harvest planner</li>
+    </ul>
+    <p class="sub" style="margin-top:20px">Open the MVP → click <strong>Run full-season comparison</strong></p>
+  </section>
+
+  <section class="slide" data-title="Moat">
+    <h2>Moat — not another IoT dashboard</h2>
+    <table>
+      <thead><tr><th>CAE skill</th><th>FarmTwin</th></tr></thead>
+      <tbody>
+        <tr><td>Meshing</td><td>Farm → irrigation zones</td></tr>
+        <tr><td>FE/CFD solvers</td><td>Water balance + lateral moisture</td></tr>
+        <tr><td>Assembly-line sim</td><td>Time-stepped crop growth + scheduling</td></tr>
+        <tr><td>Validation rigor</td><td>Calibrate vs sensors like engineering models</td></tr>
+      </tbody>
+    </table>
+    <p class="sub" style="margin-top:16px"><span class="highlight">20 years</span> simulation software + <span class="highlight">owned 15-acre test rig</span></p>
+  </section>
+
+  <section class="slide" data-title="GTM">
+    <h2>Go-to-market</h2>
+    <table>
+      <thead><tr><th>Tier</th><th>Buyer</th><th>Wedge</th></tr></thead>
+      <tbody>
+        <tr><td>Pilot</td><td>Founder's farm + neighbours</td><td>Free pilot → evidence</td></tr>
+        <tr><td>Beachhead</td><td>FPOs / FPCs</td><td>AgriNext deployment</td></tr>
+        <tr><td>Scale</td><td>Krishi Bhavans / Agri Dept</td><td>GAAM direct procurement</td></tr>
+      </tbody>
+    </table>
+    <p class="sub" style="margin-top:16px">One FPO sale reaches hundreds of farmers inside KERA's distribution.</p>
+  </section>
+
+  <section class="slide" data-title="GAAM">
+    <h2>Kerala GAAM — government without tender</h2>
+    <p><span class="highlight">Government as a Marketplace</span> (GO Ms No 2/2022/SPD):</p>
+    <ul>
+      <li>KSUM startups: <strong>direct purchase up to Rs.50 lakh (ex-GST), no tender</strong></li>
+      <li>Overall ceiling: <strong>Rs.3 crore</strong></li>
+      <li>Channels: Direct Procurement · Demand Day · Demo Day · Innovation Zones</li>
+    </ul>
+    <p class="quote" style="margin-top:20px">AgriNext proves the product. GAAM scales it.</p>
+  </section>
+
+  <section class="slide" data-title="Funding">
+    <h2>Funding roadmap</h2>
+    <p>Idea Grant (Rs.3L) → AgriNext/KERA (Rs.25L) → Productisation (Rs.7L) → Seed Fund (Rs.15L) → Scale-up (Rs.25L) → KERA Alliance (Rs.2cr)</p>
+    <p class="sub" style="margin-top:16px">Parallel: <span class="highlight">GAAM B2G revenue</span> once pilot-proven + KSUM Unique ID</p>
+    <p class="sub">18-month: calibrated twin · FPO MoU · Idea Grant · AgriNext pilot · first paid FPO</p>
+  </section>
+
+  <section class="slide" data-title="Pilot">
+    <h2>Pilot & traction</h2>
+    <ul>
+      <li>Instrument 15-acre Eruthempathy farm</li>
+      <li>Calibrate solver to <span class="highlight">±15%</span> soil-moisture error</li>
+      <li>Two-block trial → <span class="highlight">≥30% water saving</span></li>
+      <li>Sign <span class="highlight">≥1 FPO pilot MoU</span></li>
+    </ul>
+    <p class="sub" style="margin-top:16px">Outputs: calibration chart · water/yield table · 90-sec MVP demo</p>
+  </section>
+
+  <section class="slide" data-title="Ask">
+    <h2>The ask</h2>
+    <div class="grid2">
+      <div>
+        <p><strong>KSUM Idea Grant</strong></p>
+        <p class="sub">Rs.3 lakh · incubation · AgriNext introductions</p>
+      </div>
+      <div>
+        <p><strong>AgriNext / KERA</strong></p>
+        <p class="sub">Up to Rs.25L pilot · FPO matchmaking · GAAM buyer intros</p>
+      </div>
+    </div>
+    <p class="quote" style="margin-top:28px"><span class="highlight">FarmTwin</span> — mesh the field, solve the schedule, protect the yield.</p>
+  </section>
+
+</div>
+
+<nav class="nav">
+  <button id="prev" aria-label="Previous slide">← Prev</button>
+  <span class="counter" id="counter">1 / 11</span>
+  <button id="next" aria-label="Next slide">Next →</button>
+</nav>
+
+<script>
+(() => {
+  const slides = [...document.querySelectorAll(".slide")];
+  const progress = document.getElementById("progress");
+  const counter = document.getElementById("counter");
+  let i = 0;
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, j) => s.classList.toggle("active", j === i));
+    counter.textContent = `${i + 1} / ${slides.length}`;
+    progress.style.width = `${((i + 1) / slides.length) * 100}%`;
+    document.title = `FarmTwin — ${slides[i].dataset.title || "Pitch"}`;
+  }
+
+  document.getElementById("prev").onclick = () => show(i - 1);
+  document.getElementById("next").onclick = () => show(i + 1);
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); show(i + 1); }
+    if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); show(i - 1); }
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+  });
+
+  show(0);
+})();
+</script>
+</body>
+</html>

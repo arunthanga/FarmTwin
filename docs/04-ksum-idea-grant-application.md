@@ -82,10 +82,13 @@ equal yield; convert to >=1 signed FPO pilot MoU (template in doc 08).
 
 ## 11. Team & ask
 Solo founder at filing (see doc 06 on adding a co-founder/team). Ask: Rs.3 lakh
-Idea Grant + KSUM incubation + AgriNext deployment introductions.
+Idea Grant + KSUM incubation + AgriNext deployment introductions + GAAM buyer
+intros (Krishi Bhavan / Agriculture Dept) for post-pilot scale.
 
 ## 12. Attachments
 - MVP link/screenshots (`../mvp/index.html`)
+- Pitch deck — any of: `../pitch/pitch-deck.html`, `../pitch/pitch-deck.pdf`, `../pitch/pitch-deck.pptx`
+- One-pager (`../pitch/one-pager.md`)
 - Founder CAE portfolio / résumé
 - Skill map (`02-problem-statement.md`)
 

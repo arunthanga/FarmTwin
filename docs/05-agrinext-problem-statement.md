@@ -67,5 +67,6 @@ target cluster.
 - [ ] Register the startup on the AgriNext/KERA portal
 - [ ] Submit the problem statement (Section A)
 - [ ] Submit the solution (Section B) with MVP link + 90-sec demo video
+- [ ] Attach pitch deck (`pitch/pitch-deck.html` or PDF export from `pitch/pitch-deck.md`)
 - [ ] Apply / register for the next AgriNext Summit matchmaking
 - [ ] Identify a target Chittur FPO and request introduction

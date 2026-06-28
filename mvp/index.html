@@ -52,6 +52,15 @@
   .pill{font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid var(--line)}
   footer{padding:14px 22px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
   code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:12px}
+  .pitch-wrap{padding:0 22px 16px}
+  .pitch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media (max-width:900px){.pitch-grid{grid-template-columns:1fr}}
+  .pitch-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .pitch-card h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  .pitch-card p,.pitch-card li{font-size:12px;color:var(--text);margin:0}
+  .pitch-card ul{margin:0;padding-left:18px}
+  .pitch-card li{margin:4px 0}
+  .pitch-card .hl{color:var(--accent);font-weight:600}
 </style>
 </head>
 <body>
@@ -144,10 +153,35 @@
   </div>
 </div>
 
+<section class="pitch-wrap" aria-label="Pitch snapshot">
+  <div class="pitch-grid">
+    <div class="pitch-card">
+      <h3>Problem &amp; hook</h3>
+      <p>Canal water just arrived in Chittur rain-shadow belt — <span class="hl">scheduling is now the bottleneck</span>. Farmers irrigate by habit; 30–50% water wasted, 10–25% yield at risk.</p>
+    </div>
+    <div class="pitch-card">
+      <h3>Moat</h3>
+      <ul>
+        <li>Mesh + water-balance <span class="hl">solver</span>, not a sensor dashboard</li>
+        <li>20 years CAE / assembly-line simulation</li>
+        <li>Owned <span class="hl">15-acre pilot farm</span> in target cluster</li>
+      </ul>
+    </div>
+    <div class="pitch-card">
+      <h3>GTM &amp; GAAM</h3>
+      <ul>
+        <li>Beachhead: <span class="hl">FPOs</span> via AgriNext/KERA</li>
+        <li>Scale: Krishi Bhavans via <span class="hl">GAAM</span> — direct buy up to Rs.50L ex-GST, no tender</li>
+        <li>Deck: <code>pitch/pitch-deck.html</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <footer>
-  FarmTwin MVP · part of the Kerala Startup Mission application package ·
-  open <code>mvp/index.html</code> in any browser. The simulation engine here is the same
-  class of model (meshing + time-stepped solver) used in CAE / virtual assembly-line simulation.
+  FarmTwin MVP · Kerala Startup Mission application package ·
+  pitch deck: <code>pitch/pitch-deck.html</code> · one-pager: <code>pitch/one-pager.md</code> ·
+  simulation engine = meshing + time-stepped solver (CAE / virtual assembly-line class).
 </footer>
 
 <script>
