@@ -27,7 +27,10 @@ application. It contains the business/application artifacts and a working MVP.
 | [docs/11-ksum-pitch-deck.md](docs/11-ksum-pitch-deck.md) | KSUM pitch deck — emotional + professional, 14 slides | pitch |
 | [docs/12-moolathara-beachhead.md](docs/12-moolathara-beachhead.md) | Moolathara RBC immediate-win + opportunity sizing | pitch |
 | [docs/13-pitch-narrative-and-one-pager.md](docs/13-pitch-narrative-and-one-pager.md) | 3-min spoken script, one-pager, elevator lines | pitch |
-| [pitch/deck.html](pitch/deck.html) | Presentable reveal.js slide deck (open in a browser) | pitch |
+| [docs/14-partnership-mou-and-vendor-registration.md](docs/14-partnership-mou-and-vendor-registration.md) | Partner MoU template + govt vendor-registration checklist | pitch |
+| [pitch/deck.html](pitch/deck.html) | Presentable reveal.js slide deck (now incl. command-area map) | pitch |
+| [pitch/moolathara-map.svg](pitch/moolathara-map.svg) | Moolathara command-area schematic (standalone SVG) | pitch |
+| [pitch/build_pptx.py](pitch/build_pptx.py) | Generates `FarmTwin-KSUM.pptx` (run: `pip install python-pptx; python pitch/build_pptx.py`) | pitch |
 
 ## Engine & design documents (FarmTwin Engine)
 
