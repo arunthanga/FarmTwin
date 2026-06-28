@@ -1,4 +1,4 @@
-# KrishiTwin — Agri Digital-Twin & Precision-Operations Platform
+# FarmTwin — Agri Digital-Twin & Precision-Operations Platform
 
 A deeptech venture that applies 20 years of CAE / simulation expertise (meshing,
 virtual assembly-line simulation) to agriculture: a **farm digital twin** that
@@ -23,11 +23,12 @@ application. It contains the business/application artifacts and a working MVP.
 | [docs/07-funding-roadmap.md](docs/07-funding-roadmap.md) | Grant -> seed -> scale-up funding sequence | scale-funding |
 | [docs/08-fpo-pilot-mou-template.md](docs/08-fpo-pilot-mou-template.md) | FPO pilot MoU template | scale-funding |
 | [docs/09-agri-fintech-phase2.md](docs/09-agri-fintech-phase2.md) | Phase-2 agri-fintech layer | scale-funding |
+| [docs/10-branding-and-trademark.md](docs/10-branding-and-trademark.md) | Brand decision (FarmTwin) + trademark due diligence | branding |
 
-## Engine & design documents (KrishiFlow)
+## Engine & design documents (FarmTwin Engine)
 
 The deep-tech core — a self-calibrating irrigation hydraulic + agronomy engine, split
-into two products (**KrishiFlow Design Studio** pre-install, **KrishiTwin Runtime**
+into two products (**FarmTwin Studio** pre-install, **FarmTwin Runtime**
 operations) on one shared engine — lives under [`engine/`](engine/README.md).
 
 - [engine/README.md](engine/README.md) — engine overview, install, and the full

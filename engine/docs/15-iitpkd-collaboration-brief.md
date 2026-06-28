@@ -1,6 +1,6 @@
 # 15 — IIT Palakkad & KAU Collaboration Brief
 
-A concrete map of nearby research capability to KrishiFlow modules, plus an engagement
+A concrete map of nearby research capability to FarmTwin Engine modules, plus an engagement
 plan. The goal: validation, credibility (papers/IP), HPC access for the offline CFD, and
 agronomy ground-truth — all within ~50 km of the Eruthempathy pilot.
 

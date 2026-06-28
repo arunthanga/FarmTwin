@@ -48,7 +48,7 @@ saved, stress days avoided, and projected yield. The working MVP in
 
 ## CAE-to-agri skill map (the credibility core of the pitch)
 
-| Your CAE / simulation skill | Direct agri application in KrishiTwin |
+| Your CAE / simulation skill | Direct agri application in FarmTwin |
 | --- | --- |
 | **Meshing algorithms** (discretizing a domain into cells) | Discretize the farm into irrigation/soil zones; adaptive mesh by soil type, slope, crop, emitter layout |
 | **FE/CFD-style field solvers** | Water-balance + lateral moisture transport solver across the mesh; nutrient diffusion/leaching |

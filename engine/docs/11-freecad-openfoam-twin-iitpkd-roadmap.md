@@ -24,7 +24,7 @@ flowchart TB
     geo["Terrain & pipe routing, CAD import, BoM, part placement"]
     sel["Component selection from catalog (pumps, valves, emitters, fittings)"]
   end
-  subgraph eng [KrishiFlow engine]
+  subgraph eng [FarmTwin engine]
     gga["GGA steady network solver (done)"]
     moc["MOC water-hammer transient solver"]
     srfr["Zero-inertia surface-irrigation solver (WinSRFR-class)"]
@@ -51,7 +51,7 @@ flowchart TB
 
 ## 2. FreeCAD integration (pre- and post-processor)
 
-FreeCAD is the open CAD platform; we ship a **KrishiFlow workbench** (Python):
+FreeCAD is the open CAD platform; we ship a **FarmTwin workbench** (Python):
 
 1. **Geometry & terrain**: import survey/Google-terrain, draw mains/submains/
    laterals as sketches/wires; elevations from a DEM. (Your 15-acre plot becomes
@@ -59,7 +59,7 @@ FreeCAD is the open CAD platform; we ship a **KrishiFlow workbench** (Python):
 2. **Component placement**: drop pumps, valves, filters, venturis, emitters from
    the catalog onto the layout; each carries its hydraulic parameters.
 3. **Export to solver**: a workbench command serializes the model to the
-   KrishiFlow JSON schema (`preprocess.network_from_dict`) and runs `solve()`.
+   FarmTwin JSON schema (`preprocess.network_from_dict`) and runs `solve()`.
 4. **Post-processing overlay**: color pipes by velocity, nodes by pressure, show
    emitter uniformity and the **bill of materials** — IRRICAD's headline outputs.
 5. **Why FreeCAD**: free, scriptable (same Python as the engine), CAD import/
@@ -74,7 +74,7 @@ OpenFOAM (finite-volume CFD) is used **only** to characterize components that
 lack reliable catalog data, then results are cached as curves the 1-D solver
 reads:
 
-| Use case | OpenFOAM setup | Output cached into KrishiFlow |
+| Use case | OpenFOAM setup | Output cached into FarmTwin |
 | --- | --- | --- |
 | Dripper labyrinth flow | `simpleFoam`/`pimpleFoam`, small mesh | emitter `k`, exponent `x`, anti-clog insight |
 | Pressure-compensating diaphragm | FSI / parametric `p` sweep | `nominal_q`, operating band `[p_min, p_max]` |
@@ -96,7 +96,7 @@ solve. (Reinforces the doc-10 argument against meshing the whole field.)
    Preissmann scheme + Kostiakov-Lewis infiltration; for furrow/border/basin
    fields (relevant to paddy and open-field crops in Palakkad).
 
-## 5. Digital-twin layer (the KrishiTwin coupling)
+## 5. Digital-twin layer (the FarmTwin coupling)
 
 The engine becomes a *twin* when it runs continuously against field data:
 
@@ -110,7 +110,7 @@ The engine becomes a *twin* when it runs continuously against field data:
 - **Fertigation**: venturi injection + water-quality transport closes the
   nutrient loop with the soil model.
 
-This is exactly the KrishiTwin product thesis (see `../../docs/01-venture-decision.md`),
+This is exactly the FarmTwin product thesis (see `../../docs/01-venture-decision.md`),
 now backed by a real solver instead of a heuristic.
 
 ## 6. Leverage IIT Palakkad (research + incubation)
@@ -128,13 +128,13 @@ IIT Palakkad is ~50-70 km away and is unusually well-matched:
   pipe-flow rigs to validate head-loss/emitter models; HPC for OpenFOAM runs.
 - **TECHIN** — IIT Palakkad's Technology Business Incubator, **recognized by
   Startup India**: incubation, mentorship, and grant access. This complements
-  the KSUM/AgriNext path (docs 03-07): a deeptech engine like KrishiFlow is
+  the KSUM/AgriNext path (docs 03-07): a deeptech engine like FarmTwin is
   exactly TECHIN's profile.
 
 ### Concrete engagement plan
 1. Share the MVP + a validation note; request a meeting with Dr. Sridharan's
    group on joint solver/flume validation.
-2. Propose a student project (M.Tech Water Resources) to validate KrishiFlow
+2. Propose a student project (M.Tech Water Resources) to validate FarmTwin
    against EPANET + lab data and to build the OpenFOAM emitter-curve library.
 3. Apply to **TECHIN** incubation in parallel with KSUM Idea Grant; cite the IIT
    collaboration in the AgriNext submission (doc 05) for credibility.

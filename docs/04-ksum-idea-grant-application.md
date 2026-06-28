@@ -9,7 +9,7 @@ Fill the portal fields with the content below; shortlisted applicants pitch.
 ---
 
 ## 1. Startup / Product name
-KrishiTwin
+FarmTwin
 
 ## 2. Founder
 20 years in CAE / engineering simulation — meshing algorithms and virtual
@@ -30,7 +30,7 @@ day-by-day decision tool tuned to this microclimate, and FPOs have no shared
 layer to budget water and plan harvests across 650+ ha of vegetable clusters.
 
 ## 5. Solution / innovation (150-200 words)
-KrishiTwin is a **farm digital twin**. We discretize a field into a computational
+FarmTwin is a **farm digital twin**. We discretize a field into a computational
 **mesh** of zones — the same technique used in finite-element meshing — and run a
 time-stepped **water-balance + crop-growth solver** (the same class of model as a
 virtual assembly-line simulation) over each zone. The twin ingests soil type,
@@ -48,7 +48,7 @@ simulation software is the core technical moat.
 
 ## 6. Innovation vs existing solutions
 Existing agritech in Kerala is mostly IoT dashboards (show data) or generic
-advisory. KrishiTwin **predicts and optimizes** — a true twin with a calibrated
+advisory. FarmTwin **predicts and optimizes** — a true twin with a calibrated
 solver, validated against field data like an engineering model. Hardware-light:
 IP is software, using cheap/existing sensors and free weather/ET data.
 

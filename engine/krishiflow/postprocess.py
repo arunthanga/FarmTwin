@@ -1,4 +1,4 @@
-"""Post-processing for KrishiFlow: engineering report, uniformity metrics, plots.
+"""Post-processing for FarmTwin: engineering report, uniformity metrics, plots.
 
 Computes the quantities irrigation designers care about: nodal pressures, link
 flows and velocities, emitter discharges, emission/distribution uniformity, and
@@ -92,7 +92,7 @@ def report(net, result) -> str:
     """Build a human-readable text report of the solved network."""
     L = []
     L.append("=" * 64)
-    L.append("KrishiFlow hydraulic report")
+    L.append("FarmTwin hydraulic report")
     L.append("=" * 64)
     L.append(f"Converged: {result.converged}  "
              f"iterations: {result.iterations}  "
@@ -170,7 +170,7 @@ def plot_lateral_profile(net, result, path="lateral_profile.png"):
     ax2 = ax1.twinx()
     ax2.plot(xs, flows, "-s", color="#36c2a3", label="emitter flow")
     ax2.set_ylabel("emitter flow (rel.)", color="#36c2a3")
-    ax1.set_title("KrishiFlow: pressure & emitter flow along lateral")
+    ax1.set_title("FarmTwin: pressure & emitter flow along lateral")
     fig.tight_layout()
     fig.savefig(path, dpi=120)
     plt.close(fig)

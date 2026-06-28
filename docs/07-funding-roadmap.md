@@ -31,7 +31,7 @@ the table but also do not double-count.
 - **KAU RABI (RAISE/PACE)** agri incubator — up to Rs.25L grant + agri mentorship.
 - **NIDHI / Startup Seed** programs surfaced via KSUM incubation.
 - **Bank FPO finance / Agri Infrastructure Fund** — for the FPO partner's
-  capex (packhouse, cold storage), not for KrishiTwin directly, but it makes the
+  capex (packhouse, cold storage), not for FarmTwin directly, but it makes the
   FPO a stronger paying customer.
 
 ## Dilution discipline

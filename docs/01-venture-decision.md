@@ -2,7 +2,7 @@
 
 ## Decision
 
-**Lead with the agri-deeptech digital twin (product name: KrishiTwin).**
+**Lead with the agri-deeptech digital twin (product name: FarmTwin).**
 Agri-fintech is sequenced as a Phase-2 layer on top of the same data; pure CAE
 SaaS is kept as an optional parallel/fallback, not the KSUM entry vehicle.
 
@@ -26,14 +26,14 @@ evidence for grant reviewers.
 
 ## The one-line pitch
 
-> KrishiTwin builds a simulation-driven digital twin of a farm — a "mesh" of
+> FarmTwin builds a simulation-driven digital twin of a farm — a "mesh" of
 > the field where each cell models soil moisture, evapotranspiration, nutrients
 > and crop growth — so farmers and FPOs irrigate and fertilize by precise need
 > instead of habit, cutting water/input use 30-50% while protecting yield.
 
 ## Why the simulation framing is defensible (not just another IoT dashboard)
 
-Most "agritech" entrants stop at sensors + dashboards. KrishiTwin's moat is the
+Most "agritech" entrants stop at sensors + dashboards. FarmTwin's moat is the
 **physics/agronomy simulation engine** — the same competency as virtual
 assembly-line simulation and FE meshing:
 

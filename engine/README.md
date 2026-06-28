@@ -1,4 +1,4 @@
-# KrishiFlow — open irrigation hydraulic + agronomy engine
+# FarmTwin Engine — open irrigation hydraulic + agronomy engine
 
 An India-built, open alternative to IRRICAD / IrriPro / WCADI (Rivulis) /
 HydroCalc 3.0 (Netafim) for pressurized irrigation network design, plus a track

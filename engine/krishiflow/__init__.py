@@ -1,4 +1,4 @@
-"""KrishiFlow: an open hydraulic + agronomy simulation engine for irrigation.
+"""FarmTwin: an open hydraulic + agronomy simulation engine for irrigation.
 
 Core: a 1-D pressurized-network solver (Global Gradient Algorithm) with a
 component library (pipes, pumps/motors, valves, fittings, venturi, emitters),

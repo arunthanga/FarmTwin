@@ -1,4 +1,4 @@
-"""Validation tests for the KrishiFlow GGA solver.
+"""Validation tests for the FarmTwin GGA solver.
 
 Runnable directly (`python tests/test_solver.py`) or via pytest. Each test
 checks the solver against an independent hand calculation.

@@ -11,7 +11,7 @@ flowchart LR
   weather["Public weather APIs"] --> fao
   fao["FAO-56 / ASCE ET0 + crop water + agronomy"] --> model
   subgraph twin [Digital twin loop]
-    model["KrishiFlow models: GGA / Richards / FAO-56"] --> pred["Predicted states"]
+    model["FarmTwin Engine models: GGA / Richards / FAO-56"] --> pred["Predicted states"]
     pred --> da["Data assimilation: EKF / EnKF (QC + gating)"]
     da --> upd["Updated states + parameters (roughness, clog, demand, theta, Kc, Ky)"]
     upd --> model
@@ -104,7 +104,7 @@ nutrient response) on a seasonal cadence.
 
 The soil twin (Richards/FAO-56), hydraulic twin, and agronomy state co-evolve — the twin
 tracks not just water but the crop and its forecast yield. This is the engine behind the
-KrishiTwin product thesis ([docs/01-venture-decision.md](../../docs/01-venture-decision.md)).
+FarmTwin product thesis ([docs/01-venture-decision.md](../../docs/01-venture-decision.md)).
 
 ## C5. Module
 

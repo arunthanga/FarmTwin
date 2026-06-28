@@ -2,10 +2,10 @@
 
 This is how the "finance" interest is monetized — *after* the digital twin has
 farm + FPO data and traction. Building it first would mean heavy regulation and
-no proprietary data; building it second turns KrishiTwin's data into a moat.
+no proprietary data; building it second turns FarmTwin's data into a moat.
 
 ## The thesis
-Once the twin runs across many farms, KrishiTwin holds something lenders and
+Once the twin runs across many farms, FarmTwin holds something lenders and
 insurers cannot easily get: **verified, per-plot, time-series evidence** of water
 use, crop health, stress events, and yield. That data de-risks three financial
 products.
@@ -13,7 +13,7 @@ products.
 ## Three products (in priority order)
 
 ### 1. Input / working-capital credit (lowest regulatory load)
-- KrishiTwin scores a farmer/FPO's repayment capacity from yield + practice data.
+- FarmTwin scores a farmer/FPO's repayment capacity from yield + practice data.
 - Do **not** lend off our own balance sheet first. Act as a **DLG / origination +
   data partner** to an NBFC or bank, or route through the FPO. We earn a fee /
   revenue share, not interest, avoiding direct lending licences early.
@@ -21,7 +21,7 @@ products.
 ### 2. Parametric / yield-linked crop insurance
 - Use the twin's weather + soil-moisture + stress signals as the **parametric
   trigger** (e.g. consecutive stress days, rainfall deficit) for fast payouts.
-- Partner with a licensed insurer / IRDAI-regulated entity; KrishiTwin is the
+- Partner with a licensed insurer / IRDAI-regulated entity; FarmTwin is the
   **risk-modelling + claims-trigger tech provider**, not the risk carrier.
 
 ### 3. Embedded finance in the FPO value chain

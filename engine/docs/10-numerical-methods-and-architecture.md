@@ -1,4 +1,4 @@
-# 10 — Numerical Methods & Architecture for KrishiFlow
+# 10 — Numerical Methods & Architecture for FarmTwin Engine
 
 Goal: an open, India-built simulation engine equivalent to IRRICAD, IRRIPRO,
 WCADI (Rivulis), HydroCalc 3.0 (Netafim) and WinSRFR (USDA) — built on
@@ -221,7 +221,7 @@ flowchart TB
   validate, and integrate with FreeCAD's Python API and PyFoam. Hot loops move to
   C++/Rust later if profiling demands. (This MVP: pure NumPy, SciPy optional.)
 - **Pre/post UI**: FreeCAD workbench (Python) for geometry; web viewer reuses the
-  existing KrishiTwin front-end style for dashboards.
+  existing FarmTwin front-end style for dashboards.
 - **Component CFD**: OpenFOAM, scripted via PyFoam; results cached as emitter
   curves / minor-loss coefficients (run offline, not per design).
 - **Data formats**: EPANET `.inp` import/export for interoperability; JSON native.

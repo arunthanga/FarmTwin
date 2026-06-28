@@ -35,7 +35,7 @@ strengthens FPOs as the adoption anchor.
 
 ## B. Startup solution submission
 
-**Startup:** KrishiTwin — simulation-driven farm digital twin (see docs 01, 02).
+**Startup:** FarmTwin — simulation-driven farm digital twin (see docs 01, 02).
 
 **What we deploy in the pilot:**
 1. Discretize each member farm into an irrigation zone **mesh**.

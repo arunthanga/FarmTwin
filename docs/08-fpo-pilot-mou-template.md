@@ -9,10 +9,10 @@ Grant pitch, AgriNext matchmaking, and the Seed Fund "purchase order" basis.
 
 ---
 
-## Memorandum of Understanding — KrishiTwin Pilot Deployment
+## Memorandum of Understanding — FarmTwin Pilot Deployment
 
 **Between:**
-KrishiTwin Technologies Private Limited (the "Company"), registered office at
+FarmTwin Technologies Private Limited (the "Company"), registered office at
 `<address, Kerala>`, represented by `<Founder name>`, Director;
 
 **And:**
@@ -67,7 +67,7 @@ This MoU is governed by the laws of India; courts at `<Palakkad, Kerala>`.
 
 **Signed:**
 
-For KrishiTwin Technologies Pvt Ltd          For `<FPO name>`
+For FarmTwin Technologies Pvt Ltd          For `<FPO name>`
 `<name / designation / date>`                `<name / designation / date>`
 
 ---

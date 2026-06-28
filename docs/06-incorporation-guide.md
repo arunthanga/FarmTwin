@@ -31,8 +31,8 @@ the majority share, you additionally unlock the **Women Productisation Grant
 2. **Director Identification Number (DIN)** — obtained via the SPICe+ form.
 3. **Name reservation** via SPICe+ Part A on the MCA portal
    (<https://www.mca.gov.in/>). Proposed names (in order):
-   - KrishiTwin Technologies Private Limited
-   - KrishiTwin Agri Intelligence Private Limited
+   - FarmTwin Technologies Private Limited
+   - FarmTwin Agri Intelligence Private Limited
    - (keep 2 backups; avoid names too close to existing companies/trademarks)
 4. **SPICe+ Part B**: company details, registered office (the Eruthempathy
    address or a Palakkad office), capital, directors, subscribers.

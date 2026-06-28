@@ -1,4 +1,4 @@
-"""Emitter (dripper / sprinkler) models for KrishiFlow.
+"""Emitter (dripper / sprinkler) models for FarmTwin.
 
 Two ways an emitter affects the hydraulic solve:
 

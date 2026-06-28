@@ -1,4 +1,4 @@
-"""End-to-end KrishiFlow demo: pump + filter + valve + venturi + drip lateral,
+"""End-to-end FarmTwin demo: pump + filter + valve + venturi + drip lateral,
 coupled to a FAO-56 design-flow calculation.
 
 Run:  python examples/demo_drip_system.py

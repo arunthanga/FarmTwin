@@ -1,4 +1,4 @@
-"""FAO-56 agronomy module for KrishiFlow.
+"""FAO-56 agronomy module for FarmTwin.
 
 Implements the FAO Irrigation & Drainage Paper 56 method (Allen et al., 1998)
 with the ASCE-EWRI (2005) standardized reference-ET refinement:

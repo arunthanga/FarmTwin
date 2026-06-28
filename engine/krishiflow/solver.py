@@ -1,4 +1,4 @@
-"""Global Gradient Algorithm (GGA) steady-state hydraulic solver for KrishiFlow.
+"""Global Gradient Algorithm (GGA) steady-state hydraulic solver for FarmTwin.
 
 Solves the coupled mass-conservation and head-loss equations for a pressurized
 pipe network using Todini & Pilati's GGA (the EPANET core method). Every link

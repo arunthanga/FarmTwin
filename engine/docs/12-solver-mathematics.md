@@ -1,7 +1,7 @@
 # 12 — Solver Mathematics (deep dive per solver)
 
 This document gives the governing equations, numerical schemes, and key references for
-each KrishiFlow solver, and maps every part to a module in `engine/krishiflow`. It
+each FarmTwin Engine solver, and maps every part to a module in `engine/krishiflow`. It
 builds on the method-selection rationale in
 [10-numerical-methods-and-architecture.md](10-numerical-methods-and-architecture.md).
 

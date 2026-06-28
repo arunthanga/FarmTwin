@@ -1,4 +1,4 @@
-"""Pipe head-loss models for the KrishiFlow hydraulic solver.
+"""Pipe head-loss models for the FarmTwin hydraulic solver.
 
 All quantities are SI: flow Q in m^3/s, length L and diameter d in m, head in m.
 

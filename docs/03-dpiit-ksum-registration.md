@@ -28,7 +28,7 @@ shortlisted. Do the KSUM Unique ID first (free, fast, no company needed).
 
 ### Prepared profile inputs (copy-paste)
 
-- Startup / product name: **KrishiTwin**
+- Startup / product name: **FarmTwin**
 - Sector: **Agritech / Deeptech (Simulation & AI)**
 - Stage: **Prototype / MVP**
 - One-line description: *Simulation-driven farm digital twin that optimizes
@@ -62,7 +62,7 @@ incorporation (see `06-incorporation-guide.md`).
 - PAN of the entity.
 - Brief write-up on what is innovative + scalable — use this paragraph:
 
-> KrishiTwin is a physics-and-agronomy simulation engine that represents a farm
+> FarmTwin is a physics-and-agronomy simulation engine that represents a farm
 > as a computational mesh of zones and time-steps a water-balance and
 > crop-growth solver to recommend per-zone, per-day irrigation and fertigation.
 > Unlike sensor dashboards, it predicts outcomes and optimizes schedules under a

@@ -1,7 +1,7 @@
 # 16 — Annotated Bibliography
 
 Consolidated references, grouped by topic. Each entry: citation + 1-2 line summary +
-where it fits in KrishiFlow. DOIs/links are given where stable.
+where it fits in FarmTwin Engine. DOIs/links are given where stable.
 
 ## A. Pressurized network hydraulics (GGA) — [12 §A1](12-solver-mathematics.md)
 

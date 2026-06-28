@@ -4,9 +4,9 @@ Goal: define how the venture ships as **two distinct products** built on **one s
 physics/agronomy core** (`engine/krishiflow`), why the engine is kept shared rather
 than split, and the data that flows between the products.
 
-> **Headline.** Product 1 (**KrishiFlow Design Studio**) is used once, *before*
+> **Headline.** Product 1 (**FarmTwin Studio**) is used once, *before*
 > installation, to survey a farm, simulate many setups, optimize, and recommend the
-> best 2-3 designs. Product 2 (**KrishiTwin Runtime**) runs forever *after*, an IoT
+> best 2-3 designs. Product 2 (**FarmTwin Runtime**) runs forever *after*, an IoT
 > system that senses + decides + actuates irrigation and fertigation. The shared core
 > is kept common *on purpose*: Product 2's digital twin re-estimates the physical
 > parameters from real-world data and writes them back, so Product 1's designs keep
@@ -33,7 +33,7 @@ speak the same language.
    GGA solver | components/emitters | FAO-56 | head loss | params | qc | agronomy  |
             |                                                   |                  |  calibrated params
             v                                                   v                  |  (emitter curves,
-  PRODUCT 1  KrishiFlow Design Studio              PRODUCT 2  KrishiTwin Runtime   |  roughness/clog, Kc,
+  PRODUCT 1  FarmTwin Studio              PRODUCT 2  FarmTwin Runtime   |  roughness/clog, Kc,
   (designstudio/: optimize.py, CAD, BoM)           (runtime/: edge, control, twin) |  soil params, Ky, yield)
             |                                                   |                  |
    as-built design JSON + BoM + sensor/valve  ----------->  runtime + digital-twin |

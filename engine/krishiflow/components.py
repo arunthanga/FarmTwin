@@ -1,4 +1,4 @@
-"""Component library for KrishiFlow: fittings, valves, filters, pumps, venturi.
+"""Component library for FarmTwin: fittings, valves, filters, pumps, venturi.
 
 Design principle: every in-line component is a *link* that exposes
     headloss(Q)  -> signed head change (loss positive, pump gain negative)

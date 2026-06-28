@@ -1,4 +1,4 @@
-"""Network data model for KrishiFlow.
+"""Network data model for FarmTwin.
 
 A network is a graph of nodes (junctions, reservoirs) and links (pipes).
 Emitters are attached to junctions and are expanded into virtual links by the

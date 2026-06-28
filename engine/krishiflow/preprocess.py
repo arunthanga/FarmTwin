@@ -1,4 +1,4 @@
-"""Pre-processing for KrishiFlow: JSON network I/O and a drip-lateral generator.
+"""Pre-processing for FarmTwin: JSON network I/O and a drip-lateral generator.
 
 The JSON schema mirrors the data model so designs can be authored by hand, by
 the FreeCAD workbench, or generated programmatically.
