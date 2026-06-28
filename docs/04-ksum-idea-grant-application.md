@@ -55,7 +55,10 @@ IP is software, using cheap/existing sensors and free weather/ET data.
 ## 7. Target customer & market
 Beachhead: FPOs/FPCs in the Chittur rain-shadow cluster (1,500+ farmers, 650 ha),
 routed through the KERA/AgriNext program. Expansion: Krishi Bhavans and other
-rain-shadow districts; then pan-India water-stressed horticulture.
+rain-shadow districts via Kerala's **Government as a Marketplace (GAAM)** policy —
+departments can procure directly from KSUM-registered startups **up to Rs.50 lakh
+(ex-GST) without tender** (GO Ms No 2/2022/SPD), which covers a district-scale
+SaaS + sensor deployment. Then pan-India water-stressed horticulture.
 
 ## 8. Pilot & traction plan
 Live pilot on the founder's 15-acre Eruthempathy farm + 8-12 neighbours.
@@ -79,10 +82,13 @@ equal yield; convert to >=1 signed FPO pilot MoU (template in doc 08).
 
 ## 11. Team & ask
 Solo founder at filing (see doc 06 on adding a co-founder/team). Ask: Rs.3 lakh
-Idea Grant + KSUM incubation + AgriNext deployment introductions.
+Idea Grant + KSUM incubation + AgriNext deployment introductions + GAAM buyer
+intros (Krishi Bhavan / Agriculture Dept) for post-pilot scale.
 
 ## 12. Attachments
 - MVP link/screenshots (`../mvp/index.html`)
+- Pitch deck — any of: `../pitch/pitch-deck.html`, `../pitch/pitch-deck.pdf`, `../pitch/pitch-deck.pptx`
+- One-pager (`../pitch/one-pager.md`)
 - Founder CAE portfolio / résumé
 - Skill map (`02-problem-statement.md`)
 
@@ -93,3 +99,6 @@ Idea Grant + KSUM incubation + AgriNext deployment introductions.
 - Show the MVP scenario toggle: flood vs optimized -> live water-saving number.
 - Land the moat: "I have spent 20 years meshing and simulating physical systems;
   a farm is just another domain to mesh and solve — and I own the test rig."
+- Close the GTM loop: "Kerala lets departments buy from KSUM startups up to Rs.50
+  lakh without a tender — a Krishi Bhavan cluster deployment fits that band. We
+  enter through AgriNext/FPO pilots, then scale via GAAM direct procurement."

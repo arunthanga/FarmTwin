@@ -77,3 +77,6 @@ For FarmTwin Technologies Pvt Ltd          For `<FPO name>`
 - Cite the committed farmer count as the "purchase order"/demand basis for the
   Seed Fund (doc 07, stage 4).
 - Use the success metrics as the AgriNext pilot deliverables (doc 05).
+- After a successful pilot, cite the MoU + measured water/yield outcomes when
+  approaching Krishi Bhavan / Agriculture Dept buyers under **GAAM** direct
+  procurement (up to Rs.50L ex-GST, no tender — see doc 02).

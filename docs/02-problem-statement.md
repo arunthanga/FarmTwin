@@ -31,12 +31,27 @@ now delivers drip/lift irrigation to ~3,575 ha, but:
 | --- | --- | --- |
 | Primary pilot | The founder's 15-acre farm + 8-12 neighbouring vegetable/mango farmers in Eruthempathy | Free pilot, generate data & demo |
 | Beachhead buyer | **FPOs / FPCs** in Chittur taluk (cluster planning, water budgeting) | Paid per-farmer SaaS via FPO; AgriNext deployment |
-| Scale buyer | Krishi Bhavans / Dept. of Agriculture, other rain-shadow districts | Govt procurement under KERA |
+| Scale buyer | Krishi Bhavans / Dept. of Agriculture, other rain-shadow districts | KERA/AgriNext + **GAAM direct procurement** (up to Rs.50L ex-GST, no tender) |
 | Phase 2 | Lenders, insurers, input suppliers buying the data/risk layer | See doc 09 |
 
 Beachhead choice: **FPOs in the Chittur rain-shadow cluster**, because (a) KERA/
 AgriNext explicitly routes funding and adoption through FPOs, (b) one sale
 reaches hundreds of farmers, and (c) the founder's farm is inside the cluster.
+
+### Kerala government procurement advantage (for the pitch)
+
+Under Kerala's **Government as a Marketplace (GAAM)** policy (GO Ms No 2/2022/SPD),
+any department, PSU, board, corporation or local body can **buy directly from a
+KSUM-registered startup without a tender** for contracts up to **Rs.50 lakh
+(exclusive of GST)** — raised from Rs.20 lakh. The overall startup-procurement
+ceiling is **Rs.3 crore**. KSUM facilitates this through Direct Procurement,
+Demand Day, Demo Day and Innovation Zones.
+
+A district Krishi Bhavan or Agriculture Department cluster deployment (SaaS +
+sensors for 50-200 farms) fits comfortably under the Rs.50 lakh band — no
+18-month tender cycle, no incumbent-IT-vendor gatekeeping. Near-term entry is
+still AgriNext/KERA (grant + FPO matchmaking); GAAM is the scale revenue path
+once the pilot is proven and the startup holds a KSUM Unique ID.
 
 ## The product, concretely (MVP scope)
 
@@ -63,6 +78,8 @@ saved, stress days avoided, and projected yield. The working MVP in
   binding constraint, not water availability.
 - World Bank KERA / AgriNext (2026) is actively funding and distributing exactly
   this category to FPOs.
+- Kerala **GAAM** policy lets departments buy from KSUM startups **up to Rs.50L
+  ex-GST without tender** — a credible B2G scale path once the pilot is proven.
 - Cheap soil/weather sensing + free ET/weather data make a software-led,
   hardware-light product viable.
 

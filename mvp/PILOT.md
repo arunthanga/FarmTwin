@@ -27,7 +27,10 @@ it on the real farm so the demo numbers become defensible field evidence.
 - Calibration error chart (sim vs sensor).
 - Side-by-side water + yield table for the two blocks.
 - A 90-second screen recording of the app's flood-vs-optimized comparison.
-- These feed directly into the Idea Grant pitch (doc 04) and AgriNext (doc 05).
+- These feed directly into the Idea Grant pitch (doc 04), AgriNext (doc 05),
+  and the synced pitch deck (`pitch/pitch-deck.html`, `pitch/one-pager.md`).
+- Post-pilot: use field evidence + FPO MoU to pursue **GAAM** direct procurement
+  with Krishi Bhavan / Agriculture Dept (up to Rs.50L ex-GST, no tender).
 
 ## Mapping app -> field
 | App element | Real-world counterpart |

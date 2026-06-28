@@ -32,7 +32,8 @@ shortlisted. Do the KSUM Unique ID first (free, fast, no company needed).
 - Sector: **Agritech / Deeptech (Simulation & AI)**
 - Stage: **Prototype / MVP**
 - One-line description: *Simulation-driven farm digital twin that optimizes
-  irrigation, fertigation and yield for rain-shadow farmers and FPOs.*
+  irrigation, fertigation and yield for rain-shadow farmers, FPOs, and government
+  extension programs (GAAM-eligible B2G path).*
 - Location/District: **Palakkad** (Eruthempathy, Chittur)
 - Founder: 20 years CAE / simulation experience (meshing, virtual assembly-line
   simulation) — see `02-problem-statement.md` skill map.
@@ -79,10 +80,15 @@ number to your KSUM profile so you become eligible for Seed Fund / Scale-up
 (Idea/Productisation grants need DPIIT only at later milestone stages — confirm
 current requirement on the scheme page at apply time).
 
+The KSUM Unique ID also unlocks Kerala's **Government as a Marketplace (GAAM)**
+direct-procurement pathway: registered startups can be bought by any state
+department **up to Rs.50 lakh (ex-GST) without tender** (GO Ms No 2/2022/SPD).
+See `02-problem-statement.md` for how this fits the FarmTwin GTM.
+
 ## Checklist
 
 - [ ] KSUM Unique ID issued
 - [ ] Entity incorporated (doc 06)
 - [ ] DPIIT recognition number issued
 - [ ] DPIIT number linked in KSUM profile
-- [ ] MVP link + one-pager attached to profile
+- [ ] MVP link + one-pager attached to profile (`pitch/one-pager.md`)

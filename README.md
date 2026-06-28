@@ -7,7 +7,8 @@ FPOs can cut water/input use and raise yields. The 15-acre rain-shadow farm in
 **Eruthempathy, Chittur (Palakkad)** is the live pilot and demonstration site.
 
 This repository is the execution package for the Kerala Startup Mission (KSUM)
-application. It contains the business/application artifacts and a working MVP.
+application. It contains the business/application artifacts, synced pitch
+materials (Markdown, Marp, HTML), and a working MVP.
 
 ## What's here
 
@@ -19,6 +20,7 @@ application. It contains the business/application artifacts and a working MVP.
 | [docs/04-ksum-idea-grant-application.md](docs/04-ksum-idea-grant-application.md) | Ready-to-submit Idea Grant application draft | idea-grant |
 | [docs/05-agrinext-problem-statement.md](docs/05-agrinext-problem-statement.md) | AgriNext / KERA problem-statement submission | idea-grant |
 | [mvp/index.html](mvp/index.html) | Working farm digital-twin precision-irrigation simulator | mvp-pilot |
+| [pitch/](pitch/README.md) | Synced pitch deck (MD, HTML, PDF, PPTX, one-pager, script) | idea-grant |
 | [docs/06-incorporation-guide.md](docs/06-incorporation-guide.md) | Pvt Ltd vs LLP decision + incorporation steps | incorporate |
 | [docs/07-funding-roadmap.md](docs/07-funding-roadmap.md) | Grant -> seed -> scale-up funding sequence | scale-funding |
 | [docs/08-fpo-pilot-mou-template.md](docs/08-fpo-pilot-mou-template.md) | FPO pilot MoU template | scale-funding |
@@ -44,15 +46,18 @@ operations) on one shared engine — lives under [`engine/`](engine/README.md).
 - [engine/docs/19-two-product-architecture.md](engine/docs/19-two-product-architecture.md) — the two-product split and shared core.
 - [engine/docs/22-implementation-whitepapers.md](engine/docs/22-implementation-whitepapers.md) — the key white papers per module, with summaries and links.
 
-## Run the MVP
+## Run the MVP & pitch deck
 
-No build step. Open `mvp/index.html` in any modern browser, or serve locally:
+No build step. Open `mvp/index.html` or `pitch/pitch-deck.html` in any modern browser, or serve locally:
 
 ```bash
 cd mvp
 python -m http.server 8000
-# then open http://localhost:8000
+# MVP:        http://localhost:8000
+# Pitch deck: http://localhost:8000/../pitch/pitch-deck.html
 ```
+
+Export Marp deck to PDF/PPTX: see [pitch/README.md](pitch/README.md).
 
 ## Status legend
 

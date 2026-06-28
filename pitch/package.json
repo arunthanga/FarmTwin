@@ -1,0 +1,17 @@
+{
+  "name": "pitch",
+  "version": "1.0.0",
+  "description": "Synced presentation assets for KSUM Idea Grant, AgriNext/KERA, and GAAM Demo Day. All content aligns with `docs/01`–`07` and the live MVP.",
+  "main": "index.js",
+  "scripts": {
+    "build": "marp --no-stdin pitch-deck.md --pdf -o pitch-deck.pdf && marp --no-stdin pitch-deck.md --pptx -o pitch-deck.pptx && marp --no-stdin pitch-deck.md --html -o pitch-deck-marp.html",
+    "pdf": "marp --no-stdin pitch-deck.md --pdf -o pitch-deck.pdf",
+    "pptx": "marp --no-stdin pitch-deck.md --pptx -o pitch-deck.pptx"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@marp-team/marp-cli": "^4.4.0"
+  }
+}
