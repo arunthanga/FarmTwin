@@ -1,0 +1,5 @@
+numpy>=1.21
+# Optional, only for post-processing plots:
+matplotlib>=3.4
+# Optional, speeds up large sparse solves (the MVP runs on numpy alone):
+scipy>=1.7

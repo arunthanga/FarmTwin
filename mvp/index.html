@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KrishiTwin — Farm Digital Twin (MVP)</title>
+<style>
+  :root{
+    --bg:#0c1116; --panel:#141c24; --panel2:#1b2630; --line:#27333f;
+    --text:#e6edf3; --muted:#8b9bab; --accent:#36c2a3; --accent2:#3b82f6;
+    --warn:#e3a008; --bad:#ef5350; --good:#34d399;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.5}
+  header{padding:18px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#10171e,#0c1116)}
+  header h1{margin:0;font-size:20px;letter-spacing:.2px}
+  header p{margin:4px 0 0;color:var(--muted);font-size:13px;max-width:880px}
+  .tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--accent);
+    border-radius:999px;padding:2px 10px;font-size:11px;margin-left:8px;vertical-align:middle}
+  .wrap{display:grid;grid-template-columns:300px 1fr 320px;gap:16px;padding:16px 22px;align-items:start}
+  @media (max-width:1100px){.wrap{grid-template-columns:1fr}}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .panel h2{margin:0 0 12px;font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+  label{display:block;font-size:12px;color:var(--muted);margin:12px 0 4px}
+  select,input[type=range]{width:100%}
+  select{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px}
+  .btnrow{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;
+    padding:9px 12px;font-size:13px;cursor:pointer;transition:.15s}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  button.primary{background:var(--accent);color:#04130f;border-color:var(--accent);font-weight:600}
+  button.primary:hover{filter:brightness(1.08);color:#04130f}
+  .field-wrap{display:flex;justify-content:center}
+  canvas{max-width:100%;border-radius:10px;background:#0a0f14;border:1px solid var(--line)}
+  .legend{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--muted);margin-top:10px;justify-content:center}
+  .legend .bar{height:10px;width:160px;border-radius:5px;
+    background:linear-gradient(90deg,#b3402f,#d98324,#e9d16b,#5fae6b,#2f7fd9)}
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .kpi .v{font-size:20px;font-weight:700}
+  .kpi .l{font-size:11px;color:var(--muted)}
+  .kpi.good .v{color:var(--good)} .kpi.warn .v{color:var(--warn)} .kpi.bad .v{color:var(--bad)}
+  .daybar{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:10px}
+  .daybar b{color:var(--text);font-size:15px}
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
+  th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--muted);font-weight:600}
+  .win{color:var(--good);font-weight:700}
+  .note{font-size:11px;color:var(--muted);margin-top:10px}
+  .pill{font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid var(--line)}
+  footer{padding:14px 22px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>KrishiTwin <span class="tag">Farm Digital Twin · MVP</span></h1>
+  <p>A simulation-driven twin of a 15-acre rain-shadow farm in Eruthempathy (Chittur, Palakkad).
+  The field is discretized into a <b>mesh</b> of irrigation zones; a daily <b>water-balance + crop-growth
+  solver</b> steps each zone forward to recommend precise irrigation. Compare flood vs uniform-drip vs
+  twin-optimized scheduling and see water saved at protected yield.</p>
+</header>
+
+<div class="wrap">
+  <!-- CONTROLS -->
+  <div class="panel">
+    <h2>Scenario controls</h2>
+    <label>Crop</label>
+    <select id="crop">
+      <option value="tomato">Tomato (Kc 0.95)</option>
+      <option value="cucumber">Cucumber (Kc 0.85)</option>
+      <option value="banana">Banana (Kc 1.05)</option>
+      <option value="mango">Mango orchard (Kc 0.70)</option>
+    </select>
+
+    <label>Climate scenario</label>
+    <select id="climate">
+      <option value="normal">Rain-shadow normal (~1,100 mm/yr)</option>
+      <option value="drought">Drought / heat wave</option>
+      <option value="monsoon">Monsoon spell</option>
+    </select>
+
+    <label>Irrigation strategy</label>
+    <select id="strategy">
+      <option value="optimized">Twin-optimized (per-zone need)</option>
+      <option value="uniform">Uniform drip (fixed daily)</option>
+      <option value="flood">Flood (calendar, every 4 days)</option>
+    </select>
+
+    <label>Speed: <span id="speedVal">6</span> days/sec</label>
+    <input type="range" id="speed" min="1" max="20" value="6" />
+
+    <div class="btnrow">
+      <button class="primary" id="play">Play</button>
+      <button id="step">Step</button>
+      <button id="reset">Reset</button>
+    </div>
+    <div class="btnrow">
+      <button id="compare" style="flex:1">Run full-season comparison</button>
+    </div>
+    <p class="note">Mesh: 16 x 10 = 160 zones · root-zone water balance with lateral
+    redistribution · season length 90 days. Numbers are agronomic estimates for demo/pitch use.</p>
+  </div>
+
+  <!-- FIELD -->
+  <div class="panel">
+    <div class="daybar">
+      <span>Soil-moisture twin · <span id="cropLabel">Tomato</span></span>
+      <span>Day <b id="day">0</b> / 90</span>
+    </div>
+    <div class="field-wrap"><canvas id="field" width="640" height="400"></canvas></div>
+    <div class="legend"><span>Dry / stressed</span><span class="bar"></span><span>Wet</span>
+      <span class="pill" style="margin-left:8px">▦ outline = crop stress</span></div>
+    <div style="margin-top:14px">
+      <div class="daybar"><span>Season trend</span><span class="note">avg soil moisture (%) &amp; daily water applied</span></div>
+      <div class="field-wrap"><canvas id="trend" width="640" height="150"></canvas></div>
+    </div>
+  </div>
+
+  <!-- KPIs + COMPARISON -->
+  <div class="panel">
+    <h2>Live KPIs (current run)</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="v" id="kWater">0</div><div class="l">Water applied (m³)</div></div>
+      <div class="kpi warn"><div class="v" id="kWaste">0</div><div class="l">Lost to drainage (m³)</div></div>
+      <div class="kpi good"><div class="v" id="kYield">100%</div><div class="l">Yield index</div></div>
+      <div class="kpi bad"><div class="v" id="kStress">0%</div><div class="l">Zones stressed today</div></div>
+    </div>
+
+    <h2 style="margin-top:20px">Full-season comparison</h2>
+    <table id="cmp">
+      <thead><tr><th>Strategy</th><th>Water m³</th><th>Waste m³</th><th>Yield</th></tr></thead>
+      <tbody>
+        <tr><td>Flood (baseline)</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>Uniform drip</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>Twin-optimized</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div id="headline" class="note"></div>
+    <p class="note">Headline metric for KSUM/AgriNext pitch: water saved by the twin
+    vs flood baseline, at equal-or-better yield.</p>
+  </div>
+</div>
+
+<footer>
+  KrishiTwin MVP · part of the Kerala Startup Mission application package ·
+  open <code>mvp/index.html</code> in any browser. The simulation engine here is the same
+  class of model (meshing + time-stepped solver) used in CAE / virtual assembly-line simulation.
+</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---- Mesh / farm geometry ----
+  const COLS = 16, ROWS = 10, N = COLS * ROWS;
+  const ACRES = 15, M2 = ACRES * 4046.86, CELL_AREA = M2 / N; // ~379 m^2/zone
+  const SEASON = 90;
+  const WATER_COST = 8; // Rs per m^3 (pumping + labour proxy)
+
+  // ---- Agronomy params ----
+  const CROPS = {
+    tomato:  {kc:0.95, label:"Tomato"},
+    cucumber:{kc:0.85, label:"Cucumber"},
+    banana:  {kc:1.05, label:"Banana"},
+    mango:   {kc:0.70, label:"Mango orchard"},
+  };
+  // Soil field capacity (mm of plant-available water in root zone). Varied across mesh.
+  const SOILS = [
+    {fc:60,  name:"sandy"},
+    {fc:90,  name:"loam"},
+    {fc:120, name:"clay"},
+  ];
+  const MAD = 0.5;        // allowable depletion before stress
+  const TARGET = 0.92;    // optimized refill target (fraction of FC)
+  const STRESS_PENALTY = 0.012; // yield loss per stressed day per zone
+
+  // deterministic-ish pseudo random for repeatable demo
+  function makeRng(seed){ let s = seed>>>0; return () => {
+    s = (s*1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+
+  // ---- Simulation state ----
+  let cells = [];     // {fc, m (moisture mm), stressDays}
+  let day = 0;
+  let history = [];   // {avgPct, water}
+  let totals = {water:0, waste:0};
+  let rng;
+
+  function climateParams(name){
+    if(name==="drought") return {et0:6.5, rainProb:0.04, rainMax:6};
+    if(name==="monsoon") return {et0:2.8, rainProb:0.55, rainMax:28};
+    return {et0:5.0, rainProb:0.12, rainMax:10}; // rain-shadow normal
+  }
+
+  function initCells(){
+    rng = makeRng(20260628);
+    cells = [];
+    for(let i=0;i<N;i++){
+      const r = rng();
+      const soil = r<0.3 ? SOILS[0] : r<0.75 ? SOILS[1] : SOILS[2];
+      cells.push({fc:soil.fc, m:soil.fc*0.70, stress:0});
+    }
+    day = 0; history = []; totals = {water:0, waste:0};
+  }
+
+  // one daily step for a given strategy on the provided cell array
+  function stepSim(arr, crop, climate, strategy, d, localRng){
+    const kc = CROPS[crop].kc;
+    const cp = climateParams(climate);
+    const et0 = cp.et0 * (0.85 + 0.3*localRng());
+    const etc = kc * et0;
+    const rain = (localRng() < cp.rainProb) ? cp.rainMax*localRng() : 0;
+    const floodDay = (d % 4 === 0);
+    let dayWater = 0, dayWaste = 0, stressedNow = 0;
+
+    for(const c of arr){
+      let irr = 0;
+      if(strategy==="flood"){ irr = floodDay ? 70 : 0; }
+      else if(strategy==="uniform"){ irr = 6; }
+      else { // optimized: refill only when below MAD, only the deficit
+        if(c.m < MAD*c.fc){ irr = Math.max(0, TARGET*c.fc - c.m); }
+      }
+      dayWater += irr;
+      let m = c.m + rain + irr - etc;
+      if(m > c.fc){ dayWaste += (m - c.fc); m = c.fc; }
+      if(m < 0) m = 0;
+      c.m = m;
+      if(m < MAD*c.fc){ c.stress++; stressedNow++; }
+    }
+
+    // lateral redistribution across the mesh (simple diffusion -> "solver" feel)
+    const next = arr.map(c=>c.m);
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+      const i=y*COLS+x; let sum=arr[i].m, n=1;
+      if(x>0){sum+=arr[i-1].m;n++;} if(x<COLS-1){sum+=arr[i+1].m;n++;}
+      if(y>0){sum+=arr[i-COLS].m;n++;} if(y<ROWS-1){sum+=arr[i+COLS].m;n++;}
+      next[i] = arr[i].m*0.92 + (sum/n)*0.08; // weak smoothing
+    }
+    for(let i=0;i<arr.length;i++){ arr[i].m = Math.min(arr[i].fc, next[i]); }
+
+    const m3 = dayWater/1000*CELL_AREA, waste3 = dayWaste/1000*CELL_AREA;
+    return {m3, waste3, stressedNow};
+  }
+
+  function avgMoisturePct(arr){
+    let s=0; for(const c of arr) s += c.m/c.fc; return s/arr.length;
+  }
+  function yieldIndex(arr){
+    let s=0; for(const c of arr) s += Math.max(0, 1 - c.stress*STRESS_PENALTY); return s/arr.length;
+  }
+
+  // ---- Rendering ----
+  const field = document.getElementById("field"), fctx = field.getContext("2d");
+  const trend = document.getElementById("trend"), tctx = trend.getContext("2d");
+  const cw = field.width/COLS, ch = field.height/ROWS;
+
+  function moistureColor(p){ // p in 0..1 -> dry(red) to wet(blue)
+    p = Math.max(0, Math.min(1,p));
+    const stops = [[179,64,47],[217,131,36],[233,209,107],[95,174,107],[47,127,217]];
+    const t = p*(stops.length-1), i = Math.floor(t), f = t-i;
+    const a = stops[i], b = stops[Math.min(stops.length-1,i+1)];
+    const c = a.map((v,k)=>Math.round(v+(b[k]-v)*f));
+    return `rgb(${c[0]},${c[1]},${c[2]})`;
+  }
+
+  function drawField(stressedFlags){
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+      const i=y*COLS+x, c=cells[i], p=c.m/c.fc;
+      fctx.fillStyle = moistureColor(p);
+      fctx.fillRect(x*cw, y*ch, cw-1.5, ch-1.5);
+      if(c.m < MAD*c.fc){
+        fctx.strokeStyle="rgba(255,80,80,.9)"; fctx.lineWidth=2;
+        fctx.strokeRect(x*cw+1.5, y*ch+1.5, cw-4.5, ch-4.5);
+      }
+    }
+  }
+
+  function drawTrend(){
+    tctx.clearRect(0,0,trend.width,trend.height);
+    if(history.length<2) return;
+    const W=trend.width, H=trend.height, maxW = Math.max(...history.map(h=>h.water),1);
+    // water bars
+    tctx.fillStyle="rgba(59,130,246,.35)";
+    history.forEach((h,i)=>{ const x=i/SEASON*W, bw=Math.max(1,W/SEASON-0.5),
+      bh=h.water/maxW*(H*0.7); tctx.fillRect(x,H-bh,bw,bh); });
+    // moisture line
+    tctx.strokeStyle="#36c2a3"; tctx.lineWidth=2; tctx.beginPath();
+    history.forEach((h,i)=>{ const x=i/SEASON*W, y=H-h.avgPct*(H*0.9);
+      i?tctx.lineTo(x,y):tctx.moveTo(x,y); }); tctx.stroke();
+    // MAD reference
+    tctx.strokeStyle="rgba(239,83,80,.5)"; tctx.setLineDash([4,4]); tctx.beginPath();
+    const yMad=H-MAD*(H*0.9); tctx.moveTo(0,yMad); tctx.lineTo(W,yMad); tctx.stroke();
+    tctx.setLineDash([]);
+  }
+
+  function updateKpis(stressedNow){
+    document.getElementById("kWater").textContent = Math.round(totals.water).toLocaleString();
+    document.getElementById("kWaste").textContent = Math.round(totals.waste).toLocaleString();
+    document.getElementById("kYield").textContent = Math.round(yieldIndex(cells)*100)+"%";
+    document.getElementById("kStress").textContent = Math.round(stressedNow/N*100)+"%";
+    document.getElementById("day").textContent = day;
+  }
+
+  function advance(){
+    if(day>=SEASON) return false;
+    const r = stepSim(cells, crop(), climate(), strategy(), day, rng);
+    totals.water += r.m3; totals.waste += r.waste3; day++;
+    history.push({avgPct:avgMoisturePct(cells), water:r.m3});
+    drawField(); drawTrend(); updateKpis(r.stressedNow);
+    return true;
+  }
+
+  // ---- Full-season comparison (headless) ----
+  function runSeason(strat){
+    const localRng = makeRng(20260628); // same weather sequence for fair compare
+    const arr = [];
+    const seedRng = makeRng(20260628);
+    for(let i=0;i<N;i++){ const r=seedRng();
+      const soil = r<0.3?SOILS[0]:r<0.75?SOILS[1]:SOILS[2];
+      arr.push({fc:soil.fc, m:soil.fc*0.70, stress:0}); }
+    let water=0, waste=0;
+    for(let d=0; d<SEASON; d++){
+      const res = stepSim(arr, crop(), climate(), strat, d, localRng);
+      water+=res.m3; waste+=res.waste3;
+    }
+    return {water, waste, yield:yieldIndex(arr)};
+  }
+
+  function runComparison(){
+    const flood=runSeason("flood"), uni=runSeason("uniform"), opt=runSeason("optimized");
+    const rows=document.querySelectorAll("#cmp tbody tr");
+    const fmt=v=>Math.round(v).toLocaleString();
+    const fill=(tr,d,best)=>{ tr.children[1].textContent=fmt(d.water);
+      tr.children[2].textContent=fmt(d.waste);
+      tr.children[3].textContent=Math.round(d.yield*100)+"%";
+      tr.children[1].className = best?"win":""; };
+    fill(rows[0],flood,false); fill(rows[1],uni,false); fill(rows[2],opt,true);
+    const saved = (1 - opt.water/flood.water)*100;
+    const cost = (flood.water-opt.water)*WATER_COST;
+    document.getElementById("headline").innerHTML =
+      `<b style="color:var(--good)">Twin-optimized saves ${saved.toFixed(0)}% water vs flood</b>`+
+      ` (≈ ${fmt(flood.water-opt.water)} m³/season, ~Rs.${fmt(cost)} saved) at `+
+      `${Math.round(opt.yield*100)}% yield vs ${Math.round(flood.yield*100)}%.`;
+  }
+
+  // ---- Wiring ----
+  const $=id=>document.getElementById(id);
+  const crop=()=>$("crop").value, climate=()=>$("climate").value, strategy=()=>$("strategy").value;
+  let playing=false, timer=null;
+
+  function reset(){
+    initCells(); drawField(); drawTrend();
+    updateKpis(0);
+    $("cropLabel").textContent = CROPS[crop()].label;
+  }
+  function loop(){
+    if(!playing) return;
+    if(!advance()){ stop(); return; }
+    timer=setTimeout(()=>requestAnimationFrame(loop), 1000/(+$("speed").value));
+  }
+  function play(){ if(day>=SEASON) reset(); playing=true; $("play").textContent="Pause"; loop(); }
+  function stop(){ playing=false; $("play").textContent="Play"; clearTimeout(timer); }
+
+  $("play").onclick=()=> playing?stop():play();
+  $("step").onclick=()=>{ stop(); advance(); };
+  $("reset").onclick=()=>{ stop(); reset(); };
+  $("compare").onclick=runComparison;
+  $("speed").oninput=()=> $("speedVal").textContent=$("speed").value;
+  ["crop","climate","strategy"].forEach(id=>$(id).onchange=()=>{ stop(); reset(); });
+
+  // init
+  reset();
+  runComparison();
+})();
+</script>
+</body>
+</html>
