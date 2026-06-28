@@ -37,6 +37,13 @@ operations) on one shared engine — lives under [`engine/`](engine/README.md).
 - [engine/docs/19-two-product-architecture.md](engine/docs/19-two-product-architecture.md) — the two-product split and shared core.
 - [engine/docs/22-implementation-whitepapers.md](engine/docs/22-implementation-whitepapers.md) — the key white papers per module, with summaries and links.
 
+## Pitch deck
+
+A ready-to-present pitch deck (synthesised from the docs above) lives in
+[`presentation/`](presentation/README.md), available as both
+[`FarmTwin-pitch.pdf`](presentation/FarmTwin-pitch.pdf) and
+[`FarmTwin-pitch.pptx`](presentation/FarmTwin-pitch.pptx).
+
 ## Run the MVP
 
 No build step. Open `mvp/index.html` in any modern browser, or serve locally:
