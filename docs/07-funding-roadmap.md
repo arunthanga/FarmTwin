@@ -27,6 +27,16 @@ Note on stacking: Idea + Productisation are tranches of the same Innovation Gran
 ceiling (total ~Rs.15L, Rs.20L women). Plan the ask so you do not leave money on
 the table but also do not double-count.
 
+## Public-procurement revenue (non-dilutive demand, not a grant)
+Kerala's **"Government as a Marketplace"** policy lets departments, PSUs, boards,
+corporations and local bodies buy from a KSUM-registered startup **directly,
+without tender, up to Rs.50 lakh** (GO Ms No 2/2022/SPD), inside an overall
+**Rs.3 crore** public-procurement ceiling. For FarmTwin this is a route to early
+paid deployments with Krishi Bhavans, panchayats and the Dept. of Agriculture —
+the "purchase orders / committed pilots" that unlock Stage 4 Seed Fund. Note: the
+2023 GO conditions some benefits on **3 years from registration / KSUM product
+approval**, so plan it as a Stage 4-6 channel and register early to start the clock.
+
 ## Parallel / complementary (apply opportunistically)
 - **KAU RABI (RAISE/PACE)** agri incubator — up to Rs.25L grant + agri mentorship.
 - **NIDHI / Startup Seed** programs surfaced via KSUM incubation.

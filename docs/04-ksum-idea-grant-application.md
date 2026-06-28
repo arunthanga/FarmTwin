@@ -54,8 +54,12 @@ IP is software, using cheap/existing sensors and free weather/ET data.
 
 ## 7. Target customer & market
 Beachhead: FPOs/FPCs in the Chittur rain-shadow cluster (1,500+ farmers, 650 ha),
-routed through the KERA/AgriNext program. Expansion: Krishi Bhavans and other
-rain-shadow districts; then pan-India water-stressed horticulture.
+routed through the KERA/AgriNext program. Expansion: Krishi Bhavans, panchayats
+and the Dept. of Agriculture in other rain-shadow districts; then pan-India
+water-stressed horticulture. The government channel is de-risked by Kerala's
+**"Government as a Marketplace"** policy: departments and local bodies can buy a
+KSUM-registered startup's product **directly, without tender, up to Rs.50 lakh**
+(GO Ms No 2/2022/SPD), within an overall Rs.3 crore public-procurement ceiling.
 
 ## 8. Pilot & traction plan
 Live pilot on the founder's 15-acre Eruthempathy farm + 8-12 neighbours.
@@ -93,3 +97,6 @@ Idea Grant + KSUM incubation + AgriNext deployment introductions.
 - Show the MVP scenario toggle: flood vs optimized -> live water-saving number.
 - Land the moat: "I have spent 20 years meshing and simulating physical systems;
   a farm is just another domain to mesh and solve — and I own the test rig."
+- Name the path to public revenue: "Once registered, Kerala lets a Krishi Bhavan
+  or panchayat buy us directly, no tender, up to Rs.50 lakh — so the government
+  go-to-market is a direct sale, not a bidding war."

@@ -31,12 +31,30 @@ now delivers drip/lift irrigation to ~3,575 ha, but:
 | --- | --- | --- |
 | Primary pilot | The founder's 15-acre farm + 8-12 neighbouring vegetable/mango farmers in Eruthempathy | Free pilot, generate data & demo |
 | Beachhead buyer | **FPOs / FPCs** in Chittur taluk (cluster planning, water budgeting) | Paid per-farmer SaaS via FPO; AgriNext deployment |
-| Scale buyer | Krishi Bhavans / Dept. of Agriculture, other rain-shadow districts | Govt procurement under KERA |
+| Scale buyer | Krishi Bhavans / Dept. of Agriculture, LSGs (panchayats), other rain-shadow districts | KSUM direct procurement (no tender) + Govt procurement under KERA |
 | Phase 2 | Lenders, insurers, input suppliers buying the data/risk layer | See doc 09 |
 
 Beachhead choice: **FPOs in the Chittur rain-shadow cluster**, because (a) KERA/
 AgriNext explicitly routes funding and adoption through FPOs, (b) one sale
 reaches hundreds of farmers, and (c) the founder's farm is inside the cluster.
+
+### B2G tailwind: Kerala's startup procurement preference
+
+As a KSUM-registered startup, FarmTwin gets a structural advantage selling to the
+government buyer above — Kerala's **"Government as a Marketplace" (GaaM)** policy:
+
+- Government departments, PSUs, boards, corporations and local bodies can buy a
+  KSUM-registered startup's product/service **directly, without any tender**, up to
+  **Rs.50 lakh** (excl. GST) — GO (Ms) No 2/2022/SPD dt 05.07.2022.
+- The overall **public-procurement ceiling is Rs.3 crore** (raised from Rs.1 cr in
+  2023) and now covers non-IT startups, not just IT ones.
+
+This removes the usual blocker for a young company — competing in open tenders
+against incumbents on turnover/experience — and lets a Krishi Bhavan, panchayat
+or the Dept. of Agriculture pilot and buy FarmTwin directly. Eligibility note: the
+2023 GO conditions some benefits on the startup having completed **3 years from
+registration or from KSUM product approval**, so this channel maps to the Scale
+stage (see doc 07), not day one.
 
 ## The product, concretely (MVP scope)
 
