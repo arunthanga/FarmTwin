@@ -57,6 +57,13 @@ Beachhead: FPOs/FPCs in the Chittur rain-shadow cluster (1,500+ farmers, 650 ha)
 routed through the KERA/AgriNext program. Expansion: Krishi Bhavans and other
 rain-shadow districts; then pan-India water-stressed horticulture.
 
+Kerala also gives the startup a practical B2G route: under KSUM's Government as
+a Marketplace mechanism, government departments can directly purchase products
+from KSUM-registered startups up to **Rs.50 lakh** exclusive of GST, without a
+tendering process (GO (Ms) No.2/2022/SPD dated 05.07.2022). This makes pilots
+with Agriculture, LSGD and water-user institutions easier to convert into paid
+department deployments once the twin is validated.
+
 ## 8. Pilot & traction plan
 Live pilot on the founder's 15-acre Eruthempathy farm + 8-12 neighbours.
 Calibrate the twin over one crop cycle; target >=30% simulated water saving at
@@ -79,7 +86,8 @@ equal yield; convert to >=1 signed FPO pilot MoU (template in doc 08).
 
 ## 11. Team & ask
 Solo founder at filing (see doc 06 on adding a co-founder/team). Ask: Rs.3 lakh
-Idea Grant + KSUM incubation + AgriNext deployment introductions.
+Idea Grant + KSUM incubation + AgriNext deployment introductions + Government
+as a Marketplace visibility for department procurement.
 
 ## 12. Attachments
 - MVP link/screenshots (`../mvp/index.html`)
@@ -93,3 +101,6 @@ Idea Grant + KSUM incubation + AgriNext deployment introductions.
 - Show the MVP scenario toggle: flood vs optimized -> live water-saving number.
 - Land the moat: "I have spent 20 years meshing and simulating physical systems;
   a farm is just another domain to mesh and solve — and I own the test rig."
+- Land the Kerala market-access edge: "After KSUM validation, departments can
+  procure startup products directly up to Rs.50 lakh ex-GST, so this can move
+  from FPO pilot to government deployment without waiting for a large tender."

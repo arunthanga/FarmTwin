@@ -30,6 +30,11 @@ the table but also do not double-count.
 ## Parallel / complementary (apply opportunistically)
 - **KAU RABI (RAISE/PACE)** agri incubator — up to Rs.25L grant + agri mentorship.
 - **NIDHI / Startup Seed** programs surfaced via KSUM incubation.
+- **KSUM Government as a Marketplace** — after KSUM registration and pilot
+  validation, pursue department Demand Day/Demo Day/direct-procurement leads.
+  Kerala departments can directly buy from KSUM-registered startups up to
+  Rs.50L ex-GST, so this is a practical first B2G revenue path rather than only
+  a grant channel.
 - **Bank FPO finance / Agri Infrastructure Fund** — for the FPO partner's
   capex (packhouse, cold storage), not for FarmTwin directly, but it makes the
   FPO a stronger paying customer.
@@ -43,5 +48,6 @@ the table but also do not double-count.
 ## 18-month money checkpoints
 1. Month 0-2: Idea Grant filed; KSUM Unique ID; AgriNext registration.
 2. Month 2-6: pilot data; 1 FPO MoU; Idea Grant disbursed; incorporate; DPIIT.
-3. Month 6-12: Productisation Grant; AgriNext pilot funding; first paid FPO.
+3. Month 6-12: Productisation Grant; AgriNext pilot funding; first paid FPO or
+   department pilot via Government as a Marketplace.
 4. Month 12-18: Seed Fund against orders; line up Scale-up criteria (Rs.25L).

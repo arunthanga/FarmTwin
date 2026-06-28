@@ -48,11 +48,16 @@ strengthens FPOs as the adoption anchor.
 - Ready to run a real on-ground pilot (founder's farm + FPO members).
 - Hardware-light, affordable, scalable -> meets "proven, affordable, scalable".
 - Produces measurable outcomes (water saved, yield protected) for MoUs.
+- Maps to Kerala's Government as a Marketplace path: KSUM-registered startups
+  can be procured directly by departments up to Rs.50 lakh ex-GST after product
+  fit is proven, giving AgriNext pilots a clear route to paid government rollout.
 
 **Ask from AgriNext:**
 - Pilot funding (up to Rs.25 lakh) for cluster-scale deployment.
 - Matchmaking with a Chittur FPO/FPC and a signed pilot MoU (template doc 08).
-- Inclusion in the AgriNext deployment/procurement pathway.
+- Inclusion in the AgriNext deployment/procurement pathway, including Demand Day
+  / Demo Day / Government as a Marketplace visibility for Agriculture, LSGD and
+  irrigation-linked departments.
 
 **Founder edge:** 20 years of CAE/simulation (meshing, assembly-line sim) — the
 exact competency a *digital twin* requires — plus a 15-acre pilot farm inside the
