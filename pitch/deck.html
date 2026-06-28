@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FarmTwin — KSUM Pitch</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme" />
+  <style>
+    :root {
+      --ft-water: #2aa7d8;
+      --ft-water-d: #1577a6;
+      --ft-leaf: #4caf50;
+      --ft-earth: #c8a064;
+      --ft-ink: #0d1b2a;
+    }
+    .reveal { font-family: "Inter", "Segoe UI", system-ui, sans-serif; }
+    .reveal section { text-align: left; }
+    .reveal h1, .reveal h2, .reveal h3 { color: #eaf6fb; text-transform: none; letter-spacing: -0.01em; }
+    .reveal h1 { font-size: 2.0em; line-height: 1.1; }
+    .reveal h2 { font-size: 1.45em; border-bottom: 2px solid var(--ft-water); padding-bottom: .15em; }
+    .reveal .accent { color: var(--ft-water); }
+    .reveal .leaf { color: var(--ft-leaf); }
+    .reveal .big { font-size: 1.25em; }
+    .reveal .muted { color: #9fb3c8; font-size: .8em; }
+    .reveal .center { text-align: center; }
+    .reveal .pill { display:inline-block; background:var(--ft-water-d); color:#fff; border-radius:999px; padding:.12em .7em; font-size:.55em; vertical-align:middle; }
+    .reveal table { font-size: .62em; }
+    .reveal table th { color: var(--ft-water); }
+    .reveal .src { font-size:.5em; color:#7f93a8; }
+    .reveal .quote { border-left: 4px solid var(--ft-leaf); padding-left: .8em; font-style: italic; color:#dbe7f0; }
+    .reveal .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:1.2em; }
+    .reveal pre.flow { font-size:.42em; line-height:1.25; background:#0b1622; border:1px solid #1c3346; border-radius:8px; padding:.8em; }
+    .reveal .kpi { font-size:1.6em; color:var(--ft-leaf); font-weight:700; }
+    .reveal .fact { color: var(--ft-leaf); font-size:.7em; }
+    .reveal .est  { color: var(--ft-earth); font-size:.7em; }
+    .reveal .footer { position:fixed; bottom:8px; left:14px; font-size:12px; color:#5b7286; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- 1. Title -->
+    <section data-background-gradient="linear-gradient(180deg,#0d1b2a 0%,#11405a 100%)">
+      <h1>Farm<span class="accent">Twin</span></h1>
+      <p class="big leaf">A digital twin that makes sure every drop of water reaches the last farmer's roots.</p>
+      <p class="muted">Built in Eruthempathy, Chittur (Palakkad) — Kerala's rain-shadow belt.<br/>
+      From 20 years of CAE simulation for the world's factories → to water for our own village.</p>
+      <p class="muted">Kerala Startup Mission · github.com/arunthanga/FarmTwin</p>
+    </section>
+
+    <!-- 2. Story -->
+    <section>
+      <h2>This is personal</h2>
+      <p>In my village, <span class="accent">Eruthempathy</span>, farmers run out of water.</p>
+      <ul>
+        <li>We get <span class="fact">&lt; 1,000 mm rain/yr</span> — one-third of Kerala's average.</li>
+        <li>Neighbours queue for hours at the regulator for a tanker's worth of drinking water.</li>
+        <li>The young leave, because the soil can't pay them back.</li>
+      </ul>
+      <p class="quote">"I spent 20 years simulating the world's factories — but my own village
+      couldn't predict whether water would reach a field next week."</p>
+    </section>
+
+    <!-- 3. Problem -->
+    <section>
+      <h2>The problem (the head, after the heart)</h2>
+      <ul>
+        <li>Palakkad's east is Kerala's driest belt; water is <b>contested</b> (shared with Tamil Nadu) &amp; <b>badly distributed</b>.</li>
+        <li><span class="fact">26 blocks in Palakkad rated unsafe</span> on groundwater.</li>
+        <li>The old Moolathara lift canal: <span class="fact">no summer water for 7 years</span> → ~1,000 acres of coconut hit.</li>
+        <li>A <span class="fact">₹2-cr clean-up was announced — and nothing happened.</span></li>
+      </ul>
+      <p class="big">Building canals ≠ delivering water to roots. The last mile is an
+      <span class="accent">information &amp; control problem</span>, not a concrete one.</p>
+    </section>
+
+    <!-- 4. Why now -->
+    <section>
+      <h2>Why now <span class="pill">money is flowing into our backyard</span></h2>
+      <ul>
+        <li><b>Moolathara Right Bank Canal Extension</b> — KIIFB, <span class="fact">~₹262 cr</span>, Kerala's
+          <b>largest community micro-irrigation project</b>, commissioning <span class="fact">early 2026</span>.</li>
+        <li>Serves <span class="fact">3,575 ha (Phase I)</span> &amp; <span class="fact">10,000+ ha (Phase II)</span> —
+          naming <b>Eruthempathy, Vadakarapathy, Kozhinjampara</b>.</li>
+        <li>CMI is an <b>active, repeating pipeline</b>: <span class="fact">~₹40.5 cr already tendered across 3 zones.</span></li>
+        <li>Farmers get <span class="fact">up to 85% subsidy</span> (PDMC + Kerala Samrudhi).</li>
+      </ul>
+      <p class="big leaf">Capital is subsidised. The missing piece is the intelligence layer — that's us.</p>
+    </section>
+
+    <!-- 5. Solution -->
+    <section>
+      <h2>The solution: FarmTwin</h2>
+      <p>A <span class="accent">self-calibrating digital twin for irrigation</span> — two products, one learning engine.</p>
+      <div class="grid2">
+        <div>
+          <h3 class="leaf">FarmTwin Studio</h3>
+          <p class="muted">BEFORE install</p>
+          <p>Survey land → solver <b>optimises</b> the network (pumps, pipes, valves, drips, sensors, fertigation) → best <b>2-3 layouts</b> by cost, energy, uniformity, yield.</p>
+        </div>
+        <div>
+          <h3 class="leaf">FarmTwin Runtime</h3>
+          <p class="muted">AFTER install</p>
+          <p>Solar, wireless edge controllers read sensors + weather + cloud → decide <b>when/how long</b> to irrigate &amp; fertigate; act on pumps &amp; valves; reject bad data.</p>
+        </div>
+      </div>
+      <p class="muted center">Underneath: <b>FarmTwin Engine</b> — hydraulic + FAO-56 agronomy solver whose parameters keep learning from the field.</p>
+    </section>
+
+    <!-- 6. How it works -->
+    <section>
+      <h2>How it works (the engineering moat)</h2>
+<pre class="flow">
+ Survey ─▶ FarmTwin Studio ─▶ optimal design + BoM + sensor/valve plan
+                                       │
+                                       ▼
+                     install (rides on govt / PDMC capex)
+                                       │
+                                       ▼
+ sensors + weather ─▶ FarmTwin Runtime (edge) ─▶ pumps / valves / fertigation
+                                       │
+                                       ▼
+            FarmTwin Engine digital twin assimilates reality,
+            recalibrates parameters ──▶ better design next time  (learning loop)
+</pre>
+      <p>Same discipline as CAE: discretise → solve the physics → compare to reality → correct.
+      Most agritech stops at dashboards. <span class="accent">We predict, optimise &amp; control</span> — and get smarter every farm.</p>
+    </section>
+
+    <!-- 7. Why us -->
+    <section>
+      <h2>Why us (unfair advantages)</h2>
+      <ul>
+        <li><b>20 years of CAE / simulation</b> — meshing, solvers, virtual lines: the rare skill this needs.</li>
+        <li><b>A live pilot in the exact project panchayat</b> — 15 acres in Eruthempathy, on the Moolathara RBC ayacut.</li>
+        <li><b>Working code already</b> — open hydraulic + FAO-56 engine (GGA solver, components, emitters, agronomy) + a runnable MVP.</li>
+        <li><b>Research on our doorstep</b> — IIT Palakkad (water resources, HPC) + Kerala Agricultural University.</li>
+      </ul>
+    </section>
+
+    <!-- 8. Immediate win + tenders -->
+    <section>
+      <h2>The immediate win: Moolathara RBC</h2>
+      <p>A government-funded, de-risked beachhead — <span class="accent">2 km from my home.</span></p>
+      <table>
+        <tr><th>Zone</th><th>Work</th><th>Value</th><th>Tendered</th></tr>
+        <tr><td>Zone-I</td><td>General Civil Work</td><td>₹13.23 cr</td><td>Feb 2026</td></tr>
+        <tr><td>Zone-II</td><td>CMI General Civil Work</td><td>₹13.15 cr</td><td>Feb 2026</td></tr>
+        <tr><td>Zone-III</td><td>CMI DPR Preparation</td><td>₹14.19 cr</td><td>Feb 2026</td></tr>
+        <tr><th colspan="2">Already tendered, one canal</th><th>≈ ₹40.5 cr</th><th></th></tr>
+      </table>
+      <p class="muted">Our role: <b>design + digital-twin + performance-monitoring</b> (with a civil partner).
+      Target the <b>next</b> packages — Phase-II zones &amp; Phase-I O&amp;M — + a KSUM-funded pilot on our 15 acres.</p>
+      <p class="src">Source: KIIDC e-tenders (kiidc.kerala.gov.in). Zone I-III closed Feb 2026 — proof of a live, repeating pipeline.</p>
+    </section>
+
+    <!-- 9. Opportunity size -->
+    <section>
+      <h2>Opportunity size: beachhead → world</h2>
+      <table>
+        <tr><th>Tier</th><th>Scope</th><th>Addressable (our layer)</th></tr>
+        <tr><td>SOM (Yr 1-2)</td><td>Moolathara Phase I design + KSUM pilot + 1st monitoring deal</td><td class="est">₹1-2 cr</td></tr>
+        <tr><td>Beachhead (2-3 yr)</td><td>Moolathara I+II (~13,500 ha) + Chitturpuzha (20,440 ha)</td><td class="est">₹10-25 cr</td></tr>
+        <tr><td>SAM (3-5 yr)</td><td>Kerala KIIFB-CMI + PDMC micro-irrigation</td><td class="est">₹100-300 cr</td></tr>
+        <tr><td>TAM (long)</td><td>India PMKSY (₹1000s cr/yr); ~70 M ha; global precision irrigation</td><td class="est">very large</td></tr>
+      </table>
+      <p class="big">Start with <span class="accent">one canal we can touch</span> — end with farmers everywhere.</p>
+      <p class="src"><span class="fact">green = fact</span> · <span class="est">tan = our estimate</span> (assumptions in docs 12).</p>
+    </section>
+
+    <!-- 10. Business model -->
+    <section>
+      <h2>Business model (subsidy-aligned)</h2>
+      <ol>
+        <li><b>Design &amp; optimisation (Studio):</b> project fee ~₹3-6k/ha.</li>
+        <li><b>Digital-twin + IoT (Runtime):</b> hardware + software — <b>fundable inside the ~85% micro-irrigation subsidy</b>.</li>
+        <li><b>Recurring SaaS + O&amp;M / performance monitoring:</b> ~₹1,000-1,500/ha/yr — sticky, scalable, fixes the "nobody maintained it" failure.</li>
+        <li><b>Phase 2:</b> data-driven agri-fintech (yield-backed credit, insurance).</li>
+      </ol>
+    </section>
+
+    <!-- 11. GTM -->
+    <section>
+      <h2>Go-to-market</h2>
+      <ol>
+        <li><b>Prove</b> — 15 acres in Eruthempathy + one Moolathara CMI zone (KSUM pilot).</li>
+        <li><b>Win</b> — Moolathara design / monitoring with a civil partner.</li>
+        <li><b>Expand</b> — Chitturpuzha command area + Palakkad FPOs.</li>
+        <li><b>Replicate</b> — KIIFB-CMI statewide (Kerala) &amp; PDMC nationally.</li>
+        <li><b>Globalise</b> — software/twin (near-zero marginal cost).</li>
+      </ol>
+    </section>
+
+    <!-- 12. Traction -->
+    <section>
+      <h2>Traction &amp; assets</h2>
+      <ul>
+        <li><b>FarmTwin Engine (open):</b> GGA hydraulic solver, component/emitter library, FAO-56 agronomy — on GitHub.</li>
+        <li><b>MVP:</b> a runnable farm digital-twin simulator.</li>
+        <li><b>Deep dossier:</b> 13+ technical docs (solver math, sensors, IoT/fertigation, agronomy, optimisation, twin) + bibliography.</li>
+        <li><b>Pilot land:</b> 15 acres in the target panchayat.</li>
+        <li><b>Brand:</b> FarmTwin (trademark due-diligence done).</li>
+      </ul>
+    </section>
+
+    <!-- 13. Ask -->
+    <section>
+      <h2>The ask <span class="pill">KSUM grant</span></h2>
+      <p>Fund us to:</p>
+      <ul>
+        <li>Build the field-ready <b>FarmTwin Runtime</b> controller (solar, wireless) + sensor kit.</li>
+        <li>Deploy a <b>calibrated pilot</b> on 15 acres + one Moolathara CMI zone.</li>
+        <li>Validate with <b>IIT Palakkad / KAU</b>; publish a performance report.</li>
+        <li>Use the pilot to <b>win the first Moolathara CMI design / monitoring contract</b>.</li>
+      </ul>
+      <p class="muted">12-month milestones: working controller → pilot live → validated water-saving &amp; yield → first paid contract.</p>
+    </section>
+
+    <!-- 14. Vision -->
+    <section data-background-gradient="linear-gradient(180deg,#11405a 0%,#0d2a16 100%)">
+      <h2>Vision</h2>
+      <p class="big">A canal reached my village after 60 years. But concrete alone has failed us before.</p>
+      <p class="big leaf">FarmTwin makes sure that this time the water reaches the roots — and that we can prove it, drop by drop.</p>
+      <p>We start with one canal in Chittur. We're building the system that lets <b>any farmer, anywhere, grow more with less water.</b></p>
+      <p class="accent big center">From simulating the world's factories — to securing our farmers' water.</p>
+      <p class="muted center">FarmTwin · github.com/arunthanga/FarmTwin</p>
+    </section>
+
+  </div>
+</div>
+<div class="footer">FarmTwin · KSUM pitch · facts sourced (docs 12) · estimates labelled</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1200,
+    height: 720,
+    margin: 0.06,
+    plugins: [ RevealNotes ]
+  });
+</script>
+</body>
+</html>

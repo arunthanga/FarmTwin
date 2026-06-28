@@ -24,6 +24,10 @@ application. It contains the business/application artifacts and a working MVP.
 | [docs/08-fpo-pilot-mou-template.md](docs/08-fpo-pilot-mou-template.md) | FPO pilot MoU template | scale-funding |
 | [docs/09-agri-fintech-phase2.md](docs/09-agri-fintech-phase2.md) | Phase-2 agri-fintech layer | scale-funding |
 | [docs/10-branding-and-trademark.md](docs/10-branding-and-trademark.md) | Brand decision (FarmTwin) + trademark due diligence | branding |
+| [docs/11-ksum-pitch-deck.md](docs/11-ksum-pitch-deck.md) | KSUM pitch deck — emotional + professional, 14 slides | pitch |
+| [docs/12-moolathara-beachhead.md](docs/12-moolathara-beachhead.md) | Moolathara RBC immediate-win + opportunity sizing | pitch |
+| [docs/13-pitch-narrative-and-one-pager.md](docs/13-pitch-narrative-and-one-pager.md) | 3-min spoken script, one-pager, elevator lines | pitch |
+| [pitch/deck.html](pitch/deck.html) | Presentable reveal.js slide deck (open in a browser) | pitch |
 
 ## Engine & design documents (FarmTwin Engine)
 
