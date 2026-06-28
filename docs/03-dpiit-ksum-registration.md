@@ -79,6 +79,11 @@ number to your KSUM profile so you become eligible for Seed Fund / Scale-up
 (Idea/Productisation grants need DPIIT only at later milestone stages — confirm
 current requirement on the scheme page at apply time).
 
+The KSUM Unique ID also unlocks Kerala's **Government as a Marketplace (GAAM)**
+direct-procurement pathway: registered startups can be bought by any state
+department **up to Rs.50 lakh (ex-GST) without tender** (GO Ms No 2/2022/SPD).
+See `02-problem-statement.md` for how this fits the FarmTwin GTM.
+
 ## Checklist
 
 - [ ] KSUM Unique ID issued

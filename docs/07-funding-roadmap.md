@@ -33,6 +33,10 @@ the table but also do not double-count.
 - **Bank FPO finance / Agri Infrastructure Fund** — for the FPO partner's
   capex (packhouse, cold storage), not for FarmTwin directly, but it makes the
   FPO a stronger paying customer.
+- **GAAM (Government as a Marketplace)** — once KSUM-registered and pilot-proven,
+  Kerala departments can buy FarmTwin directly **up to Rs.50L ex-GST without
+  tender** (GO Ms No 2/2022/SPD). Target Krishi Bhavans / Agriculture Dept
+  cluster deployments; use Demand Day and Innovation Zone intros via KSUM.
 
 ## Dilution discipline
 - Stages 1-3 are non-dilutive grants -> take fully before any equity.

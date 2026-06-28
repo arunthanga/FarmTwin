@@ -57,3 +57,8 @@ assembly-line simulation and FE meshing:
 We apply to KSUM and AgriNext as a **software/deeptech product company** whose
 pilot happens to run on the founder's farm — never as a "farm" or "agribusiness"
 (those are KSUM-ineligible). See `02-problem-statement.md`.
+
+Kerala's **GAAM** policy also creates a credible B2G revenue path: once
+KSUM-registered, government departments can procure FarmTwin directly up to
+**Rs.50 lakh (ex-GST) without tender** — district Krishi Bhavan deployments fit
+that band. AgriNext proves the product; GAAM scales it.

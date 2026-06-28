@@ -53,6 +53,9 @@ strengthens FPOs as the adoption anchor.
 - Pilot funding (up to Rs.25 lakh) for cluster-scale deployment.
 - Matchmaking with a Chittur FPO/FPC and a signed pilot MoU (template doc 08).
 - Inclusion in the AgriNext deployment/procurement pathway.
+- Introduction to Agriculture Department / Krishi Bhavan buyers for post-pilot
+  **GAAM direct procurement** (up to Rs.50 lakh ex-GST without tender under
+  GO Ms No 2/2022/SPD once KSUM-registered).
 
 **Founder edge:** 20 years of CAE/simulation (meshing, assembly-line sim) — the
 exact competency a *digital twin* requires — plus a 15-acre pilot farm inside the
