@@ -15,7 +15,6 @@ TDD mode (FARMTWIN_TDD_MODE=on):
 from __future__ import annotations
 
 import os
-from typing import Generator
 
 import numpy as np
 import pytest
@@ -42,7 +41,7 @@ def pytest_configure(config: pytest.Config) -> None:
     mode_label = "ON (failures expected)" if TDD_MODE else "OFF (all tests must pass)"
     print(f"\n{'='*60}")
     print(f"  FarmTwin TDD Mode: {mode_label}")
-    print(f"  Set FARMTWIN_TDD_MODE=on|off to change.")
+    print("  Set FARMTWIN_TDD_MODE=on|off to change.")
     print(f"{'='*60}\n")
 
 
@@ -57,13 +56,18 @@ def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo) -> None:
     When TDD_MODE=off:
       - tdd-marked tests are treated normally (must pass).
     """
-    if TDD_MODE and "tdd" in [m.name for m in item.iter_markers()]:
-        if call.when == "call" and call.excinfo is not None:
-            # Test failed — expected in TDD red phase. Mark as xfail.
-            item.add_marker(pytest.mark.xfail(strict=False))
+    if (
+        TDD_MODE
+        and "tdd" in [m.name for m in item.iter_markers()]
+        and call.when == "call"
+        and call.excinfo is not None
+    ):
+        # Test failed — expected in TDD red phase. Mark as xfail.
+        item.add_marker(pytest.mark.xfail(strict=False))
 
 
 # ── Numeric Tolerance Constants ────────────────────────────────────────────────
+
 
 class Tolerances:
     """Numeric tolerances for solver validation tests.
@@ -73,28 +77,29 @@ class Tolerances:
     """
 
     # GGA solver (Todini & Pilati 1988): convergence to 4 significant figures
-    GGA_FLOW_REL: float = 1e-4       # relative tolerance on flows [m³/s]
-    GGA_HEAD_ABS: float = 1e-3       # absolute tolerance on nodal heads [m]
-    GGA_EU_ABS: float = 0.1          # emission uniformity [%]
+    GGA_FLOW_REL: float = 1e-4  # relative tolerance on flows [m³/s]
+    GGA_HEAD_ABS: float = 1e-3  # absolute tolerance on nodal heads [m]
+    GGA_EU_ABS: float = 0.1  # emission uniformity [%]
 
     # FAO-56 (Allen et al. 1998): ET₀ validated to ±5% vs lysimeter data
-    FAO56_ET0_REL: float = 0.05      # relative tolerance on ET₀ [mm/day]
+    FAO56_ET0_REL: float = 0.05  # relative tolerance on ET₀ [mm/day]
     FAO56_BALANCE_ABS: float = 0.01  # root-zone water balance closure [mm]
 
     # Richards (Celia 1990): mass conservation to machine precision with lumped matrix
     RICHARDS_MASS_REL: float = 1e-6  # relative mass conservation error
 
     # van Genuchten (1980): retention curve
-    VG_THETA_ABS: float = 1e-4      # volumetric water content [m³/m³]
+    VG_THETA_ABS: float = 1e-4  # volumetric water content [m³/m³]
 
     # MOC transient (Wylie & Streeter): surge peak to ±2%
-    MOC_HEAD_REL: float = 0.02      # relative tolerance on surge head [m]
+    MOC_HEAD_REL: float = 0.02  # relative tolerance on surge head [m]
 
 
 TOL = Tolerances()
 
 
 # ── Fixtures: minimal network for GGA tests ────────────────────────────────────
+
 
 @pytest.fixture(scope="session")
 def two_reservoir_network() -> dict:
@@ -114,19 +119,29 @@ def two_reservoir_network() -> dict:
     return {
         "nodes": [
             {"id": "R1", "type": "reservoir", "elevation_m": 100.0, "head_m": 100.0},
-            {"id": "J1", "type": "junction",  "elevation_m": 0.0,   "demand_m3s": 0.0},
-            {"id": "R2", "type": "reservoir", "elevation_m": 80.0,  "head_m": 80.0},
+            {"id": "J1", "type": "junction", "elevation_m": 0.0, "demand_m3s": 0.0},
+            {"id": "R2", "type": "reservoir", "elevation_m": 80.0, "head_m": 80.0},
         ],
         "links": [
             {
-                "id": "P1", "from_node": "R1", "to_node": "J1",
-                "type": "pipe", "headloss_formula": "hazen_williams",
-                "diameter_m": 0.2, "length_m": 1000.0, "c_factor": 100.0,
+                "id": "P1",
+                "from_node": "R1",
+                "to_node": "J1",
+                "type": "pipe",
+                "headloss_formula": "hazen_williams",
+                "diameter_m": 0.2,
+                "length_m": 1000.0,
+                "c_factor": 100.0,
             },
             {
-                "id": "P2", "from_node": "J1", "to_node": "R2",
-                "type": "pipe", "headloss_formula": "hazen_williams",
-                "diameter_m": 0.15, "length_m": 800.0, "c_factor": 100.0,
+                "id": "P2",
+                "from_node": "J1",
+                "to_node": "R2",
+                "type": "pipe",
+                "headloss_formula": "hazen_williams",
+                "diameter_m": 0.15,
+                "length_m": 800.0,
+                "c_factor": 100.0,
             },
         ],
         "expected": {"J1_head_m": 90.0},
@@ -146,15 +161,28 @@ def single_lateral_network() -> dict:
         nid = f"J{i}"
         nodes.append({"id": nid, "type": "junction", "elevation_m": 0.0, "demand_m3s": 0.0})
         from_n = "R" if i == 0 else f"J{i-1}"
-        links.append({
-            "id": f"L{i}", "from_node": from_n, "to_node": nid,
-            "type": "pipe", "headloss_formula": "hazen_williams",
-            "diameter_m": 0.016, "length_m": 0.5, "c_factor": 145.0,
-        })
-        links.append({
-            "id": f"E{i}", "from_node": nid, "to_node": f"EM{i}",
-            "type": "emitter", "k": 0.5, "x": 0.5,
-        })
+        links.append(
+            {
+                "id": f"L{i}",
+                "from_node": from_n,
+                "to_node": nid,
+                "type": "pipe",
+                "headloss_formula": "hazen_williams",
+                "diameter_m": 0.016,
+                "length_m": 0.5,
+                "c_factor": 145.0,
+            }
+        )
+        links.append(
+            {
+                "id": f"E{i}",
+                "from_node": nid,
+                "to_node": f"EM{i}",
+                "type": "emitter",
+                "k": 0.5,
+                "x": 0.5,
+            }
+        )
         nodes.append({"id": f"EM{i}", "type": "emitter_outlet", "elevation_m": 0.0})
     return {"nodes": nodes, "links": links}
 
@@ -173,12 +201,12 @@ def fao56_palakkad_inputs() -> dict:
         "rh_max_pct": 82.0,
         "rh_min_pct": 52.0,
         "u2_ms": 1.8,
-        "rs_mjm2d": 21.4,      # incoming solar radiation
-        "rn_mjm2d": 13.2,      # net radiation (computed from rs, albedo, Tsky)
-        "g_mjm2d": 0.0,        # soil heat flux (daily ≈ 0)
+        "rs_mjm2d": 21.4,  # incoming solar radiation
+        "rn_mjm2d": 13.2,  # net radiation (computed from rs, albedo, Tsky)
+        "g_mjm2d": 0.0,  # soil heat flux (daily ≈ 0)
         "elevation_m": 142.5,
         "lat_deg": 10.65,
-        "doy": 180,             # day of year (June 29)
+        "doy": 180,  # day of year (June 29)
         "expected_et0_mmd": 5.6,
     }
 
@@ -192,22 +220,23 @@ def van_genuchten_palakkad_laterite() -> dict:
     Reference: van Genuchten (1980) SSSAJ 44(5):892-898.
     """
     return {
-        "alpha": 0.059,   # 1/m
-        "n": 1.48,        # [-]
-        "theta_r": 0.065, # m³/m³
+        "alpha": 0.059,  # 1/m
+        "n": 1.48,  # [-]
+        "theta_r": 0.065,  # m³/m³
         "theta_s": 0.41,  # m³/m³
         "ks_mday": 0.62,  # m/day
         # Test points: (psi_m, expected_theta)
         "test_points": [
-            (-0.0,  0.41),    # saturated
-            (-1.0,  0.35),    # near-saturation
-            (-10.0, 0.22),    # field capacity approx
-            (-150.0, 0.10),   # permanent wilting point approx
+            (-0.0, 0.41),  # saturated
+            (-1.0, 0.35),  # near-saturation
+            (-10.0, 0.22),  # field capacity approx
+            (-150.0, 0.10),  # permanent wilting point approx
         ],
     }
 
 
 # ── Fixtures: parameter store ──────────────────────────────────────────────────
+
 
 @pytest.fixture
 def default_params() -> dict:
@@ -220,7 +249,7 @@ def default_params() -> dict:
         "water_density_kgm3": 1000.0,
         "hw_exponent": 1.852,
         "hw_coefficient_factor": 10.67,
-        "dw_lambda": 0.5,           # Mualem pore-connectivity parameter
+        "dw_lambda": 0.5,  # Mualem pore-connectivity parameter
         "zero_flow_eps_m3s": 1.0e-6,  # Elhay-Simpson regularization threshold
         "convergence_tol": 1.0e-4,
         "max_iterations": 50,
@@ -228,6 +257,7 @@ def default_params() -> dict:
 
 
 # ── Fixtures: numpy rng for stochastic tests ───────────────────────────────────
+
 
 @pytest.fixture
 def rng() -> np.random.Generator:

@@ -5,7 +5,7 @@
         validate-schema baselines clean upload
 
 PYTHON      ?= python3
-PIP         ?= pip
+PIP         ?= $(PYTHON) -m pip
 ENGINE_DIR   = engine
 TESTS_DIR    = engine/tests
 
@@ -29,12 +29,12 @@ install:
 	$(PIP) install -e ".[dev]"
 
 lint:
-	ruff check $(ENGINE_DIR)/krishiflow $(ENGINE_DIR)/tests --output-format text
-	ruff format --check $(ENGINE_DIR)/
+	$(PYTHON) -m ruff check $(ENGINE_DIR)/krishiflow $(ENGINE_DIR)/tests --output-format full
+	$(PYTHON) -m ruff format --check $(ENGINE_DIR)/
 
 format:
-	ruff check $(ENGINE_DIR)/ --fix
-	ruff format $(ENGINE_DIR)/
+	$(PYTHON) -m ruff check $(ENGINE_DIR)/ --fix
+	$(PYTHON) -m ruff format $(ENGINE_DIR)/
 
 test: test-unit
 

@@ -29,6 +29,7 @@ try:
         b6_hampel,
         run_b6_gate,
     )
+
     _QC_AVAILABLE = True
 except ImportError:
     _QC_AVAILABLE = False
@@ -37,6 +38,7 @@ except ImportError:
 # ══════════════════════════════════════════════════════════════════════
 # SECTION 1 — QC Flag Enumeration (unit)
 # ══════════════════════════════════════════════════════════════════════
+
 
 class TestQCFlagEnum:
     """Unit tests for QCFlag enumeration values (aligned with QARTOD standard)."""
@@ -72,6 +74,7 @@ class TestQCFlagEnum:
 # SECTION 2 — B1 Gross-Range Check (unit)
 # ══════════════════════════════════════════════════════════════════════
 
+
 class TestB1GrossRange:
     """Unit tests for B1 gross-range check.
 
@@ -79,16 +82,23 @@ class TestB1GrossRange:
     """
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("value,sensor_min,sensor_max,expected_flag", [
-        (25.0,   0.0, 100.0, 1),   # PASS — inside range
-        (0.0,    0.0, 100.0, 1),   # PASS — at lower bound (inclusive)
-        (100.0,  0.0, 100.0, 1),   # PASS — at upper bound (inclusive)
-        (-0.001, 0.0, 100.0, 4),   # FAIL — just below lower bound
-        (100.001,0.0, 100.0, 4),   # FAIL — just above upper bound
-        (float("nan"), 0.0, 100.0, 4),  # FAIL — NaN
-    ])
+    @pytest.mark.parametrize(
+        "value,sensor_min,sensor_max,expected_flag",
+        [
+            (25.0, 0.0, 100.0, 1),  # PASS — inside range
+            (0.0, 0.0, 100.0, 1),  # PASS — at lower bound (inclusive)
+            (100.0, 0.0, 100.0, 1),  # PASS — at upper bound (inclusive)
+            (-0.001, 0.0, 100.0, 4),  # FAIL — just below lower bound
+            (100.001, 0.0, 100.0, 4),  # FAIL — just above upper bound
+            (float("nan"), 0.0, 100.0, 4),  # FAIL — NaN
+        ],
+    )
     def test_b1_parametrized(
-        self, value: float, sensor_min: float, sensor_max: float, expected_flag: int,
+        self,
+        value: float,
+        sensor_min: float,
+        sensor_max: float,
+        expected_flag: int,
     ) -> None:
         """Gross-range check for various input values."""
         if not _QC_AVAILABLE:
@@ -117,6 +127,7 @@ class TestB1GrossRange:
 # ══════════════════════════════════════════════════════════════════════
 # SECTION 3 — B3 Spike Check (unit)
 # ══════════════════════════════════════════════════════════════════════
+
 
 class TestB3Spike:
     """Unit tests for B3 spike detection.
@@ -157,6 +168,7 @@ class TestB3Spike:
 # SECTION 4 — B4 Rate-of-Change Check (unit)
 # ══════════════════════════════════════════════════════════════════════
 
+
 class TestB4RateOfChange:
     """Unit tests for B4 rate-of-change check.
 
@@ -169,7 +181,9 @@ class TestB4RateOfChange:
         if not _QC_AVAILABLE:
             pytest.skip("quality module not available")
         flag = b4_rate_of_change(
-            current=0.30, previous=0.29, dt_seconds=900,  # 15 min
+            current=0.30,
+            previous=0.29,
+            dt_seconds=900,  # 15 min
             max_rate_per_second=0.0001,
         )
         assert flag == QCFlag.PASS
@@ -180,7 +194,9 @@ class TestB4RateOfChange:
         if not _QC_AVAILABLE:
             pytest.skip("quality module not available")
         flag = b4_rate_of_change(
-            current=0.80, previous=0.30, dt_seconds=900,
+            current=0.80,
+            previous=0.30,
+            dt_seconds=900,
             max_rate_per_second=0.0001,  # 0.0001 m³/m³/s = 0.09/15min max
         )
         assert flag == QCFlag.FAIL
@@ -189,6 +205,7 @@ class TestB4RateOfChange:
 # ══════════════════════════════════════════════════════════════════════
 # SECTION 5 — B5 Flatline Check (unit)
 # ══════════════════════════════════════════════════════════════════════
+
 
 class TestB5Flatline:
     """Unit tests for B5 flatline (stuck sensor) check.
@@ -219,7 +236,7 @@ class TestB5Flatline:
         """If history is shorter than min_count, test cannot fire → PASS."""
         if not _QC_AVAILABLE:
             pytest.skip("quality module not available")
-        history = [0.30, 0.30]   # Only 2 readings; need 5 to flag
+        history = [0.30, 0.30]  # Only 2 readings; need 5 to flag
         flag = b5_flatline(history=history, eps=1e-4, min_count=5)
         assert flag == QCFlag.PASS
 
@@ -227,6 +244,7 @@ class TestB5Flatline:
 # ══════════════════════════════════════════════════════════════════════
 # SECTION 6 — B6 Hampel Outlier Check (unit)
 # ══════════════════════════════════════════════════════════════════════
+
 
 class TestB6Hampel:
     """Unit tests for B6 Hampel filter (rolling median ± k·MAD).
@@ -273,6 +291,7 @@ class TestB6Hampel:
 # SECTION 7 — Full B6 Gate Integration (unit)
 # ══════════════════════════════════════════════════════════════════════
 
+
 class TestRunB6Gate:
     """Integration tests for the full B6 QC gate (all six checks in sequence)."""
 
@@ -304,7 +323,7 @@ class TestRunB6Gate:
             pytest.skip("quality module not available")
         history = [0.28] * 10
         result = run_b6_gate(
-            value=1.5,          # WAY outside 0–1 for soil moisture
+            value=1.5,  # WAY outside 0–1 for soil moisture
             sensor_type="soil_moisture",
             sensor_min=0.0,
             sensor_max=1.0,
@@ -345,6 +364,7 @@ class TestRunB6Gate:
 # SECTION 8 — TDD Stubs
 # ══════════════════════════════════════════════════════════════════════
 
+
 class TestQualityTDD:
     """TDD stubs for QC features not yet implemented."""
 
@@ -371,6 +391,7 @@ class TestQualityTDD:
         Not yet implemented: battery health check in quality.py.
         """
         from krishiflow.quality import check_battery_health  # type: ignore[import]
+
         result = check_battery_health(voltage_v=3.1, min_voltage_v=3.2)
         assert result["alert_required"] is True
         assert result["flag"] == QCFlag.SUSPECT
@@ -382,9 +403,11 @@ class TestQualityTDD:
         Not yet implemented: adaptive spike threshold in b3_spike().
         Reference: IOOS QARTOD Manual Appendix A — adaptive threshold calibration.
         """
-        from krishiflow.quality import calibrate_spike_threshold  # type: ignore[import]
         # 30 days of 15-min readings with σ ≈ 0.015 m³/m³
         import numpy as np
+
+        from krishiflow.quality import calibrate_spike_threshold  # type: ignore[import]
+
         rng = np.random.default_rng(42)
         history = (0.30 + rng.normal(0, 0.015, 2880)).tolist()
         threshold = calibrate_spike_threshold(history=history, n_sigma=2.0)

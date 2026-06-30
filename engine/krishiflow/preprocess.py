@@ -10,7 +10,14 @@ import json
 
 from .components import PumpCurve, Venturi
 from .network import (
-    Emitter, Junction, Network, Pipe, Pump, Reservoir, Valve, VenturiLink,
+    Emitter,
+    Junction,
+    Network,
+    Pipe,
+    Pump,
+    Reservoir,
+    Valve,
+    VenturiLink,
 )
 
 
@@ -38,7 +45,7 @@ def network_from_dict(d: dict) -> Network:
 
 
 def load_network(path: str) -> Network:
-    with open(path, "r", encoding="utf-8") as fh:
+    with open(path, encoding="utf-8") as fh:
         return network_from_dict(json.load(fh))
 
 
@@ -66,19 +73,30 @@ def build_drip_lateral(
     the PC variant is likewise 4 L/h.
     """
     net = Network()
-    net.add_reservoir(Reservoir(id="SRC", head=source_head, x=0.0,
-                                y=source_elevation))
+    net.add_reservoir(Reservoir(id="SRC", head=source_head, x=0.0, y=source_elevation))
     prev = "SRC"
     for i in range(1, n_emitters + 1):
         nid = f"E{i}"
         elev = source_elevation + slope * spacing * i
         em = Emitter(
-            k=emitter_k, x=emitter_x,
-            pressure_compensating=pressure_compensating, nominal_q=nominal_q,
+            k=emitter_k,
+            x=emitter_x,
+            pressure_compensating=pressure_compensating,
+            nominal_q=nominal_q,
         )
-        net.add_junction(Junction(id=nid, elevation=elev, demand=0.0,
-                                  emitter=em, x=spacing * i, y=elev))
-        net.add_pipe(Pipe(id=f"P{i}", start=prev, end=nid, length=spacing,
-                          diameter=diameter, coeff=hw_c, model="HW"))
+        net.add_junction(
+            Junction(id=nid, elevation=elev, demand=0.0, emitter=em, x=spacing * i, y=elev)
+        )
+        net.add_pipe(
+            Pipe(
+                id=f"P{i}",
+                start=prev,
+                end=nid,
+                length=spacing,
+                diameter=diameter,
+                coeff=hw_c,
+                model="HW",
+            )
+        )
         prev = nid
     return net

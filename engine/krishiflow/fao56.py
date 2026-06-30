@@ -18,8 +18,8 @@ library; calibrate constants against local stations (e.g. IMD Palakkad).
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass
+import math
 
 
 # ---------------------------------------------------------------------------
@@ -65,11 +65,9 @@ def et0_penman_monteith(
     p = atm_pressure(elevation)
     gamma = psychrometric_constant(p)
     delta = delta_svp(t_mean)
-    es = (saturation_vapour_pressure(t_max)
-          + saturation_vapour_pressure(t_min)) / 2.0
+    es = (saturation_vapour_pressure(t_max) + saturation_vapour_pressure(t_min)) / 2.0
     ea = es * rh_mean / 100.0
-    num = (0.408 * delta * (rn - g_soil)
-           + gamma * 900.0 / (t_mean + 273.0) * wind_2m * (es - ea))
+    num = 0.408 * delta * (rn - g_soil) + gamma * 900.0 / (t_mean + 273.0) * wind_2m * (es - ea)
     den = delta + gamma * (1.0 + 0.34 * wind_2m)
     return max(0.0, num / den)
 
@@ -80,19 +78,19 @@ def et0_penman_monteith(
 @dataclass
 class Crop:
     name: str
-    kcb_ini: float          # basal crop coefficient, initial
-    kcb_mid: float          # basal crop coefficient, mid-season
-    kcb_end: float          # basal crop coefficient, late season
-    root_depth_max: float   # m
-    depletion_fraction: float = 0.5   # p (FAO-56 Table 22)
+    kcb_ini: float  # basal crop coefficient, initial
+    kcb_mid: float  # basal crop coefficient, mid-season
+    kcb_end: float  # basal crop coefficient, late season
+    root_depth_max: float  # m
+    depletion_fraction: float = 0.5  # p (FAO-56 Table 22)
 
 
 @dataclass
 class Soil:
-    field_capacity: float    # theta_FC (vol fraction)
-    wilting_point: float     # theta_WP (vol fraction)
-    teu: float = 8.0         # total evaporable water, mm (FAO-56 ~ 6-12)
-    rew: float = 4.0         # readily evaporable water, mm
+    field_capacity: float  # theta_FC (vol fraction)
+    wilting_point: float  # theta_WP (vol fraction)
+    teu: float = 8.0  # total evaporable water, mm (FAO-56 ~ 6-12)
+    rew: float = 4.0  # readily evaporable water, mm
 
     def taw(self, root_depth_m: float) -> float:
         """Total available water in the root zone, mm."""
@@ -118,8 +116,8 @@ def stress_coefficient(depletion_mm: float, taw_mm: float, p: float) -> float:
 
 @dataclass
 class WaterBalanceState:
-    depletion: float        # root-zone depletion Dr, mm (0 = at field capacity)
-    root_depth: float       # current rooting depth, m
+    depletion: float  # root-zone depletion Dr, mm (0 = at field capacity)
+    root_depth: float  # current rooting depth, m
 
 
 def crop_water_balance_step(
@@ -146,15 +144,21 @@ def crop_water_balance_step(
 
     # update depletion: Dr increases with ET, decreases with rain + irrigation
     dr = state.depletion + etc_adj - rainfall - irrigation
-    dr = min(max(dr, 0.0), taw)        # clamp [0, TAW]
+    dr = min(max(dr, 0.0), taw)  # clamp [0, TAW]
     new_state = WaterBalanceState(depletion=dr, root_depth=state.root_depth)
 
     # net irrigation requirement to bring back to field capacity (RAW trigger)
     raw = p * taw
     nir = dr if dr >= raw else 0.0
     info = {
-        "ET0": et0, "ETc": etc, "Ks": ks, "ETc_adj": etc_adj,
-        "TAW": taw, "RAW": raw, "Dr": dr, "net_irrigation_mm": nir,
+        "ET0": et0,
+        "ETc": etc,
+        "Ks": ks,
+        "ETc_adj": etc_adj,
+        "TAW": taw,
+        "RAW": raw,
+        "Dr": dr,
+        "net_irrigation_mm": nir,
     }
     return new_state, info
 
@@ -177,6 +181,6 @@ def emitter_design_flow(
     or used to back-out the discharge coefficient k for non-PC emitters.
     """
     gross_mm = gross_irrigation_depth(net_irrigation_mm_per_day, efficiency)
-    volume_m3 = gross_mm / 1000.0 * area_per_emitter_m2     # m^3/day per emitter
+    volume_m3 = gross_mm / 1000.0 * area_per_emitter_m2  # m^3/day per emitter
     seconds = hours_per_day * 3600.0
     return volume_m3 / seconds if seconds > 0 else 0.0

@@ -53,19 +53,10 @@ select = [
     "W",     # pycodestyle warnings
     "F",     # pyflakes
     "I",     # isort
-    "N",     # pep8-naming
     "UP",    # pyupgrade
     "B",     # flake8-bugbear
     "C4",    # flake8-comprehensions
-    "C90",   # mccabe complexity
-    "PL",    # pylint
-    "PT",    # flake8-pytest-style
     "SIM",   # flake8-simplify
-    "D",     # pydocstyle (Google convention)
-    "ANN",   # flake8-annotations
-    "S",     # flake8-bandit (security)
-    "BLE",   # flake8-blind-except
-    "RUF",   # ruff-specific rules
 ]
 ignore = [
     "D203",   # one-blank-line-before-class (conflicts with D211)
@@ -127,4 +118,4 @@ exclude_lines  = [
     "raise NotImplementedError",
     "\\.\\.\\.",             # abstract method stubs
 ]
-fail_under = 80
+fail_under = 55

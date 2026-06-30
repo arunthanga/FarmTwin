@@ -22,16 +22,14 @@ try:
     from krishiflow.preprocess import (
         load_fts_json,
         validate_fts_json,
-        FTSValidationError,
     )
+
     _PREPROCESS_AVAILABLE = True
 except ImportError:
     _PREPROCESS_AVAILABLE = False
 
 # Path to the example FTS document used throughout
-EXAMPLE_FTS_PATH = (
-    Path(__file__).parent.parent.parent / "docs/examples/eruthempathy_pilot.fts.json"
-)
+EXAMPLE_FTS_PATH = Path(__file__).parent.parent.parent / "docs/examples/eruthempathy_pilot.fts.json"
 
 # Load the example document once (fixture will deep-copy it per test)
 _EXAMPLE_DOC: dict = {}
@@ -51,6 +49,7 @@ def valid_fts() -> dict:
 # ══════════════════════════════════════════════════════════════════════
 # SECTION 1 — Schema Version & Top-Level Structure (unit)
 # ══════════════════════════════════════════════════════════════════════
+
 
 class TestFTSTopLevel:
     """Unit tests for top-level FTS document structure."""
@@ -96,6 +95,7 @@ class TestFTSTopLevel:
 # SECTION 2 — Farm Block Validation (unit)
 # ══════════════════════════════════════════════════════════════════════
 
+
 class TestFTSFarmBlock:
     """Unit tests for farm block validation rules."""
 
@@ -109,9 +109,16 @@ class TestFTSFarmBlock:
         assert any("V03" in e or "area" in e.lower() for e in errors)
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("soil_type", [
-        "sandy", "loam", "clay_loam", "red_laterite", "black_cotton",
-    ])
+    @pytest.mark.parametrize(
+        "soil_type",
+        [
+            "sandy",
+            "loam",
+            "clay_loam",
+            "red_laterite",
+            "black_cotton",
+        ],
+    )
     def test_known_soil_types_accepted(self, valid_fts: dict, soil_type: str) -> None:
         """All documented soil types in §4.1 must pass validation."""
         if not _PREPROCESS_AVAILABLE:
@@ -135,7 +142,7 @@ class TestFTSFarmBlock:
         """V18: surveyed_by.phone must match E.164 format (+countrycode digits)."""
         if not _PREPROCESS_AVAILABLE:
             pytest.skip("preprocess module not available")
-        valid_fts["surveyed_by"]["phone"] = "9876543210"   # missing + prefix
+        valid_fts["surveyed_by"]["phone"] = "9876543210"  # missing + prefix
         errors = validate_fts_json(valid_fts)
         assert any("V18" in e or "phone" in e.lower() for e in errors)
 
@@ -143,6 +150,7 @@ class TestFTSFarmBlock:
 # ══════════════════════════════════════════════════════════════════════
 # SECTION 3 — Network Topology Validation (unit)
 # ══════════════════════════════════════════════════════════════════════
+
 
 class TestFTSNetworkTopology:
     """Unit tests for node/link topology validation rules V04–V09."""
@@ -183,25 +191,33 @@ class TestFTSNetworkTopology:
         if not _PREPROCESS_AVAILABLE:
             pytest.skip("preprocess module not available")
         # Add an orphan junction with no links
-        valid_fts["nodes"].append({
-            "id": "ORPHAN",
-            "type": "junction",
-            "location": {"lat": 10.65, "lon": 76.64, "elevation_m": 140.0},
-            "elevation_source": "manual",
-            "attributes": {},
-        })
+        valid_fts["nodes"].append(
+            {
+                "id": "ORPHAN",
+                "type": "junction",
+                "location": {"lat": 10.65, "lon": 76.64, "elevation_m": 140.0},
+                "elevation_source": "manual",
+                "attributes": {},
+            }
+        )
         errors = validate_fts_json(valid_fts)
         assert any("V07" in e or "disconnected" in e.lower() or "ORPHAN" in e for e in errors)
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("diameter_m,should_pass", [
-        (0.005, True),    # 5mm — lower bound (drip lateral)
-        (0.5,   True),    # 500mm — upper bound (large main)
-        (0.004, False),   # below lower bound
-        (0.51,  False),   # above upper bound
-    ])
+    @pytest.mark.parametrize(
+        "diameter_m,should_pass",
+        [
+            (0.005, True),  # 5mm — lower bound (drip lateral)
+            (0.5, True),  # 500mm — upper bound (large main)
+            (0.004, False),  # below lower bound
+            (0.51, False),  # above upper bound
+        ],
+    )
     def test_pipe_diameter_bounds_v08(
-        self, valid_fts: dict, diameter_m: float, should_pass: bool,
+        self,
+        valid_fts: dict,
+        diameter_m: float,
+        should_pass: bool,
     ) -> None:
         """V08: pipe internal diameter must be in 0.005–0.5 m range."""
         if not _PREPROCESS_AVAILABLE:
@@ -218,6 +234,7 @@ class TestFTSNetworkTopology:
 # ══════════════════════════════════════════════════════════════════════
 # SECTION 4 — Zone & Crop Validation (unit)
 # ══════════════════════════════════════════════════════════════════════
+
 
 class TestFTSZoneValidation:
     """Unit tests for zone and crop validation rules V10–V16."""
@@ -266,6 +283,7 @@ class TestFTSZoneValidation:
 # SECTION 5 — Round-Trip Import/Export (unit)
 # ══════════════════════════════════════════════════════════════════════
 
+
 class TestFTSRoundTrip:
     """Unit tests for FTS JSON round-trip fidelity (load → serialize → reload)."""
 
@@ -309,7 +327,8 @@ class TestFTSRoundTrip:
         network = load_fts_json(valid_fts)
         for fts_link in valid_fts["links"]:
             net_link = next(
-                (ln for ln in network["links"] if ln["id"] == fts_link["id"]), None,
+                (ln for ln in network["links"] if ln["id"] == fts_link["id"]),
+                None,
             )
             if net_link is not None:
                 assert net_link["length_m"] == pytest.approx(fts_link["length_m"], rel=1e-6)
@@ -318,6 +337,7 @@ class TestFTSRoundTrip:
 # ══════════════════════════════════════════════════════════════════════
 # SECTION 6 — TDD Stubs
 # ══════════════════════════════════════════════════════════════════════
+
 
 class TestFTSSchemaTDD:
     """TDD stubs for schema features not yet implemented."""
@@ -329,6 +349,7 @@ class TestFTSSchemaTDD:
         Not yet implemented: EPANET .inp → FTS converter in preprocess.py.
         """
         from krishiflow.preprocess import load_epanet_inp  # type: ignore[import]
+
         inp_file = tmp_path / "test_network.inp"  # type: ignore[operator]
         inp_file.write_text("""\
 [TITLE]
@@ -358,6 +379,7 @@ P2    J1    R2    800     150    100
         Not yet implemented: POST /api/v1/surveys/kobo-ingest endpoint.
         """
         from krishiflow.preprocess import convert_kobo_to_fts  # type: ignore[import]
+
         kobo_payload = {
             "_id": 12345,
             "farm_name": "Test Farm",
@@ -377,6 +399,7 @@ P2    J1    R2    800     150    100
         Not yet implemented: commissioning_app/qr_scanner.py → FTS sensor registration.
         """
         from krishiflow.commissioning import register_sensor_from_deveui  # type: ignore[import]
+
         fts = copy.deepcopy(_EXAMPLE_DOC)
         updated_fts = register_sensor_from_deveui(
             fts=fts,
@@ -395,6 +418,7 @@ P2    J1    R2    800     150    100
         Not yet implemented: BoM generator in postprocess.py.
         """
         from krishiflow.postprocess import generate_bom  # type: ignore[import]
+
         bom = generate_bom(valid_fts)
         materials_in_fts = {ln["material"] for ln in valid_fts["links"]}
         materials_in_bom = {item["material"] for item in bom["pipes"]}

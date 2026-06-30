@@ -14,7 +14,7 @@ from .emitters import emitter_flow
 
 
 def pipe_velocity(flow, diameter):
-    area = math.pi * diameter ** 2 / 4.0
+    area = math.pi * diameter**2 / 4.0
     return abs(flow) / area if area > 0 else 0.0
 
 
@@ -44,8 +44,9 @@ def uniformity(discharges):
     CV    : coefficient of variation of emitter flow.
     EU    : statistical emission uniformity (%) = (1 - CV) * 100 (approx).
     """
-    q = sorted(float(v) for v in (discharges.values()
-               if isinstance(discharges, dict) else discharges))
+    q = sorted(
+        float(v) for v in (discharges.values() if isinstance(discharges, dict) else discharges)
+    )
     n = len(q)
     if n == 0:
         return {}
@@ -81,10 +82,16 @@ def pump_report(net, result):
             note = ""
         except ValueError as exc:
             catalog_hp, note = None, str(exc)
-        rows.append({
-            "pump": pid, "Q_m3ph": q * 3600.0, "head_m": gain,
-            "required_hp": hp, "motor_hp": catalog_hp, "note": note,
-        })
+        rows.append(
+            {
+                "pump": pid,
+                "Q_m3ph": q * 3600.0,
+                "head_m": gain,
+                "required_hp": hp,
+                "motor_hp": catalog_hp,
+                "note": note,
+            }
+        )
     return rows
 
 
@@ -94,14 +101,15 @@ def report(net, result) -> str:
     L.append("=" * 64)
     L.append("FarmTwin hydraulic report")
     L.append("=" * 64)
-    L.append(f"Converged: {result.converged}  "
-             f"iterations: {result.iterations}  "
-             f"max |dQ|: {result.max_residual:.2e} m3/s")
+    L.append(
+        f"Converged: {result.converged}  "
+        f"iterations: {result.iterations}  "
+        f"max |dQ|: {result.max_residual:.2e} m3/s"
+    )
     L.append("")
     L.append("Node pressures (m):")
     for nid in sorted(net.junctions):
-        L.append(f"  {nid:<10} P = {result.pressures[nid]:8.2f}   "
-                 f"H = {result.heads[nid]:8.2f}")
+        L.append(f"  {nid:<10} P = {result.pressures[nid]:8.2f}   " f"H = {result.heads[nid]:8.2f}")
     L.append("")
     L.append("Link flows & velocities:")
     for pid, pipe in net.pipes.items():
@@ -118,23 +126,28 @@ def report(net, result) -> str:
         L.append("")
         L.append("Pumps (duty point & motor sizing):")
         for r in pumps:
-            hp = f"{r['motor_hp']} HP" if r['motor_hp'] else "OVER-RANGE"
-            L.append(f"  {r['pump']:<8} Q = {r['Q_m3ph']:7.2f} m3/h  "
-                     f"H = {r['head_m']:6.2f} m  req {r['required_hp']:5.2f} HP "
-                     f"-> {hp} {r['note']}")
+            hp = f"{r['motor_hp']} HP" if r["motor_hp"] else "OVER-RANGE"
+            L.append(
+                f"  {r['pump']:<8} Q = {r['Q_m3ph']:7.2f} m3/h  "
+                f"H = {r['head_m']:6.2f} m  req {r['required_hp']:5.2f} HP "
+                f"-> {hp} {r['note']}"
+            )
 
     disch = emitter_discharges(net, result)
     if disch:
         u = uniformity(disch)
         L.append("")
         L.append("Emitter performance:")
-        L.append(f"  emitters: {u['count']}   "
-                 f"q_avg = {u['q_mean']*1e6:.2f} L/h-ish (x3.6 -> L/h: "
-                 f"{u['q_mean']*3.6e6:.2f})")
-        L.append(f"  q_min = {u['q_min']*3.6e6:.2f} L/h   "
-                 f"q_max = {u['q_max']*3.6e6:.2f} L/h")
-        L.append(f"  DU(low-quarter) = {u['DU_lq_pct']:.1f}%   "
-                 f"EU = {u['EU_pct']:.1f}%   CV = {u['CV']:.3f}")
+        L.append(
+            f"  emitters: {u['count']}   "
+            f"q_avg = {u['q_mean']*1e6:.2f} L/h-ish (x3.6 -> L/h: "
+            f"{u['q_mean']*3.6e6:.2f})"
+        )
+        L.append(f"  q_min = {u['q_min']*3.6e6:.2f} L/h   " f"q_max = {u['q_max']*3.6e6:.2f} L/h")
+        L.append(
+            f"  DU(low-quarter) = {u['DU_lq_pct']:.1f}%   "
+            f"EU = {u['EU_pct']:.1f}%   CV = {u['CV']:.3f}"
+        )
 
     if result.pc_warnings:
         L.append("")
@@ -149,13 +162,13 @@ def plot_lateral_profile(net, result, path="lateral_profile.png"):
     """Plot pressure & emitter flow along an ordered E1..En lateral. Optional."""
     try:
         import matplotlib
+
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
     except Exception as exc:  # matplotlib not installed -> skip gracefully
         return f"(plot skipped: {exc})"
 
-    nodes = sorted((n for n in net.junctions if n.startswith("E")),
-                   key=lambda s: int(s[1:]))
+    nodes = sorted((n for n in net.junctions if n.startswith("E")), key=lambda s: int(s[1:]))
     if not nodes:
         nodes = sorted(net.junctions)
     xs = list(range(1, len(nodes) + 1))

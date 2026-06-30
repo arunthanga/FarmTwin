@@ -8,16 +8,16 @@ solver (see emitters.py). Units are SI throughout.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
 
 
 @dataclass
 class Junction:
     """A node with unknown head. demand is base withdrawal (m^3/s, >0 = out)."""
+
     id: str
-    elevation: float = 0.0      # m
-    demand: float = 0.0         # m^3/s (fixed/base demand)
-    emitter: Optional["Emitter"] = None
+    elevation: float = 0.0  # m
+    demand: float = 0.0  # m^3/s (fixed/base demand)
+    emitter: Emitter | None = None
     x: float = 0.0
     y: float = 0.0
 
@@ -25,8 +25,9 @@ class Junction:
 @dataclass
 class Reservoir:
     """A fixed-head boundary node (source). head = total head (m)."""
+
     id: str
-    head: float                  # total head (m), = water-surface elevation
+    head: float  # total head (m), = water-surface elevation
     x: float = 0.0
     y: float = 0.0
 
@@ -38,15 +39,16 @@ class Pipe:
     `fittings` is a list of fitting names (see components.K_LIBRARY) whose K
     values are summed into the minor loss; `minor_loss` adds any extra K.
     """
+
     id: str
     start: str
     end: str
-    length: float                # m
-    diameter: float              # m
-    coeff: float                 # HW: C (dimensionless); DW: roughness eps (m)
-    minor_loss: float = 0.0      # extra minor-loss K (beyond `fittings`)
+    length: float  # m
+    diameter: float  # m
+    coeff: float  # HW: C (dimensionless); DW: roughness eps (m)
+    minor_loss: float = 0.0  # extra minor-loss K (beyond `fittings`)
     fittings: list = field(default_factory=list)  # e.g. ["tee_run", "elbow_45"]
-    model: str = "HW"            # "HW" or "DW"
+    model: str = "HW"  # "HW" or "DW"
 
 
 @dataclass
@@ -55,10 +57,11 @@ class Pump:
 
     `curve` is a components.PumpCurve. `status` may be "OPEN" or "CLOSED".
     """
+
     id: str
     start: str
     end: str
-    curve: object                # components.PumpCurve
+    curve: object  # components.PumpCurve
     status: str = "OPEN"
 
 
@@ -70,11 +73,12 @@ class Valve:
     PRV/PSV/FCV are reserved for the next increment.
     diameter is needed to convert K -> minor-loss coefficient.
     """
+
     id: str
     start: str
     end: str
     diameter: float
-    k: float = 0.05              # minor-loss K at the current opening
+    k: float = 0.05  # minor-loss K at the current opening
     type: str = "TCV"
     status: str = "OPEN"
 
@@ -82,10 +86,11 @@ class Valve:
 @dataclass
 class VenturiLink:
     """A venturi fertigation injector placed in-line as a loss element."""
+
     id: str
     start: str
     end: str
-    venturi: object              # components.Venturi
+    venturi: object  # components.Venturi
     status: str = "OPEN"
 
 
@@ -96,12 +101,13 @@ class Emitter:
     Non-PC (power law): q = k * P^x, where P = pressure head = H - elevation.
     PC (pressure compensating): delivers `nominal_q` while P in [p_min, p_max].
     """
-    k: float                     # discharge coefficient (SI units consistent)
-    x: float = 0.5               # emitter exponent (0.5 turbulent .. 1.0 laminar)
+
+    k: float  # discharge coefficient (SI units consistent)
+    x: float = 0.5  # emitter exponent (0.5 turbulent .. 1.0 laminar)
     pressure_compensating: bool = False
-    nominal_q: float = 0.0       # m^3/s, used when pressure_compensating
-    p_min: float = 5.0           # m, PC operating band lower bound
-    p_max: float = 40.0          # m, PC operating band upper bound
+    nominal_q: float = 0.0  # m^3/s, used when pressure_compensating
+    p_min: float = 5.0  # m, PC operating band lower bound
+    p_max: float = 40.0  # m, PC operating band upper bound
 
 
 @dataclass

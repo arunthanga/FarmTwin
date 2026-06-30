@@ -3,8 +3,10 @@
 All physical coefficients live here. Nothing is hard-coded in solver loops.
 Reference: engine/docs/12-solver-mathematics.md §1 (A0 parametrization).
 """
+
 from __future__ import annotations
-from dataclasses import dataclass, field
+
+from dataclasses import dataclass
 
 
 @dataclass
@@ -25,16 +27,16 @@ class ParameterSet:
     hw_coefficient_factor: float = 10.67
 
     # ── Darcy-Weisbach / Swamee-Jain ────────────────────────────────
-    dw_lambda: float = 0.5          # Mualem pore-connectivity (for K(Se))
+    dw_lambda: float = 0.5  # Mualem pore-connectivity (for K(Se))
 
     # ── GGA solver ──────────────────────────────────────────────────
-    zero_flow_eps_m3s: float = 1.0e-6   # Elhay-Simpson regularization threshold
+    zero_flow_eps_m3s: float = 1.0e-6  # Elhay-Simpson regularization threshold
     convergence_tol: float = 1.0e-4
     max_iterations: int = 50
 
     # ── FAO-56 (ASCE-EWRI standardized form) ────────────────────────
-    cn_short_grass: float = 900.0   # numerator constant (daytime)
-    cd_short_grass: float = 0.34    # denominator wind coefficient
+    cn_short_grass: float = 900.0  # numerator constant (daytime)
+    cd_short_grass: float = 0.34  # denominator wind coefficient
 
     # ── van Genuchten defaults (Palakkad red laterite) ───────────────
     vg_alpha_default: float = 0.059  # 1/m
@@ -44,9 +46,9 @@ class ParameterSet:
     vg_ks_mday_default: float = 0.62
 
     # ── Richards solver ─────────────────────────────────────────────
-    picard_tol: float = 1.0e-3   # Modified Picard convergence [m]
+    picard_tol: float = 1.0e-3  # Modified Picard convergence [m]
     picard_max_iter: int = 20
 
     # ── B6 QC gate ──────────────────────────────────────────────────
-    hampel_k: float = 3.0        # Hampel filter threshold multiplier
-    hampel_window: int = 7       # rolling window half-width (samples)
+    hampel_k: float = 3.0  # Hampel filter threshold multiplier
+    hampel_window: int = 7  # rolling window half-width (samples)

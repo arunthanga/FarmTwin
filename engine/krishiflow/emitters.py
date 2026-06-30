@@ -58,10 +58,8 @@ def expand_emitters(net):
             pc_info[jid] = (em.p_min, em.p_max, em.nominal_q)
         else:
             vnode = f"__emit_{jid}"
-            extra_fixed[vnode] = j.elevation       # virtual reservoir at ground
-            extra_links.append(
-                (f"__emitlink_{jid}", jid, vnode, emitter_link_eval(em.k, em.x))
-            )
+            extra_fixed[vnode] = j.elevation  # virtual reservoir at ground
+            extra_links.append((f"__emitlink_{jid}", jid, vnode, emitter_link_eval(em.k, em.x)))
     return extra_fixed, extra_links, pc_demands, pc_info
 
 
@@ -69,4 +67,4 @@ def emitter_flow(k: float, x: float, pressure: float) -> float:
     """Direct emitter discharge q = k * P^x for post-processing (P in m)."""
     if pressure <= 0:
         return 0.0
-    return k * pressure ** x
+    return k * pressure**x
