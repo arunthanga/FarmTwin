@@ -200,6 +200,29 @@ def generate_bom(fts: dict) -> dict:
     }
 
 
+def priced_bom(fts: dict, costs=None) -> dict:
+    """Bill of Materials with prices (specifications.md §3.9).
+
+    Extends :func:`generate_bom` with a per-line ``inr_per_m``/``line_inr`` and a
+    total ``capital_inr`` (pipes + fittings + valves + pump + emitters).
+    """
+    from . import catalog
+
+    costs = costs or catalog.DEFAULT_COSTS
+    bom = generate_bom(fts)
+    pipe_total = 0.0
+    for line in bom["pipes"]:
+        price = catalog.pipe_inr_per_m(
+            line.get("material", "pvc_upvc"), line.get("nominal_diameter_mm")
+        )
+        line["inr_per_m"] = price
+        line["line_inr"] = round(line["total_length_m"] * price, 2)
+        pipe_total += line["line_inr"]
+    bom["pipe_inr"] = round(pipe_total, 2)
+    bom["capital_inr"] = round(catalog.capital_cost(fts, costs), 2)
+    return bom
+
+
 def plot_lateral_profile(net, result, path="lateral_profile.png"):
     """Plot pressure & emitter flow along an ordered E1..En lateral. Optional."""
     try:

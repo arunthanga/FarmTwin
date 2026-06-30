@@ -650,6 +650,29 @@ def _load_epanet_inp_minimal(path: str) -> dict:
     return {"nodes": nodes, "links": links}
 
 
+def export_epanet_inp(net: Network, path: str) -> None:
+    """Write a solver ``Network`` as an EPANET 2.x ``.inp`` (specifications.md §3.9).
+
+    Emits the ``[JUNCTIONS]``, ``[RESERVOIRS]`` and ``[PIPES]`` sections (diameter
+    in mm, Hazen-Williams C as roughness) so a design can be verified in EPANET
+    2.2 / IRRICAD and round-trips through :func:`load_epanet_inp`.
+    """
+    lines = ["[TITLE]", "FarmTwin design export", "", "[JUNCTIONS]", ";ID\tElev"]
+    for jid, j in net.junctions.items():
+        lines.append(f"{jid}\t{j.elevation:.4f}")
+    lines += ["", "[RESERVOIRS]", ";ID\tHead"]
+    for rid, r in net.reservoirs.items():
+        lines.append(f"{rid}\t{r.head:.4f}")
+    lines += ["", "[PIPES]", ";ID\tNode1\tNode2\tLength\tDiameter\tRoughness"]
+    for pid, p in net.pipes.items():
+        lines.append(
+            f"{pid}\t{p.start}\t{p.end}\t{p.length:.4f}\t{p.diameter * 1000.0:.3f}\t{p.coeff:.1f}"
+        )
+    lines += ["", "[END]", ""]
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines))
+
+
 def convert_kobo_to_fts(payload: dict) -> dict:
     """Convert a KoboToolbox/ODK survey submission into an FTS document.
 
