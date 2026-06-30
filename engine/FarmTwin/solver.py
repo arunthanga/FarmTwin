@@ -29,13 +29,13 @@ from .emitters import expand_emitters
 
 @dataclass
 class SolveResult:
-    heads: dict          # node_id -> total head H (m)
-    pressures: dict      # junction_id -> pressure head P = H - elevation (m)
-    flows: dict          # link_id -> flow (m^3/s), + means start->end
+    heads: dict  # node_id -> total head H (m)
+    pressures: dict  # junction_id -> pressure head P = H - elevation (m)
+    flows: dict  # link_id -> flow (m^3/s), + means start->end
     iterations: int
     converged: bool
     max_residual: float
-    pc_warnings: list     # PC emitters outside their pressure band
+    pc_warnings: list  # PC emitters outside their pressure band
 
 
 def _link_evaluator(kind, link):
@@ -47,6 +47,7 @@ def _link_evaluator(kind, link):
             return comp.pipe_headloss_gradient(
                 flow, link.length, link.diameter, link.coeff, link.model, total_k
             )
+
         return f
     if kind == "pump":
         return lambda flow, link=link: link.curve.headloss_gradient(flow)
@@ -56,6 +57,7 @@ def _link_evaluator(kind, link):
         def f(flow, m=m):
             aq = abs(flow)
             return m * flow * aq, max(2.0 * m * aq, 1e-8)
+
         return f
     if kind == "venturi":
         return lambda flow, link=link: link.venturi.headloss_gradient(flow)
@@ -108,7 +110,8 @@ def solve(net, *, tol=1e-8, max_iter=200, damping=1.0):
     converged = False
     max_res = np.inf
     it = 0
-    for it in range(1, max_iter + 1):
+    for iteration in range(1, max_iter + 1):
+        it = iteration
         hL = np.empty(nl)
         ginv = np.empty(nl)
         for k, (_, _, _, f) in enumerate(links):
@@ -129,14 +132,14 @@ def solve(net, *, tol=1e-8, max_iter=200, damping=1.0):
             ei = uidx.get(e)
             # A10 H0 term: contribution of fixed-head endpoints
             if si is None:
-                a10h0[k] += fixed_head[s]      # +1 incidence at start
+                a10h0[k] += fixed_head[s]  # +1 incidence at start
             if ei is None:
-                a10h0[k] -= fixed_head[e]       # -1 incidence at end
+                a10h0[k] -= fixed_head[e]  # -1 incidence at end
             # M assembly (incidence products); unknown endpoints only
             gi = ginv[k]
             if si is not None:
                 M[si, si] += gi
-                rhs[si] -= Q[k]                 # -A12^T Q
+                rhs[si] -= Q[k]  # -A12^T Q
                 rhs[si] += gi * (hL[k] - a10h0[k])  # +A12^T G^-1(hL - A10H0)
             if ei is not None:
                 M[ei, ei] += gi
@@ -187,7 +190,7 @@ def solve(net, *, tol=1e-8, max_iter=200, damping=1.0):
 
     # PC emitter band check
     pc_warnings = []
-    for nid, (p_min, p_max, q_nom) in pc_info.items():
+    for nid, (p_min, p_max, _q_nom) in pc_info.items():
         p = pressures[nid]
         if p < p_min or p > p_max:
             pc_warnings.append(
@@ -196,6 +199,11 @@ def solve(net, *, tol=1e-8, max_iter=200, damping=1.0):
             )
 
     return SolveResult(
-        heads=heads, pressures=pressures, flows=flows, iterations=it,
-        converged=converged, max_residual=max_res, pc_warnings=pc_warnings,
+        heads=heads,
+        pressures=pressures,
+        flows=flows,
+        iterations=it,
+        converged=converged,
+        max_residual=max_res,
+        pc_warnings=pc_warnings,
     )

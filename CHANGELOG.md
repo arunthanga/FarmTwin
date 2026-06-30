@@ -16,19 +16,19 @@ Changes merged to `master` but not yet assigned a release tag.
 
 #### Added — engine modules (were emptied during a merge conflict)
 
-- `engine/krishiflow/quality.py` — QARTOD-style B1–B6 data-quality gate
+- `engine/FarmTwin/quality.py` — QARTOD-style B1–B6 data-quality gate
   (gross-range, climatological range, spike, rate-of-change, flat-line, Hampel
   median±k·MAD), `run_b6_gate`, battery-health and adaptive spike-threshold
   calibration. Dependency-free, edge-runnable.
-- `engine/krishiflow/commissioning.py` — `register_sensor_from_deveui`
+- `engine/FarmTwin/commissioning.py` — `register_sensor_from_deveui`
   (DevEUI QR onboarding) and a measured-vs-designed commissioning sign-off.
-- `engine/krishiflow/transient.py` — pure-NumPy MOC water-hammer reference
+- `engine/FarmTwin/transient.py` — pure-NumPy MOC water-hammer reference
   (validated vs Joukowsky); optional **TSNet** backend for full-network transients.
-- `engine/krishiflow/richards.py` — van Genuchten–Mualem closures + mass-
+- `engine/FarmTwin/richards.py` — van Genuchten–Mualem closures + mass-
   conservative method-of-lines column (openRE); optional SciPy BDF integrator.
-- `engine/krishiflow/agronomy.py` — GDD phenology + FAO-33 yield + Maas-Hoffman
+- `engine/FarmTwin/agronomy.py` — GDD phenology + FAO-33 yield + Maas-Hoffman
   salinity.
-- `engine/krishiflow/surface.py` — Kostiakov-Lewis infiltration + volume-balance
+- `engine/FarmTwin/surface.py` — Kostiakov-Lewis infiltration + volume-balance
   advance (Walker).
 
 #### Added — schema, BoM, EPANET I/O
@@ -124,7 +124,7 @@ Changes merged to `master` but not yet assigned a release tag.
 
 - `requirements.md` — single source of truth requirements document covering all solvers, components, UX personas, and technology choices (this session)
 - `changelog.md` — this file; established Keep-a-Changelog format
-- Specification for C-language GGA solver core (`libkrishiflow.so`) as a CPython extension for edge and high-performance Studio use
+- Specification for C-language GGA solver core (`libFarmTwin.so`) as a CPython extension for edge and high-performance Studio use
 - Specification for C-language MOC transient solver (`transient.py` backend)
 - Specification for C-language zero-inertia Saint-Venant surface irrigation solver (`surface.py` backend)
 - Specification for C-language Richards equation soil-water solver (`richards.py` backend) with Modified Picard (Celia 1990) and van Genuchten (1980) retention/conductivity
@@ -149,13 +149,13 @@ Initial engine design documents and MVP committed to `master`.
 ### Added
 
 - `engine/README.md` — engine overview: GGA solver, FAO-56 agronomy, design-doc index (docs 10–22), install/run instructions
-- `engine/krishiflow/solver.py` — steady-state GGA (Todini & Pilati 1988 / EPANET 2 method); Newton-Raphson with sparse SPD solve; validation target: two-reservoir analytic case H_J = 90 m
-- `engine/krishiflow/headloss.py` — Hazen-Williams (n=1.852) and Darcy-Weisbach (Swamee-Jain friction factor) head-loss laws
-- `engine/krishiflow/components.py` — pumps/motors (curve fitting, 1–50 HP sizing); ball/gate/check valves; filters; tees/elbows via minor-loss K library; venturi fertigation injector
-- `engine/krishiflow/emitters.py` — non-PC power-law emitters (virtual-link method) and pressure-compensating emitters
-- `engine/krishiflow/preprocess.py` — JSON network I/O; drip-lateral auto-generator
-- `engine/krishiflow/postprocess.py` — pressures, flows, velocities, emitter discharges, EU/DU(lq)/CV uniformity, pump duty + HP; optional Matplotlib plots
-- `engine/krishiflow/fao56.py` — FAO Penman-Monteith ET₀; dual crop coefficient (Kcb + Ke); root-zone water balance; net/gross irrigation requirement; emitter design flow
+- `engine/FarmTwin/solver.py` — steady-state GGA (Todini & Pilati 1988 / EPANET 2 method); Newton-Raphson with sparse SPD solve; validation target: two-reservoir analytic case H_J = 90 m
+- `engine/FarmTwin/headloss.py` — Hazen-Williams (n=1.852) and Darcy-Weisbach (Swamee-Jain friction factor) head-loss laws
+- `engine/FarmTwin/components.py` — pumps/motors (curve fitting, 1–50 HP sizing); ball/gate/check valves; filters; tees/elbows via minor-loss K library; venturi fertigation injector
+- `engine/FarmTwin/emitters.py` — non-PC power-law emitters (virtual-link method) and pressure-compensating emitters
+- `engine/FarmTwin/preprocess.py` — JSON network I/O; drip-lateral auto-generator
+- `engine/FarmTwin/postprocess.py` — pressures, flows, velocities, emitter discharges, EU/DU(lq)/CV uniformity, pump duty + HP; optional Matplotlib plots
+- `engine/FarmTwin/fao56.py` — FAO Penman-Monteith ET₀; dual crop coefficient (Kcb + Ke); root-zone water balance; net/gross irrigation requirement; emitter design flow
 - `engine/examples/demo_drip_system.py` — full demo: pump + filter + valve + venturi + lateral; generates `lateral_profile.png`
 - `engine/tests/test_solver.py` — GGA validation against hand calculations (two-reservoir analytic check)
 - `engine/tests/test_fao56.py` — FAO-56 validation
@@ -205,7 +205,7 @@ Items not yet in scope for v0.3.0 but formally planned in the design documents.
 
 ### v0.4.0 — Solver C Cores (planned)
 
-- Implement and unit-test `libkrishiflow.so` C GGA solver; cross-validate against EPANET 2 on published `.inp` test networks
+- Implement and unit-test `libFarmTwin.so` C GGA solver; cross-validate against EPANET 2 on published `.inp` test networks
 - Implement MOC transient C library; validate against Wylie & Streeter example problems and published surge-test data
 - Python cffi bindings for both C libs; replace NumPy GGA in solver.py with C backend call
 - Implement zero-flow Elhay-Simpson regularization in C core

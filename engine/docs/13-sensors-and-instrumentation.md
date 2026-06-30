@@ -124,7 +124,7 @@ data — see [18-...](18-iot-control-architecture.md) §E2).
 data with enough samples and a real uncertainty reduction is promoted to core priors
 (bounded step, governed).
 
-**Module:** planned `quality/qc.py`, upstream of [`fao56.py`](../krishiflow/fao56.py),
+**Module:** planned `quality/qc.py`, upstream of [`fao56.py`](../FarmTwin/fao56.py),
 the edge engine, and the twin; it consumes each device's declared ranges (from the
 plug-and-play descriptor, §E6) for the range checks, and writes QC flags into the
 parameter registry.

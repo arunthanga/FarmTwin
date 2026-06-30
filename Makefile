@@ -5,14 +5,14 @@
         validate-schema baselines clean upload
 
 PYTHON      ?= python3
-PIP         ?= pip
+PIP         ?= $(PYTHON) -m pip
 ENGINE_DIR   = engine
 TESTS_DIR    = engine/tests
 
 help:
 	@echo ""
 	@echo "FarmTwin Makefile targets:"
-	@echo "  make install          Install engine dev dependencies"
+	@echo "  make install          Install engine package and dev dependencies"
 	@echo "  make lint             Run Ruff check + format check"
 	@echo "  make format           Auto-format with Ruff"
 	@echo "  make test             Run all unit tests (TDD mode OFF)"
@@ -26,22 +26,22 @@ help:
 	@echo ""
 
 install:
-	$(PIP) install -r $(ENGINE_DIR)/requirements-dev.txt
+	$(PIP) install -e ".[dev]"
 
 lint:
-	ruff check $(ENGINE_DIR)/krishiflow $(ENGINE_DIR)/tests --output-format text
-	ruff format --check $(ENGINE_DIR)/
+	$(PYTHON) -m ruff check $(ENGINE_DIR)/FarmTwin $(ENGINE_DIR)/tests --output-format full
+	$(PYTHON) -m ruff format --check $(ENGINE_DIR)/
 
 format:
-	ruff check $(ENGINE_DIR)/ --fix
-	ruff format $(ENGINE_DIR)/
+	$(PYTHON) -m ruff check $(ENGINE_DIR)/ --fix
+	$(PYTHON) -m ruff format $(ENGINE_DIR)/
 
 test: test-unit
 
 test-unit:
 	FARMTWIN_TDD_MODE=off \
 	$(PYTHON) -m pytest $(TESTS_DIR)/ -m "unit and not tdd" \
-	  --cov=krishiflow --cov-report=term-missing --tb=short -v
+	  --cov=FarmTwin --cov-report=term-missing --tb=short -v
 
 test-tdd:
 	FARMTWIN_TDD_MODE=on \
@@ -55,7 +55,7 @@ test-regression:
 
 validate-schema:
 	$(PYTHON) scripts/validate_schema.py \
-	  --schema $(ENGINE_DIR)/krishiflow/schemas/fts_survey_schema.json \
+	  --schema $(ENGINE_DIR)/FarmTwin/schemas/fts_survey_schema.json \
 	  --docs   docs/examples/eruthempathy_pilot.fts.json
 
 baselines:

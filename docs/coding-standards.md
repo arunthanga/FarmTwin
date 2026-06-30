@@ -10,8 +10,8 @@
 ## Table of Contents
 
 1. [Guiding Principles](#1-guiding-principles)
-2. [Python Standards (krishiflow, cloud, edge Python glue)](#2-python-standards)
-3. [C Standards (solver cores — libkrishiflow, MOC, Richards, Surface)](#3-c-standards)
+2. [Python Standards (FarmTwin, cloud, edge Python glue)](#2-python-standards)
+3. [C Standards (solver cores — libFarmTwin, MOC, Richards, Surface)](#3-c-standards)
 4. [C++ Standards (edge decision engine)](#4-c-standards-c)
 5. [JavaScript / React Native Standards (Studio survey app, farmer PWA)](#5-javascript--react-native-standards)
 6. [Test Code Standards](#6-test-code-standards)
@@ -57,10 +57,10 @@ from pathlib import Path
 import numpy as np
 from scipy.sparse.linalg import spsolve
 
-from krishiflow.params import ParameterSet
+from FarmTwin.params import ParameterSet
 
 # WRONG — mixed order, wildcard import
-from krishiflow.solver import *
+from FarmTwin.solver import *
 import numpy as np, math
 ```
 
@@ -209,7 +209,7 @@ def van_genuchten_theta(
 
 ## 3. C Standards
 
-Applied to: `libkrishiflow` (GGA C core), MOC transient, zero-inertia surface, Richards solver.
+Applied to: `libFarmTwin` (GGA C core), MOC transient, zero-inertia surface, Richards solver.
 
 ### 3.1 Linter
 
@@ -228,7 +228,7 @@ Formatter: **clang-format** (style: `{BasedOnStyle: LLVM, IndentWidth: 4, Column
 | Function | `module_verb_noun` | `gga_solve_network()` |
 | Struct | `PascalCase` + `_t` typedef | `typedef struct GgaNetwork GgaNetwork_t;` |
 | Enum | `UPPER_SNAKE_CASE` | `LINK_TYPE_PIPE` |
-| Macro constant | `KRISHIFLOW_UPPER` | `KRISHIFLOW_GRAVITY_MS2` |
+| Macro constant | `FARMTWIN_UPPER` | `FARMTWIN_GRAVITY_MS2` |
 | Local variable | `snake_case` + unit suffix | `head_loss_mh` |
 | Parameter | same as local | `flow_m3s` |
 
@@ -237,12 +237,12 @@ Formatter: **clang-format** (style: `{BasedOnStyle: LLVM, IndentWidth: 4, Column
 **Every public function must validate its inputs and return an error code:**
 ```c
 typedef enum {
-    KRISHIFLOW_OK = 0,
-    KRISHIFLOW_ERR_NULL_PTR,
-    KRISHIFLOW_ERR_CONVERGENCE,
-    KRISHIFLOW_ERR_SINGULAR,
-    KRISHIFLOW_ERR_OUT_OF_RANGE,
-} KrishiflowError;
+    FARMTWIN_OK = 0,
+    FARMTWIN_ERR_NULL_PTR,
+    FARMTWIN_ERR_CONVERGENCE,
+    FARMTWIN_ERR_SINGULAR,
+    FARMTWIN_ERR_OUT_OF_RANGE,
+} FarmTwinError;
 
 /**
  * Compute Hazen-Williams head loss.
@@ -254,9 +254,9 @@ typedef enum {
  * @param length_m   Pipe length [m]; must be > 0.
  * @param c_factor   Hazen-Williams C coefficient [-]; must be > 0.
  * @param[out] head_loss_mh Head loss [m]; sign follows flow direction.
- * @return KRISHIFLOW_OK on success, error code otherwise.
+ * @return FARMTWIN_OK on success, error code otherwise.
  */
-KrishiflowError gga_hazen_williams(
+FarmTwinError gga_hazen_williams(
     double flow_m3s,
     double diameter_m,
     double length_m,
@@ -271,11 +271,11 @@ KrishiflowError gga_hazen_williams(
 **Convergence failures must set a descriptive error string, not just an error code:**
 ```c
 if (iter >= max_iterations) {
-    snprintf(ctx->error_msg, KRISHIFLOW_ERR_MSG_LEN,
+    snprintf(ctx->error_msg, FARMTWIN_ERR_MSG_LEN,
              "GGA did not converge after %d iterations; "
              "max |dQ|/|Q| = %.3e (tol = %.3e)",
              max_iterations, residual, ctx->params.convergence_tol);
-    return KRISHIFLOW_ERR_CONVERGENCE;
+    return FARMTWIN_ERR_CONVERGENCE;
 }
 ```
 
@@ -586,7 +586,7 @@ Checks: >-
   -cppcoreguidelines-avoid-magic-numbers,
   -modernize-use-trailing-return-type
 WarningsAsErrors: "*"
-HeaderFilterRegex: ".*krishiflow.*"
+HeaderFilterRegex: ".*FarmTwin.*"
 ```
 
 ### .eslintrc.js (React Native / PWA)

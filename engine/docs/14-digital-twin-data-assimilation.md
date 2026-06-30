@@ -109,6 +109,6 @@ FarmTwin product thesis ([docs/01-venture-decision.md](../../docs/01-venture-dec
 ## C5. Module
 
 A planned `twin/assimilation.py` (EKF/EnKF) reading the network from
-[`network.py`](../krishiflow/network.py) and the models from
-[`solver.py`](../krishiflow/solver.py) / [`fao56.py`](../krishiflow/fao56.py), guarded by
+[`network.py`](../FarmTwin/network.py) and the models from
+[`solver.py`](../FarmTwin/solver.py) / [`fao56.py`](../FarmTwin/fao56.py), guarded by
 `quality/qc.py`, writing to `params.py`.

@@ -10,10 +10,10 @@ All SI: Q in m^3/s, head in m, diameter in m.
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass
+import math
 
-from .headloss import G, NU_WATER, resistance
+from .headloss import G, resistance
 
 # 1 horsepower in kilowatts
 HP_KW = 0.7457
@@ -23,19 +23,19 @@ HP_KW = 0.7457
 # Values are typical engineering ranges; override per manufacturer data.
 # ---------------------------------------------------------------------------
 K_LIBRARY = {
-    "elbow_90_threaded": 0.9,      # L-connector, 90 deg
-    "elbow_90_long": 0.30,         # long-radius bend
+    "elbow_90_threaded": 0.9,  # L-connector, 90 deg
+    "elbow_90_long": 0.30,  # long-radius bend
     "elbow_45": 0.40,
-    "tee_run": 0.60,               # T-connector, flow through the run
-    "tee_branch": 1.80,            # T-connector, flow turns into branch
+    "tee_run": 0.60,  # T-connector, flow through the run
+    "tee_branch": 1.80,  # T-connector, flow turns into branch
     "coupler": 0.10,
     "reducer": 0.25,
-    "ball_valve_open": 0.05,       # fully open
-    "ball_valve_half": 2.10,       # ~half closed
+    "ball_valve_open": 0.05,  # fully open
+    "ball_valve_half": 2.10,  # ~half closed
     "gate_valve_open": 0.15,
     "check_valve": 2.50,
     "foot_valve_strainer": 6.0,
-    "screen_filter": 12.0,         # clean; rises with clogging
+    "screen_filter": 12.0,  # clean; rises with clogging
     "disc_filter": 18.0,
     "media_filter": 30.0,
     "entrance": 0.50,
@@ -48,9 +48,7 @@ def k_of(name: str) -> float:
     try:
         return K_LIBRARY[name]
     except KeyError as exc:
-        raise KeyError(
-            f"Unknown fitting {name!r}. Known: {sorted(K_LIBRARY)}"
-        ) from exc
+        raise KeyError(f"Unknown fitting {name!r}. Known: {sorted(K_LIBRARY)}") from exc
 
 
 def sum_k(*names: str) -> float:
@@ -63,8 +61,8 @@ def minor_loss_m(total_k: float, diameter: float) -> float:
 
     h_minor = K * V^2 / (2 g) = K / (2 g A^2) * Q^2,  A = pi d^2 / 4.
     """
-    area = math.pi * diameter ** 2 / 4.0
-    return total_k / (2.0 * G * area ** 2)
+    area = math.pi * diameter**2 / 4.0
+    return total_k / (2.0 * G * area**2)
 
 
 # ---------------------------------------------------------------------------
@@ -91,9 +89,9 @@ def pipe_headloss_gradient(flow, length, diameter, coeff, model, total_k):
 # ---------------------------------------------------------------------------
 @dataclass
 class Venturi:
-    a: float                 # loss-curve coefficient (s^2/m^5): dH = a*Q^2
-    injection_rate: float = 0.0   # fertilizer solution flow injected (m^3/s)
-    concentration: float = 0.0    # injected nutrient concentration (kg/m^3)
+    a: float  # loss-curve coefficient (s^2/m^5): dH = a*Q^2
+    injection_rate: float = 0.0  # fertilizer solution flow injected (m^3/s)
+    concentration: float = 0.0  # injected nutrient concentration (kg/m^3)
 
     def headloss_gradient(self, flow):
         aq = abs(flow)
@@ -107,15 +105,16 @@ class Venturi:
 # ---------------------------------------------------------------------------
 @dataclass
 class PumpCurve:
-    h0: float                # shutoff head (Q=0), m
-    r_p: float               # curve coefficient
-    c: float = 2.0           # curve exponent
-    pump_eff: float = 0.70   # pump efficiency (fraction)
+    h0: float  # shutoff head (Q=0), m
+    r_p: float  # curve coefficient
+    c: float = 2.0  # curve exponent
+    pump_eff: float = 0.70  # pump efficiency (fraction)
     motor_eff: float = 0.90  # motor efficiency (fraction)
 
     @classmethod
-    def from_design_point(cls, q_design, h_design, pump_eff=0.70,
-                          motor_eff=0.90, c=2.0, shutoff_factor=1.33):
+    def from_design_point(
+        cls, q_design, h_design, pump_eff=0.70, motor_eff=0.90, c=2.0, shutoff_factor=1.33
+    ):
         """Build a curve from a single design (duty) point.
 
         Assumes shutoff head h0 = shutoff_factor * h_design (typical ~1.33),
@@ -124,17 +123,17 @@ class PumpCurve:
         h0 = shutoff_factor * h_design
         if q_design <= 0:
             raise ValueError("q_design must be > 0")
-        r_p = (h0 - h_design) / q_design ** c
+        r_p = (h0 - h_design) / q_design**c
         return cls(h0=h0, r_p=r_p, c=c, pump_eff=pump_eff, motor_eff=motor_eff)
 
     def head_gain(self, flow):
         q = max(flow, 0.0)
-        return self.h0 - self.r_p * q ** self.c
+        return self.h0 - self.r_p * q**self.c
 
     def headloss_gradient(self, flow):
         # link "loss" = -gain ; gradient of loss wrt Q = + c r_p Q^(c-1)
         q = max(flow, 0.0)
-        headloss = -(self.h0 - self.r_p * q ** self.c)
+        headloss = -(self.h0 - self.r_p * q**self.c)
         gradient = self.c * self.r_p * q ** (self.c - 1.0) if q > 0 else 1e-8
         return headloss, max(gradient, 1e-8)
 

@@ -25,7 +25,7 @@ Topography can come from a survey (GPS/DGPS), a DEM, or manual spot levels.
 ## 2. Decision variables
 
 - Pipe diameters per segment — **discrete** from a commercial catalog.
-- Pump model (1-50 HP) from a pump catalog ([`components.py`](../krishiflow/components.py)).
+- Pump model (1-50 HP) from a pump catalog ([`components.py`](../FarmTwin/components.py)).
 - Zone count and layout (which laterals on which valve), watering schedule blocks.
 - Emitter type and spacing (PC vs non-PC; q-P curve).
 - Valve sizing and placement.
@@ -48,7 +48,7 @@ subject to  Pmin <= emitter pressure <= Pmax            (emitter operating range
 - **Cost** = pipes + fittings + pump + valves + emitters + sensors + controllers + (PV/battery for solar nodes).
 - **Energy** = `rho g Q H / eta` integrated over the season's duty (from FAO-56 demand).
 - **Uniformity** = emission uniformity `EU` / distribution uniformity `DU` from the
-  solved emitter flows ([`emitters.py`](../krishiflow/emitters.py)).
+  solved emitter flows ([`emitters.py`](../FarmTwin/emitters.py)).
 - **Yield / profit** = expected yield from the agronomy layer
   ([21-...](21-agronomy-layer.md)) given the design's achievable uniformity and water
   delivery, times price, minus operating cost.
@@ -57,12 +57,12 @@ subject to  Pmin <= emitter pressure <= Pmax            (emitter operating range
 
 Each candidate design is evaluated by:
 
-1. Build the network ([`network.py`](../krishiflow/network.py),
-   [`preprocess.py`](../krishiflow/preprocess.py)).
-2. Solve hydraulics with the GGA ([`solver.py`](../krishiflow/solver.py)) for the
+1. Build the network ([`network.py`](../FarmTwin/network.py),
+   [`preprocess.py`](../FarmTwin/preprocess.py)).
+2. Solve hydraulics with the GGA ([`solver.py`](../FarmTwin/solver.py)) for the
    critical operating case(s) -> nodal pressures, link flows, emitter discharges.
 3. Compute uniformity (EU/DU), pump duty point and motor HP
-   ([`postprocess.py`](../krishiflow/postprocess.py)).
+   ([`postprocess.py`](../FarmTwin/postprocess.py)).
 4. Compute crop water demand + expected yield (FAO-56 + agronomy).
 5. Check constraints; compute the objective vector.
 
@@ -118,8 +118,8 @@ priors that the twin then refines ([14-...](14-digital-twin-data-assimilation.md
 
 ## 8. Module
 
-A planned `optimize.py` orchestrating [`solver.py`](../krishiflow/solver.py) +
-[`fao56.py`](../krishiflow/fao56.py) + [`emitters.py`](../krishiflow/emitters.py) +
+A planned `optimize.py` orchestrating [`solver.py`](../FarmTwin/solver.py) +
+[`fao56.py`](../FarmTwin/fao56.py) + [`emitters.py`](../FarmTwin/emitters.py) +
 the agronomy layer; consumed by the Design Studio pre/post-processor.
 
 ## 9. References

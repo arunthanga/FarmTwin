@@ -51,7 +51,7 @@ def network_from_dict(d: dict) -> Network:
 
 
 def load_network(path: str) -> Network:
-    with open(path, "r", encoding="utf-8") as fh:
+    with open(path, encoding="utf-8") as fh:
         return network_from_dict(json.load(fh))
 
 
@@ -79,20 +79,31 @@ def build_drip_lateral(
     the PC variant is likewise 4 L/h.
     """
     net = Network()
-    net.add_reservoir(Reservoir(id="SRC", head=source_head, x=0.0,
-                                y=source_elevation))
+    net.add_reservoir(Reservoir(id="SRC", head=source_head, x=0.0, y=source_elevation))
     prev = "SRC"
     for i in range(1, n_emitters + 1):
         nid = f"E{i}"
         elev = source_elevation + slope * spacing * i
         em = Emitter(
-            k=emitter_k, x=emitter_x,
-            pressure_compensating=pressure_compensating, nominal_q=nominal_q,
+            k=emitter_k,
+            x=emitter_x,
+            pressure_compensating=pressure_compensating,
+            nominal_q=nominal_q,
         )
-        net.add_junction(Junction(id=nid, elevation=elev, demand=0.0,
-                                  emitter=em, x=spacing * i, y=elev))
-        net.add_pipe(Pipe(id=f"P{i}", start=prev, end=nid, length=spacing,
-                          diameter=diameter, coeff=hw_c, model="HW"))
+        net.add_junction(
+            Junction(id=nid, elevation=elev, demand=0.0, emitter=em, x=spacing * i, y=elev)
+        )
+        net.add_pipe(
+            Pipe(
+                id=f"P{i}",
+                start=prev,
+                end=nid,
+                length=spacing,
+                diameter=diameter,
+                coeff=hw_c,
+                model="HW",
+            )
+        )
         prev = nid
     return net
 
@@ -115,26 +126,62 @@ _LAT_MIN, _LAT_MAX = -90.0, 90.0
 _LON_MIN, _LON_MAX = -180.0, 180.0
 
 _REQUIRED_TOP = (
-    "schema_version", "survey_id", "farm_id", "created_at", "updated_at",
-    "surveyed_by", "farm", "water_source", "nodes", "links", "zones",
+    "schema_version",
+    "survey_id",
+    "farm_id",
+    "created_at",
+    "updated_at",
+    "surveyed_by",
+    "farm",
+    "water_source",
+    "nodes",
+    "links",
+    "zones",
 )
 _SOURCE_NODE_TYPES = frozenset({"reservoir", "pump"})
-_SOIL_TYPES = frozenset({
-    "sandy", "sandy_loam", "loam", "clay_loam", "clay",
-    "red_laterite", "black_cotton", "alluvial",
-})
-_CROP_TYPES = frozenset({
-    "coconut", "paddy", "banana_nendran", "banana_robusta", "tomato", "okra",
-    "capsicum", "tapioca", "areca", "pepper", "mango", "other",
-})
-_WEATHER_SOURCES = frozenset({
-    "open_meteo", "open_meteo_era5", "nasa_power", "imd", "aws",
-    "on_farm_aws", "gefs", "era5",
-})
+_SOIL_TYPES = frozenset(
+    {
+        "sandy",
+        "sandy_loam",
+        "loam",
+        "clay_loam",
+        "clay",
+        "red_laterite",
+        "black_cotton",
+        "alluvial",
+    }
+)
+_CROP_TYPES = frozenset(
+    {
+        "coconut",
+        "paddy",
+        "banana_nendran",
+        "banana_robusta",
+        "tomato",
+        "okra",
+        "capsicum",
+        "tapioca",
+        "areca",
+        "pepper",
+        "mango",
+        "other",
+    }
+)
+_WEATHER_SOURCES = frozenset(
+    {
+        "open_meteo",
+        "open_meteo_era5",
+        "nasa_power",
+        "imd",
+        "aws",
+        "on_farm_aws",
+        "gefs",
+        "era5",
+    }
+)
 
 _UUID_RE = re.compile(
-    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-"
-    r"[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-" r"[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
 )
 _E164_RE = re.compile(r"^\+[1-9]\d{1,14}$")
 
@@ -163,8 +210,11 @@ def _validate_top_level(doc: dict, errors: list[str]) -> None:
     survey_id = doc.get("survey_id")
     if survey_id is not None and not _UUID_RE.match(str(survey_id)):
         errors.append(_err("V02", "invalid survey_id (must be UUID)"))
-    phone = doc.get("surveyed_by", {}).get("phone") if isinstance(
-        doc.get("surveyed_by"), dict) else None
+    phone = (
+        doc.get("surveyed_by", {}).get("phone")
+        if isinstance(doc.get("surveyed_by"), dict)
+        else None
+    )
     if phone is not None and not _E164_RE.match(str(phone)):
         errors.append(_err("V18", "surveyed_by.phone must be E.164 (+digits)"))
 
@@ -209,10 +259,10 @@ def _validate_links(doc: dict, errors: list[str]) -> None:
         for end in ("from_node", "to_node"):
             ref = link.get(end)
             if ref is not None and ref not in node_ids:
-                errors.append(
-                    _err("V06", f"dangling link {link.get('id')} -> {ref}"))
+                errors.append(_err("V06", f"dangling link {link.get('id')} -> {ref}"))
         if "internal_diameter_m" in link and not _in_range(
-                link["internal_diameter_m"], _DIAM_MIN, _DIAM_MAX):
+            link["internal_diameter_m"], _DIAM_MIN, _DIAM_MAX
+        ):
             errors.append(_err("V08", f"link {link.get('id')} diameter out of range"))
         if "length_m" in link and not _in_range(link["length_m"], _LEN_MIN, _LEN_MAX):
             errors.append(_err("V09", f"link {link.get('id')} length out of range"))
@@ -230,10 +280,12 @@ def _validate_zones(doc: dict, errors: list[str]) -> None:
             errors.append(_err("V16", f"unknown crop type '{crop}'"))
         layout = zone.get("emitter_layout") or {}
         if "flow_rate_lh" in layout and not _in_range(
-                layout["flow_rate_lh"], _EMIT_FLOW_MIN, _EMIT_FLOW_MAX):
+            layout["flow_rate_lh"], _EMIT_FLOW_MIN, _EMIT_FLOW_MAX
+        ):
             errors.append(_err("V10", "emitter flow_rate out of range (0.5-200 L/h)"))
         if "operating_pressure_kpa" in layout and not _in_range(
-                layout["operating_pressure_kpa"], _EMIT_PRESS_MIN, _EMIT_PRESS_MAX):
+            layout["operating_pressure_kpa"], _EMIT_PRESS_MIN, _EMIT_PRESS_MAX
+        ):
             errors.append(_err("V11", "emitter pressure out of range (30-600 kPa)"))
 
 
@@ -310,23 +362,27 @@ def load_fts_json(doc: dict) -> dict:
     nodes = []
     for node in doc.get("nodes", []):
         loc = node.get("location") or {}
-        nodes.append({
-            "id": node["id"],
-            "type": node.get("type", "junction"),
-            "elevation_m": loc.get("elevation_m", 0.0),
-            "attributes": node.get("attributes", {}),
-        })
+        nodes.append(
+            {
+                "id": node["id"],
+                "type": node.get("type", "junction"),
+                "elevation_m": loc.get("elevation_m", 0.0),
+                "attributes": node.get("attributes", {}),
+            }
+        )
     links = []
     for link in doc.get("links", []):
-        links.append({
-            "id": link["id"],
-            "from_node": link.get("from_node"),
-            "to_node": link.get("to_node"),
-            "type": link.get("type", "pipe"),
-            "length_m": link.get("length_m"),
-            "diameter_m": link.get("internal_diameter_m"),
-            "c_factor": link.get("hazen_williams_c"),
-        })
+        links.append(
+            {
+                "id": link["id"],
+                "from_node": link.get("from_node"),
+                "to_node": link.get("to_node"),
+                "type": link.get("type", "pipe"),
+                "length_m": link.get("length_m"),
+                "diameter_m": link.get("internal_diameter_m"),
+                "c_factor": link.get("hazen_williams_c"),
+            }
+        )
     return {"nodes": nodes, "links": links}
 
 
@@ -376,23 +432,30 @@ def _load_epanet_inp_wntr(path: str) -> dict:
     nodes: list[dict] = []
     for name, node in wn.nodes():
         node_type = type(node).__name__.replace("Node", "").lower()
-        nodes.append({
-            "id": name,
-            "type": "reservoir" if node_type == "reservoir" else (
-                "reservoir" if node_type == "tank" else "junction"),
-            "elevation_m": float(getattr(node, "elevation", 0.0) or 0.0),
-        })
+        nodes.append(
+            {
+                "id": name,
+                "type": "reservoir"
+                if node_type == "reservoir"
+                else ("reservoir" if node_type == "tank" else "junction"),
+                "elevation_m": float(getattr(node, "elevation", 0.0) or 0.0),
+            }
+        )
     links: list[dict] = []
     for name, link in wn.links():
         if type(link).__name__ != "Pipe":
             continue
-        links.append({
-            "id": name, "from_node": link.start_node_name,
-            "to_node": link.end_node_name, "type": "pipe",
-            "length_m": float(link.length),
-            "diameter_m": float(link.diameter),
-            "c_factor": float(link.roughness),
-        })
+        links.append(
+            {
+                "id": name,
+                "from_node": link.start_node_name,
+                "to_node": link.end_node_name,
+                "type": "pipe",
+                "length_m": float(link.length),
+                "diameter_m": float(link.diameter),
+                "c_factor": float(link.roughness),
+            }
+        )
     return {"nodes": nodes, "links": links}
 
 
@@ -411,22 +474,33 @@ def _load_epanet_inp_minimal(path: str) -> dict:
                 continue
             parts = line.split()
             if section == "JUNCTIONS":
-                nodes.append({
-                    "id": parts[0], "type": "junction",
-                    "elevation_m": float(parts[1]) if len(parts) > 1 else 0.0,
-                })
+                nodes.append(
+                    {
+                        "id": parts[0],
+                        "type": "junction",
+                        "elevation_m": float(parts[1]) if len(parts) > 1 else 0.0,
+                    }
+                )
             elif section == "RESERVOIRS":
-                nodes.append({
-                    "id": parts[0], "type": "reservoir",
-                    "elevation_m": float(parts[1]) if len(parts) > 1 else 0.0,
-                })
+                nodes.append(
+                    {
+                        "id": parts[0],
+                        "type": "reservoir",
+                        "elevation_m": float(parts[1]) if len(parts) > 1 else 0.0,
+                    }
+                )
             elif section == "PIPES" and len(parts) >= 6:
-                links.append({
-                    "id": parts[0], "from_node": parts[1], "to_node": parts[2],
-                    "type": "pipe", "length_m": float(parts[3]),
-                    "diameter_m": float(parts[4]) / 1000.0,  # EPANET mm -> m
-                    "c_factor": float(parts[5]),
-                })
+                links.append(
+                    {
+                        "id": parts[0],
+                        "from_node": parts[1],
+                        "to_node": parts[2],
+                        "type": "pipe",
+                        "length_m": float(parts[3]),
+                        "diameter_m": float(parts[4]) / 1000.0,  # EPANET mm -> m
+                        "c_factor": float(parts[5]),
+                    }
+                )
     return {"nodes": nodes, "links": links}
 
 

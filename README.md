@@ -19,19 +19,19 @@ FarmTwin applies hydraulic simulation, agronomy science, and a digital-twin cali
 ```
 FarmTwin/
 │
-├── engine/                        # Shared physics core (krishiflow)
-│   ├── krishiflow/                # Python package — all solvers
+├── engine/                        # Shared physics core (FarmTwin)
+│   ├── FarmTwin/                # Python package — all solvers
 │   │   ├── __init__.py
 │   │   ├── params.py              # Live ParameterSet (A0 principle)
 │   │   ├── solver.py              # GGA hydraulic solver (Todini & Pilati 1988)
 │   │   ├── headloss.py            # Hazen-Williams + Darcy-Weisbach
 │   │   ├── components.py          # Pumps, valves, filters, venturi
 │   │   ├── emitters.py            # Drip & PC emitter models
-│   │   ├── preprocess.py          # FTS JSON → solver network; EPANET import
-│   │   ├── postprocess.py         # Results → EU/DU/BoM/PDF
+│   │   ├── preprocess.py          # FTS JSON → solver network
+│   │   ├── postprocess.py         # Results → EU/DU and optional plots
 │   │   ├── fao56.py               # FAO-56 Penman-Monteith ET₀ + dual Kc
-│   │   ├── quality.py             # B6 QC gate (QARTOD + Hampel)
-│   │   ├── agronomy.py            # Crop catalogue, FAO-33 yield model
+│   │   ├── quality.py             # B6 QC gate (QARTOD + Hampel) [planned]
+│   │   ├── agronomy.py            # Crop catalogue, FAO-33 yield model [planned]
 │   │   ├── transient.py           # MOC water-hammer solver [planned]
 │   │   ├── surface.py             # Zero-inertia Saint-Venant [planned]
 │   │   ├── richards.py            # Richards unsaturated flow [planned]
@@ -39,18 +39,18 @@ FarmTwin/
 │   │   └── schemas/
 │   │       └── fts_survey_schema.json   # JSON Schema for FTS v1.0
 │   │
-│   ├── tests/                     # pytest test suite (90 tests)
+│   ├── tests/                     # pytest test suite
 │   │   ├── conftest.py            # TDD switch, fixtures, tolerances
-│   │   ├── test_solver.py         # GGA unit + TDD + regression
-│   │   ├── test_fao56.py          # FAO-56 unit + TDD + regression
+│   │   ├── test_solver.py         # GGA unit + regression
+│   │   ├── test_fao56.py          # FAO-56 unit + regression
 │   │   ├── test_schema.py         # FTS schema unit + TDD
 │   │   ├── test_quality.py        # B6 QC gate unit + TDD
-│   │   └── baselines/             # Golden outputs for regression tests
+│   │   └── baselines/             # Golden outputs for future baseline tests
 │   │
 │   ├── docs/                      # Engine-specific deep-dive docs (docs 10–22)
 │   ├── examples/                  # Runnable demo scripts
-│   ├── requirements.txt
-│   └── requirements-dev.txt
+│   ├── requirements.txt           # Legacy mirror of pyproject dependencies
+│   └── requirements-dev.txt       # Legacy mirror of pyproject dev extras
 │
 ├── apps/                          # User-facing application layer
 │   ├── studio/                    # FarmTwin Studio (React Native tablet app)
@@ -91,7 +91,7 @@ FarmTwin/
 │   └── pull_request_template.md
 │
 ├── CHANGELOG.md                   # Keep-a-Changelog format
-├── pyproject.toml                 # Ruff + pytest config
+├── pyproject.toml                 # Packaging, dependencies, Ruff, pytest
 ├── .gitignore
 ├── .editorconfig
 └── .env.example
@@ -107,11 +107,11 @@ git clone https://github.com/arunthanga/FarmTwin.git
 cd FarmTwin
 
 # Install engine (Python 3.11+)
-cd engine
-pip install -r requirements-dev.txt
+make install
 
-# Run unit tests
-FARMTWIN_TDD_MODE=off pytest tests/ -m "unit and not tdd" -v
+# Run checks
+make lint
+make test-unit
 
 # Run the MVP demo (open in browser)
 open mvp/index.html
@@ -129,7 +129,7 @@ FARMTWIN_TDD_MODE=on  pytest tests/ -m tdd -v
 FARMTWIN_TDD_MODE=off pytest tests/ -m tdd -v
 
 # Full test run (skip TDD stubs)
-FARMTWIN_TDD_MODE=off pytest tests/ -m "unit and not tdd" --cov=krishiflow
+FARMTWIN_TDD_MODE=off pytest tests/ -m "unit and not tdd" --cov=FarmTwin
 ```
 
 CI automatically sets `FARMTWIN_TDD_MODE=on` on `tdd/**` branches and `off` on `master`.

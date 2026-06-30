@@ -5,12 +5,12 @@
 *                          @arunthanga
 
 # Physics engine — require explicit review for any solver change
-/engine/krishiflow/solver.py      @arunthanga
-/engine/krishiflow/headloss.py    @arunthanga
-/engine/krishiflow/fao56.py       @arunthanga
-/engine/krishiflow/richards.py    @arunthanga
-/engine/krishiflow/transient.py   @arunthanga
-/engine/krishiflow/surface.py     @arunthanga
+/engine/FarmTwin/solver.py      @arunthanga
+/engine/FarmTwin/headloss.py    @arunthanga
+/engine/FarmTwin/fao56.py       @arunthanga
+/engine/FarmTwin/richards.py    @arunthanga
+/engine/FarmTwin/transient.py   @arunthanga
+/engine/FarmTwin/surface.py     @arunthanga
 
 # Requirements (single source of truth) — always needs owner sign-off
 /docs/requirements.md             @arunthanga
@@ -19,5 +19,5 @@
 /.github/workflows/               @arunthanga
 
 # Schema
-/engine/krishiflow/schemas/       @arunthanga
+/engine/FarmTwin/schemas/       @arunthanga
 /docs/survey-schema.md            @arunthanga

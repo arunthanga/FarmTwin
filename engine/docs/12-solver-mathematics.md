@@ -1,7 +1,7 @@
 # 12 — Solver Mathematics (deep dive per solver)
 
 This document gives the governing equations, numerical schemes, and key references for
-each FarmTwin Engine solver, and maps every part to a module in `engine/krishiflow`. It
+each FarmTwin Engine solver, and maps every part to a module in `engine/FarmTwin`. It
 builds on the method-selection rationale in
 [10-numerical-methods-and-architecture.md](10-numerical-methods-and-architecture.md).
 
@@ -50,9 +50,9 @@ confidence/governance checks are promoted to the shared core as new priors. Bad/
 data is rejected before it can move any parameter.
 
 **Module.** A planned `params.py` (ParameterSet + registry) that
-[`solver.py`](../krishiflow/solver.py), [`fao56.py`](../krishiflow/fao56.py),
-[`components.py`](../krishiflow/components.py) and
-[`emitters.py`](../krishiflow/emitters.py) read from; the twin writes to it.
+[`solver.py`](../FarmTwin/solver.py), [`fao56.py`](../FarmTwin/fao56.py),
+[`components.py`](../FarmTwin/components.py) and
+[`emitters.py`](../FarmTwin/emitters.py) read from; the twin writes to it.
 
 ---
 
@@ -78,11 +78,11 @@ Q <- Q - G^-1 (A11 Q + A10 H0 + A12 H)
 ```
 
 The system matrix `A21 G^-1 A12` is SPD — solve by sparse Cholesky. Iterate to
-`||dQ||/||Q|| < tol`. Implemented in [`solver.py`](../krishiflow/solver.py); all link
+`||dQ||/||Q|| < tol`. Implemented in [`solver.py`](../FarmTwin/solver.py); all link
 types (pipes, pumps, valves, venturi, virtual emitter links) are handled uniformly by
 an evaluator returning `(headloss, dheadloss/dQ)`.
 
-**Head-loss laws** ([`headloss.py`](../krishiflow/headloss.py)):
+**Head-loss laws** ([`headloss.py`](../FarmTwin/headloss.py)):
 
 - Hazen-Williams: `h_L = 10.67 L Q^1.852 / (C^1.852 D^4.87)`, `n = 1.852`. Empirical,
   water only; singular gradient as `Q -> 0`.
@@ -133,7 +133,7 @@ air/relief valve, surge tank) as device equations combined with one characterist
 Add unsteady-friction (Brunone) for accurate damping.
 
 **Use:** a planned `transient.py` reusing the network topology from
-[`network.py`](../krishiflow/network.py); sizes air/relief valves, pump-trip
+[`network.py`](../FarmTwin/network.py); sizes air/relief valves, pump-trip
 protection, and informs the pump<->valve sequencing interlocks in the controller
 ([18-...](18-iot-control-architecture.md)).
 
@@ -196,7 +196,7 @@ lumped (diagonal) time matrix — the head-based form loses mass and must be avo
 flux.
 
 **Use:** a planned `richards.py`; the high-fidelity upgrade to the bucket model in
-[`fao56.py`](../krishiflow/fao56.py); produces the soil-moisture state the twin
+[`fao56.py`](../FarmTwin/fao56.py); produces the soil-moisture state the twin
 assimilates sensor data into. Validate against HYDRUS.
 
 **Live parameters (A0):** `alpha, n, theta_r, theta_s, Ks`.
@@ -209,7 +209,7 @@ doi:10.1029/WR026i007p01483; van Genuchten (1980) *SSSAJ*; Simunek et al. HYDRUS
 ## A5. Reference ET & crop water — FAO-56 + ASCE standardized
 
 **Reference ET (Penman-Monteith, already implemented in
-[`fao56.py`](../krishiflow/fao56.py)):**
+[`fao56.py`](../FarmTwin/fao56.py)):**
 
 ```
 ET0 = [ 0.408 D (Rn - G) + g (900/(T+273)) u2 (es - ea) ] / [ D + g (1 + 0.34 u2) ]
@@ -251,8 +251,8 @@ fluid-structure interaction (diaphragm deformation) via OpenFOAM + CalculiX/deal
 coupled with **preCICE**.
 
 **Crucial scoping:** these simulations run **offline on HPC**; outputs are cached as the
-K-library and emitter curves consumed by [`components.py`](../krishiflow/components.py) /
-[`emitters.py`](../krishiflow/emitters.py) — **never per-design**. Field-scale network
+K-library and emitter curves consumed by [`components.py`](../FarmTwin/components.py) /
+[`emitters.py`](../FarmTwin/emitters.py) — **never per-design**. Field-scale network
 solves stay 1-D (A1).
 
 **Refs:** Li et al. (2008) labyrinth CFD + particle tracking, *Irrig. Sci.* 26(5),

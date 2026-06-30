@@ -7,7 +7,7 @@
 > design docs. Deep derivations live in [`engine/docs/`](engine/docs/) (referenced inline);
 > this file is the authoritative index, decisions, and acceptance criteria.
 
-- Scope: the FarmTwin Engine (`engine/krishiflow`), its two products
+- Scope: the FarmTwin Engine (`engine/FarmTwin`), its two products
   (**Studio** = design, **Runtime** = operations), and the user experience for both.
 - Audience: engineers, the design/agronomy team, and reviewers (KSUM/AgriNext, IIT-PKD/KAU).
 - Conventions: requirements are tagged `R-<area>-<n>` and are **MUST** unless marked
@@ -114,7 +114,7 @@ runs on the field MCUs.
 ## 4. Solver & component requirements
 
 Each block: **what it must do** → **chosen technology + rationale** → **white paper(s)**
-(original + the *latest improvements* to use). Module names map to `engine/krishiflow/`.
+(original + the *latest improvements* to use). Module names map to `engine/FarmTwin/`.
 Deep math is in [engine/docs/12](engine/docs/12-solver-mathematics.md);
 papers are summarized in [engine/docs/22](engine/docs/22-implementation-whitepapers.md).
 

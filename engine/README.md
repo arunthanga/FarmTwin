@@ -34,7 +34,7 @@ The venture is two products on one shared, self-calibrating engine — see
 ## What works today (MVP)
 
 - **Steady network solver** via the Global Gradient Algorithm (Todini-Pilati),
-  the EPANET core method — `krishiflow/solver.py`.
+  the EPANET core method — `FarmTwin/solver.py`.
 - **Head loss**: Hazen-Williams and Darcy-Weisbach (Swamee-Jain `f`) —
   `headloss.py`.
 - **Component library** — `components.py`:
@@ -53,30 +53,27 @@ The venture is two products on one shared, self-calibrating engine — see
 
 ```
 engine/
-  krishiflow/        core package (solver, components, emitters, fao56, pre/post)
+  FarmTwin/        core package (solver, components, emitters, fao56, pre/post)
   examples/          demo_drip_system.py  (pump+filter+valve+venturi+lateral)
-  tests/             test_solver.py, test_fao56.py  (independent validations)
+  tests/             pytest suite for solver, FAO-56, FTS schema, and QC stubs
   docs/              design docs 10-22 (architecture, math, sensors, twin, IoT,
                      optimization, agronomy, whitepapers) — see table above
-  requirements.txt
+  requirements.txt   legacy mirror; pyproject.toml is the dependency source
 ```
 
 ## Install & run
 
 ```bash
-cd engine
-python -m venv .venv && . .venv/Scripts/activate   # Windows PowerShell: .venv\Scripts\Activate.ps1
-pip install -r requirements.txt                    # numpy required; matplotlib/scipy optional
+cd <repo-root>
+python -m venv .venv && . .venv/bin/activate
+pip install -e ".[dev]"
 
-python tests/test_solver.py        # validation against hand calculations
-python tests/test_fao56.py
-python examples/demo_drip_system.py # full system report + lateral_profile.png
+make test-unit
+python engine/examples/demo_drip_system.py # full system report + lateral_profile.png
 ```
 
-> Note: the validation tests and demo are written and reviewed but were not
-> executed in the authoring session (the sandbox shell was unavailable). Run the
-> commands above to confirm on your machine; `test_two_reservoirs` checks the
-> solver against the exact analytic answer H_J = 90 m.
+`test_two_reservoirs` checks the solver against the exact analytic answer
+H_J = 90 m and is included in both unit and regression selections.
 
 ## Design principle
 

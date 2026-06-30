@@ -9,11 +9,11 @@ The GGA solver inner loop (sparse Cholesky, repeated 5–20 Newton iterations) a
 Python/NumPy has 3–5× overhead versus compiled C at this scale.
 
 ## Decision
-Implement GGA, MOC transient, zero-inertia surface, and Richards as C11 libraries (`libkrishiflow.so`).
+Implement GGA, MOC transient, zero-inertia surface, and Richards as C11 libraries (`libFarmTwin.so`).
 Expose via `cffi` Python bindings. Python callers (Studio, cloud twin) use the same `.so`.
 
 ## Consequences
 - **Good:** GGA 500-node solve < 50 ms on RPi 4 (vs ~300 ms Python).
 - **Good:** C library callable from C++ edge runtime without Python runtime overhead.
 - **Bad:** C code harder to prototype; more CI infrastructure needed (clang-tidy, sanitizers).
-- **Mitigation:** Python MVP version stays in `krishiflow/` as reference; C ports validated against it.
+- **Mitigation:** Python MVP version stays in `FarmTwin/` as reference; C ports validated against it.

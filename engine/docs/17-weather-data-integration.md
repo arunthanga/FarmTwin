@@ -62,7 +62,7 @@ gauge rain vs forecast) before use.
 A planned `weather/` provider layer: one adapter per source mapping to a **common
 schema** (variable names, units), with a cache + offline mode for connectivity gaps.
 Adapters: `nasapower`, `openmeteo`, `openweather_agro`, `imd_gkms`, `era5_gefs`. The
-layer feeds [`fao56.py`](../krishiflow/fao56.py) and the twin
+layer feeds [`fao56.py`](../FarmTwin/fao56.py) and the twin
 ([14-...](14-digital-twin-data-assimilation.md)).
 
 ## 5. References

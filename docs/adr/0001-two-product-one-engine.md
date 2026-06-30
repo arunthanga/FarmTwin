@@ -12,7 +12,7 @@ FarmTwin needs two distinct user-facing products:
 Both need the same physics (GGA hydraulic solver, FAO-56 crop water, van Genuchten soil).
 
 ## Decision
-Maintain a single versioned Python package (`engine/krishiflow`) shared by both products.
+Maintain a single versioned Python package (`engine/FarmTwin`) shared by both products.
 All physical coefficients are **live parameters** (A0 principle) — no constants frozen in solver loops.
 Runtime continuously estimates and writes back calibrated parameters to the shared core.
 
