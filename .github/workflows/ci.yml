@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
-      - run: pip install ruff==0.4.4
+      - run: pip install -e ".[dev]"
       - id: ruff
         run: |
           ruff check engine/krishiflow engine/tests --output-format github \
@@ -62,7 +62,7 @@ jobs:
         with: { ref: "${{ github.head_ref }}", token: "${{ secrets.GITHUB_TOKEN }}" }
       - uses: actions/setup-python@v5
         with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
-      - run: pip install ruff==0.4.4 anthropic==0.25.8 pygithub==2.3.0
+      - run: pip install -e ".[dev]"
       - uses: actions/download-artifact@v4
         with: { name: ruff-output }
         continue-on-error: true
@@ -94,14 +94,19 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
-      - run: pip install -r engine/requirements-dev.txt
+      - run: pip install -e ".[dev]"
       - id: tdd
         env: { FARMTWIN_TDD_MODE: "${{ env.FARMTWIN_TDD_MODE }}" }
         run: |
-          cd engine
-          python -m pytest tests/ -m tdd --tb=short -v \
-            --junitxml=tdd_results.xml 2>&1 | tee tdd_out.txt
-          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+          if [ "${{ env.FARMTWIN_TDD_MODE }}" = "off" ]; then
+            echo "TDD red-phase tests are disabled outside tdd/* branches."
+            echo "exit_code=0" >> "$GITHUB_OUTPUT"
+          else
+            cd engine
+            python -m pytest tests/ -m tdd --tb=short -v \
+              --junitxml=tdd_results.xml 2>&1 | tee tdd_out.txt
+            echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+          fi
         continue-on-error: true
       - run: |
           if [ "${{ env.FARMTWIN_TDD_MODE }}" = "on" ]; then
@@ -121,7 +126,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
-      - run: pip install -r engine/requirements-dev.txt
+      - run: pip install -e ".[dev]"
       - env: { FARMTWIN_TDD_MODE: "off" }
         run: |
           cd engine
@@ -141,7 +146,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
-      - run: pip install -r engine/requirements-dev.txt
+      - run: pip install -e ".[dev]"
       - env: { FARMTWIN_TDD_MODE: "off" }
         run: |
           cd engine
@@ -159,7 +164,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "${{ env.PYTHON_VERSION }}" }
-      - run: pip install jsonschema==4.22.0
+      - run: pip install -e .
       - run: |
           python scripts/validate_schema.py \
             --schema engine/krishiflow/schemas/fts_survey_schema.json \

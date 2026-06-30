@@ -8,12 +8,16 @@ import math
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from krishiflow import (  # noqa: E402
     Network, Junction, Reservoir, Pipe, Pump, Valve, Emitter, PumpCurve, solve,
 )
 from krishiflow.components import pipe_headloss_gradient  # noqa: E402
+
+pytestmark = pytest.mark.unit
 
 
 def test_single_pipe_headloss():
@@ -33,6 +37,7 @@ def test_single_pipe_headloss():
     print("PASS test_single_pipe_headloss  H_J =", round(res.heads["J"], 4))
 
 
+@pytest.mark.regression
 def test_two_reservoirs():
     """R1=100, R2=80 through a junction with two identical pipes -> H_J=90."""
     net = Network()

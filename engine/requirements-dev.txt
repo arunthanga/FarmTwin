@@ -1,4 +1,6 @@
 # FarmTwin dev/test dependencies
+# Primary source: pyproject.toml [project.optional-dependencies.dev].
+# Prefer from the repository root: pip install -e ".[dev]"
 -r requirements.txt
 
 ruff==0.4.4

@@ -12,7 +12,7 @@ TESTS_DIR    = engine/tests
 help:
 	@echo ""
 	@echo "FarmTwin Makefile targets:"
-	@echo "  make install          Install engine dev dependencies"
+	@echo "  make install          Install engine package and dev dependencies"
 	@echo "  make lint             Run Ruff check + format check"
 	@echo "  make format           Auto-format with Ruff"
 	@echo "  make test             Run all unit tests (TDD mode OFF)"
@@ -26,7 +26,7 @@ help:
 	@echo ""
 
 install:
-	$(PIP) install -r $(ENGINE_DIR)/requirements-dev.txt
+	$(PIP) install -e ".[dev]"
 
 lint:
 	ruff check $(ENGINE_DIR)/krishiflow $(ENGINE_DIR)/tests --output-format text

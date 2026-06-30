@@ -3,11 +3,16 @@
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from krishiflow import fao56  # noqa: E402
 
+pytestmark = pytest.mark.unit
 
+
+@pytest.mark.regression
 def test_et0_sane_range():
     et0 = fao56.et0_penman_monteith(
         t_mean=29.0, t_min=23.0, t_max=35.0, rh_mean=60.0,

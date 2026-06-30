@@ -28,7 +28,10 @@ TDD_MODE: bool = os.getenv("FARMTWIN_TDD_MODE", "off").lower() == "on"
 def pytest_configure(config: pytest.Config) -> None:
     """Register custom markers and print TDD mode banner."""
     config.addinivalue_line("markers", "unit: fast unit tests; no I/O or network")
-    config.addinivalue_line("markers", "regression: regression tests against stored baselines")
+    config.addinivalue_line(
+        "markers",
+        "regression: regression tests against analytic or stored baseline outputs",
+    )
     config.addinivalue_line(
         "markers",
         "tdd: TDD stubs — expected to fail until product code is written",

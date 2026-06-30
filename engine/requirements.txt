@@ -1,5 +1,6 @@
 # FarmTwin engine — Python dependencies
-# Pin minor versions; patch versions float for security fixes.
+# Primary source: pyproject.toml [project.dependencies].
+# Keep this legacy requirements file in sync for direct pip users.
 
 # ── Numerics (solver core) ──────────────────────────────────────────
 numpy>=1.26,<2.0

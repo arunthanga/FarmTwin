@@ -21,4 +21,4 @@ __all__ = [
     "select_motor_hp", "MOTOR_CATALOG_HP", "solve", "SolveResult",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

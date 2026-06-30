@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "farmtwin-engine"
@@ -12,12 +12,13 @@ license = { text = "Proprietary" }
 authors = [{ name = "Arun T.", email = "arun@farmtwin.ai" }]
 
 dependencies = [
-    "numpy>=1.26",
-    "scipy>=1.12",
+    "numpy>=1.26,<2.0",
+    "scipy>=1.12,<2.0",
     "jsonschema>=4.22",
     "httpx>=0.27",          # async weather API client
-    "anthropic>=0.25",      # AI code review bot
-    "PyGithub>=2.3",        # AI code review bot — GitHub API
+    "ioos-qc>=2.1",         # QARTOD B6 gate
+    "psycopg2-binary>=2.9", # time-series DB client
+    "pymoo>=0.6",           # NSGA-II design optimizer
 ]
 
 [project.optional-dependencies]
@@ -26,8 +27,18 @@ dev = [
     "pytest>=8.2",
     "pytest-cov>=5.0",
     "pytest-xdist>=3.5",
-    "ioos-qc>=2.1",         # QARTOD B6 gate
+    "anthropic>=0.25",      # AI code review bot
+    "PyGithub>=2.3",        # AI code review bot — GitHub API
+    "matplotlib>=3.8",      # postprocess plots
+    "reportlab>=4.1",       # BoM PDF generation
 ]
+
+[tool.setuptools]
+package-dir = { "" = "engine" }
+
+[tool.setuptools.packages.find]
+where = ["engine"]
+include = ["krishiflow*"]
 
 # ─── Ruff ────────────────────────────────────────────────────────────
 
@@ -93,7 +104,7 @@ python_functions = ["test_*"]
 addopts = "-v --tb=short --strict-markers -p no:warnings"
 markers = [
     "unit:        fast unit tests; no I/O or network access",
-    "regression:  regression tests against stored baseline files",
+    "regression:  regression tests against analytic or stored baseline outputs",
     "tdd:         TDD stubs — expected to fail until product code is written",
     "integration: may use files, subprocess, or network",
     "benchmark:   slow performance benchmarks",
