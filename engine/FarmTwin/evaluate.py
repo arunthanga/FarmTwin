@@ -127,6 +127,33 @@ def _zone_valve_nodes(fts: dict) -> dict[str, str]:
     return {z["id"]: z.get("valve_node") for z in fts.get("zones") or []}
 
 
+def observability_score(fts: dict) -> dict:
+    """Twin-readiness of a design's instrumentation (specifications.md §4 P4.13).
+
+    A design is observable enough for the digital twin when system flow is
+    metered and each zone has at least one state sensor. Returns the sensor
+    tallies, the fraction of zones covered, and a 0–1 ``score`` the optimizer can
+    use as a tie-break so the chosen design is twin-ready.
+    """
+    sensors = fts.get("sensors") or []
+    zones = fts.get("zones") or []
+    n_flow = sum(1 for s in sensors if s.get("type") == "flow_meter")
+    n_pressure = sum(1 for s in sensors if s.get("type") == "pressure_transducer")
+    n_moisture = sum(1 for s in sensors if s.get("type") == "soil_moisture")
+    covered = {s.get("zone_id") for s in sensors if s.get("zone_id")}
+    zones_covered = sum(1 for z in zones if z.get("id") in covered)
+    zone_coverage = zones_covered / len(zones) if zones else 0.0
+    score = 0.5 * min(n_flow, 1) + 0.5 * zone_coverage
+    return {
+        "n_flow_meters": n_flow,
+        "n_pressure_transducers": n_pressure,
+        "n_soil_moisture": n_moisture,
+        "zones_covered": zones_covered,
+        "zone_coverage": zone_coverage,
+        "score": min(1.0, score),
+    }
+
+
 def evaluate(
     fts: dict,
     *,

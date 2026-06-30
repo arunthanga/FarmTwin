@@ -12,10 +12,11 @@ from __future__ import annotations
 import copy
 
 from . import geo
+from .assimilation import CalibrationTarget, HydraulicTwin
 from .catalog import DEFAULT_COSTS, CostModel
 from .evaluate import DesignConstraints
 from .optimize import RankedDesign, optimize_design
-from .preprocess import FTSValidationError, validate_fts_json
+from .preprocess import FTSValidationError, fts_to_network, validate_fts_json
 
 
 def design_from_fts(
@@ -53,3 +54,24 @@ def design_from_fts(
         if errors:
             raise FTSValidationError("; ".join(errors))
     return optimize_design(fts, costs=costs, constraints=constraints)
+
+
+def design_twin_targets(
+    net, *, prior_std: float = 20.0, lower: float = 50.0, upper: float = 160.0
+) -> list[CalibrationTarget]:
+    """Calibration targets (pipe Hazen-Williams C) for every pipe in a design."""
+    return [
+        CalibrationTarget.pipe_coeff(pid, prior_std=prior_std, lower=lower, upper=upper)
+        for pid in net.pipes
+    ]
+
+
+def twin_from_design(fts: dict, *, prior_std: float = 20.0) -> HydraulicTwin:
+    """Seed a :class:`~FarmTwin.assimilation.HydraulicTwin` from a chosen design.
+
+    The Studio→Runtime bridge (specifications.md §4 P4.14): the as-built design's
+    pipe roughness values become the twin's priors, so the Runtime starts from
+    the design and refines roughness/clog from field sensors.
+    """
+    net = fts_to_network(fts)
+    return HydraulicTwin(net, targets=design_twin_targets(net, prior_std=prior_std))

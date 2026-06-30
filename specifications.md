@@ -11,6 +11,16 @@ This document records **what is already implemented**, **what is missing**, the
 **specification for the missing pieces**, and a **prioritized implementation
 list**. It is the single reference for closing the survey → optimized-design loop.
 
+> **Implementation status (2026-06-30): all four phases implemented.** The
+> survey → optimized pipe/valve/fitting pipeline is now end-to-end via
+> `FarmTwin.design_from_fts(fts)`. Modules added: `geo.py`, `catalog.py`,
+> `evaluate.py`, `optimize.py`, `studio_design.py`, plus `preprocess.fts_to_network`
+> / `export_epanet_inp`, `components.PumpCurve.from_fts`, `fao56.zone_design_flow`,
+> and `postprocess.priced_bom`. Tests: `engine/tests/test_design_phase1..4.py`.
+> The status markers below are retained for historical context; the gaps they
+> describe are now closed (NSGA-II runs when the `[pro]` `pymoo` extra is present,
+> otherwise a deterministic greedy + size-ladder search is used).
+
 ---
 
 ## 0. The end-to-end pipeline
@@ -21,28 +31,29 @@ GPS node locations + pump nameplate/curve + crops + constraints   (the survey)
         ▼
 [A] Survey ingest & validation ............... load_fts_json / validate_fts_json   ✅ Done
         ▼
-[B] Geometry from GPS ........................ pipe lengths, node static head      ❌ Missing
+[B] Geometry from GPS ........................ geo.fill_link_lengths / source_head   ✅ Done
         ▼
-[C] Pump spec → PumpCurve .................... 3-point curve from FTS attributes    ⚠ Partial
+[C] Pump spec → PumpCurve .................... PumpCurve.from_fts (shutoff-anchored) ✅ Done
         ▼
-[D] FTS → solvable Network ................... pumps/valves/emitters/zones/laterals ❌ Missing (bridge)
+[D] FTS → solvable Network ................... preprocess.fts_to_network             ✅ Done
         ▼
-[E] Demand model ............................. FAO-56 design flow per zone/emitter  ⚠ Partial
+[E] Demand model ............................. fao56.zone_design_flow + scenarios    ✅ Done
         ▼
-[F] Candidate evaluation (inner loop) ........ solve → EU/DU, velocity, duty, cost  ⚠ Partial
+[F] Candidate evaluation (inner loop) ........ evaluate.evaluate (constraints+objs)  ✅ Done
         ▼
-[G] Catalogs + cost model .................... pipe sizes, prices, energy ₹         ❌ Missing
+[G] Catalogs + cost model .................... catalog.py (PipeSpec, CostModel)      ✅ Done
         ▼
-[H] Decision space + optimizer (NSGA-II) ..... search diameters/valves/fittings     ❌ Missing
+[H] Decision space + optimizer (NSGA-II) ..... optimize.optimize_design (+greedy)    ✅ Done
         ▼
-[I] Rank & select top 2–3 .................... least-cost / most-uniform / balanced ❌ Missing
+[I] Rank & select top 2–3 .................... optimize._rank (knee)                 ✅ Done
         ▼
-[J] Priced BoM + layout/EPANET export ........ generate_bom (aggregation only)      ⚠ Partial
+[J] Priced BoM + EPANET export ............... postprocess.priced_bom / export_inp   ✅ Done
         ▼
-[K] Orchestration ............................ design_from_fts(fts) → RankedDesigns ❌ Missing
+[K] Orchestration ............................ studio_design.design_from_fts(fts)    ✅ Done
 ```
 
 Legend: ✅ Done · ⚠ Partial (primitives exist, not wired/complete) · ❌ Missing.
+(Status as of 2026-06-30 — all stages implemented; see the banner above.)
 
 ---
 

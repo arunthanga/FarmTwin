@@ -12,6 +12,34 @@ Date format: YYYY-MM-DD.
 
 Changes merged to `master` but not yet assigned a release tag.
 
+### Added — Studio design optimization (survey → best pipe/valve/fitting config — 2026-06-30)
+
+End-to-end implementation of `specifications.md` (all 4 phases):
+
+- `engine/FarmTwin/geo.py` — GPS geometry: haversine/3-D segment lengths,
+  `polyline_length_m`, `source_head_m`, `fill_link_lengths` (Stage B).
+- `components.PumpCurve.from_fts` / `from_three_points` — fit a pump curve from
+  FTS nameplate attributes (shutoff/design points) (Stage C).
+- `preprocess.fts_to_network` — bridge an FTS survey into a solvable `Network`
+  (pump node-split, pipes with fittings, zones as pressure-dependent emitters);
+  `preprocess.export_epanet_inp` — write a design as EPANET `.inp` (Stages D, J).
+- `fao56.zone_design_flow` — peak-ET zone design flow (Stage E).
+- `engine/FarmTwin/catalog.py` — commercial `PipeSpec` catalog (uPVC/HDPE),
+  `CostModel`, `capital_cost`, `season_energy_cost` (Stage G).
+- `engine/FarmTwin/evaluate.py` — `ZoneScenario`/`build_scenarios` (simultaneous
+  zones), `DesignConstraints` from FTS, `evaluate()` → feasibility + objective
+  vector (cost/energy/EU/yield), `observability_score` (Stages F, P4.13).
+- `engine/FarmTwin/optimize.py` — diameter decision space, deterministic
+  greedy + size-ladder search, optional NSGA-II (`pymoo`) proposals, knee-based
+  ranking → top-3 `RankedDesign` (lowest-cost/highest-uniformity/balanced) with
+  priced BoM (Stages H, I).
+- `postprocess.priced_bom` — Bill of Materials with per-line and total INR (Stage J).
+- `engine/FarmTwin/studio_design.py` — `design_from_fts(fts)` orchestration and
+  `twin_from_design(fts)` Studio→Runtime twin-prior handoff (Stages K, P4.14).
+- Tests: `engine/tests/test_design_phase1..4.py` (geometry, pump curve,
+  FTS→Network solve, demand, catalog/cost, scenarios, evaluate, optimizer
+  ranking + determinism, priced BoM, EPANET round-trip, observability, twin handoff).
+
 ### To be released in v0.5.0 (engine modules restored after merge — 2026-06-30)
 
 #### Added — engine modules (were emptied during a merge conflict)

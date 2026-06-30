@@ -37,6 +37,11 @@ FarmTwin/
 │   │   ├── richards.py            # van Genuchten–Mualem soil column (SciPy optional)
 │   │   ├── commissioning.py       # DevEUI → FTS registration + sign-off
 │   │   ├── assimilation.py        # Digital-twin EKF: fine-tune params from sensors
+│   │   ├── geo.py                 # GPS → pipe lengths + source head
+│   │   ├── catalog.py             # Commercial pipe catalog + cost model
+│   │   ├── evaluate.py            # Scenarios, constraints, design objective vector
+│   │   ├── optimize.py            # Diameter search (greedy + NSGA-II) → top-3 designs
+│   │   ├── studio_design.py       # design_from_fts(): survey → ranked priced designs
 │   │   └── schemas/
 │   │       └── fts_survey_schema.json   # JSON Schema for FTS v1.0
 │   │
