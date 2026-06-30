@@ -1,5 +1,24 @@
-numpy>=1.21
-# Optional, only for post-processing plots:
-matplotlib>=3.4
-# Optional, speeds up large sparse solves (the MVP runs on numpy alone):
-scipy>=1.7
+# FarmTwin engine — Python dependencies
+# Pin minor versions; patch versions float for security fixes.
+
+# ── Numerics (solver core) ──────────────────────────────────────────
+numpy>=1.26,<2.0
+scipy>=1.12,<2.0
+
+# ── Data quality ────────────────────────────────────────────────────
+ioos-qc>=2.1
+
+# ── HTTP (weather APIs) ─────────────────────────────────────────────
+httpx>=0.27
+
+# ── Schema validation ───────────────────────────────────────────────
+jsonschema>=4.22
+
+# ── Time-series DB client ───────────────────────────────────────────
+psycopg2-binary>=2.9
+
+# ── Optimisation (NSGA-II) ──────────────────────────────────────────
+pymoo>=0.6
+
+# ── Dev / test ──────────────────────────────────────────────────────
+# Install with: pip install -r requirements.txt -r requirements-dev.txt

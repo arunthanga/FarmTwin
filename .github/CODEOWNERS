@@ -1,0 +1,23 @@
+# FarmTwin CODEOWNERS
+# These owners are automatically requested for review on PRs.
+
+# Global fallback
+*                          @arunthanga
+
+# Physics engine — require explicit review for any solver change
+/engine/krishiflow/solver.py      @arunthanga
+/engine/krishiflow/headloss.py    @arunthanga
+/engine/krishiflow/fao56.py       @arunthanga
+/engine/krishiflow/richards.py    @arunthanga
+/engine/krishiflow/transient.py   @arunthanga
+/engine/krishiflow/surface.py     @arunthanga
+
+# Requirements (single source of truth) — always needs owner sign-off
+/docs/requirements.md             @arunthanga
+
+# CI pipeline
+/.github/workflows/               @arunthanga
+
+# Schema
+/engine/krishiflow/schemas/       @arunthanga
+/docs/survey-schema.md            @arunthanga

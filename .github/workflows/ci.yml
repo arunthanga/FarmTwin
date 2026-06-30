@@ -1,0 +1,181 @@
+name: FarmTwin CI
+
+on:
+  push:
+    branches: ["master", "develop", "feature/**", "fix/**", "tdd/**"]
+  pull_request:
+    branches: ["master", "develop"]
+  workflow_dispatch:
+    inputs:
+      tdd_mode:
+        description: "TDD mode (on=red phase, off=must pass)"
+        required: false
+        default: "off"
+        type: choice
+        options: ["on", "off"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  FARMTWIN_TDD_MODE: >-
+    ${{ (startsWith(github.ref,'refs/heads/tdd/') ||
+         github.event.inputs.tdd_mode == 'on') && 'on' || 'off' }}
+
+jobs:
+  # ── 1. Lint ───────────────────────────────────────────────────────
+  lint:
+    name: "Lint (Ruff)"
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
+      - run: pip install ruff==0.4.4
+      - id: ruff
+        run: |
+          ruff check engine/krishiflow engine/tests --output-format github \
+            2>&1 | tee ruff_output.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        with: { name: ruff-output, path: ruff_output.txt }
+      - run: ruff format --check engine/
+      - if: steps.ruff.outputs.exit_code != '0'
+        run: |
+          echo "Ruff errors found — AI review bot will attempt auto-fix on PRs"
+          exit 1
+
+  # ── 2. AI Code Review (PRs only) ─────────────────────────────────
+  ai-review:
+    name: "AI Code Review & Auto-Fix"
+    runs-on: ubuntu-22.04
+    needs: [lint]
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.head_ref }}", token: "${{ secrets.GITHUB_TOKEN }}" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
+      - run: pip install ruff==0.4.4 anthropic==0.25.8 pygithub==2.3.0
+      - uses: actions/download-artifact@v4
+        with: { name: ruff-output }
+        continue-on-error: true
+      - id: fix
+        run: |
+          ruff check engine/ --fix --select E,W,F,I,UP,C4,SIM
+          ruff format engine/
+          git diff --quiet && echo "changes=false" >> "$GITHUB_OUTPUT" \
+                          || echo "changes=true"  >> "$GITHUB_OUTPUT"
+      - if: steps.fix.outputs.changes == 'true'
+        run: |
+          git config user.name  "FarmTwin AI Bot"
+          git config user.email "bot@farmtwin.ai"
+          git add -A
+          git commit -m "ci(ai-review): Ruff auto-fix [skip ci]"
+          git push
+      - env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN:       ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER:          ${{ github.event.pull_request.number }}
+          REPO:               ${{ github.repository }}
+        run: python scripts/ai_code_review.py
+
+  # ── 3. TDD tests ─────────────────────────────────────────────────
+  test-tdd:
+    name: "TDD (mode=${{ env.FARMTWIN_TDD_MODE }})"
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
+      - run: pip install -r engine/requirements-dev.txt
+      - id: tdd
+        env: { FARMTWIN_TDD_MODE: "${{ env.FARMTWIN_TDD_MODE }}" }
+        run: |
+          cd engine
+          python -m pytest tests/ -m tdd --tb=short -v \
+            --junitxml=tdd_results.xml 2>&1 | tee tdd_out.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
+      - run: |
+          if [ "${{ env.FARMTWIN_TDD_MODE }}" = "on" ]; then
+            echo "TDD ON — failures are expected (red phase) ✓"; exit 0
+          else
+            exit ${{ steps.tdd.outputs.exit_code }}
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: tdd-results, path: engine/tdd_results.xml }
+
+  # ── 4. Unit tests ─────────────────────────────────────────────────
+  test-unit:
+    name: "Unit Tests"
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
+      - run: pip install -r engine/requirements-dev.txt
+      - env: { FARMTWIN_TDD_MODE: "off" }
+        run: |
+          cd engine
+          python -m pytest tests/ -m "unit and not tdd" \
+            --cov=krishiflow --cov-report=xml --cov-report=term-missing \
+            --cov-fail-under=80 --tb=short -n auto --junitxml=unit_results.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: unit-results, path: "engine/{unit_results.xml,coverage.xml}" }
+
+  # ── 5. Regression tests ──────────────────────────────────────────
+  test-regression:
+    name: "Regression Tests"
+    runs-on: ubuntu-22.04
+    needs: [test-unit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip }
+      - run: pip install -r engine/requirements-dev.txt
+      - env: { FARMTWIN_TDD_MODE: "off" }
+        run: |
+          cd engine
+          python -m pytest tests/ -m regression --tb=long -v \
+            --junitxml=regression_results.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: regression-results, path: engine/regression_results.xml }
+
+  # ── 6. Schema validation ─────────────────────────────────────────
+  validate-schema:
+    name: "FTS Schema Validation"
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ env.PYTHON_VERSION }}" }
+      - run: pip install jsonschema==4.22.0
+      - run: |
+          python scripts/validate_schema.py \
+            --schema engine/krishiflow/schemas/fts_survey_schema.json \
+            --docs   docs/examples/eruthempathy_pilot.fts.json
+
+  # ── 7. Summary ───────────────────────────────────────────────────
+  summary:
+    name: "CI Summary"
+    runs-on: ubuntu-22.04
+    needs: [lint, test-tdd, test-unit, test-regression, validate-schema]
+    if: always()
+    steps:
+      - run: |
+          echo "FarmTwin CI — ${{ github.ref_name }} — TDD=${{ env.FARMTWIN_TDD_MODE }}"
+          echo "lint:             ${{ needs.lint.result }}"
+          echo "test-tdd:         ${{ needs.test-tdd.result }}"
+          echo "test-unit:        ${{ needs.test-unit.result }}"
+          echo "test-regression:  ${{ needs.test-regression.result }}"
+          echo "validate-schema:  ${{ needs.validate-schema.result }}"

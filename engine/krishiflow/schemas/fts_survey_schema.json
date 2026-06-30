@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://farmtwin.ai/schemas/fts-survey/1.0",
+  "title": "FarmTwin Survey (FTS) v1.0",
+  "description": "Schema for FarmTwin farm survey export/import format. See docs/survey-schema.md.",
+  "type": "object",
+  "required": ["schema_version", "survey_id", "farm_id", "created_at", "surveyed_by",
+               "farm", "water_source", "nodes", "links", "zones", "sensors",
+               "weather", "design_constraints"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0" },
+    "survey_id":      { "type": "string", "format": "uuid" },
+    "farm_id":        { "type": "string", "format": "uuid" },
+    "created_at":     { "type": "string", "format": "date-time" },
+    "updated_at":     { "type": "string", "format": "date-time" },
+    "sync_status":    { "type": "string", "enum": ["draft","synced","conflict","pending_review"] },
+    "surveyed_by": {
+      "type": "object",
+      "required": ["name", "phone", "role"],
+      "properties": {
+        "name":  { "type": "string" },
+        "phone": { "type": "string", "pattern": "^\\+[1-9]\\d{7,14}$" },
+        "role":  { "type": "string", "enum": ["installer","agronomist","farmer","admin"] }
+      }
+    },
+    "farm": {
+      "type": "object",
+      "required": ["name", "village", "district", "state", "area_ha"],
+      "properties": {
+        "area_ha": { "type": "number", "minimum": 0.01, "maximum": 500 },
+        "soil_type_primary": {
+          "type": "string",
+          "enum": ["sandy","sandy_loam","loam","clay_loam","clay",
+                   "red_laterite","black_cotton","alluvial"]
+        }
+      }
+    },
+    "nodes": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id","type","location"],
+        "properties": {
+          "id":   { "type": "string" },
+          "type": { "type": "string",
+                    "enum": ["reservoir","pump","junction","prv","psv","fcv",
+                             "zone_valve","filter","venturi","air_valve","flush_valve"] },
+          "location": {
+            "type": "object",
+            "required": ["lat","lon","elevation_m"],
+            "properties": {
+              "lat":         { "type": "number", "minimum": -90,   "maximum": 90 },
+              "lon":         { "type": "number", "minimum": -180,  "maximum": 180 },
+              "elevation_m": { "type": "number", "minimum": -10,   "maximum": 3000 }
+            }
+          }
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id","type","from_node","to_node","internal_diameter_m","length_m"],
+        "properties": {
+          "internal_diameter_m": { "type": "number", "minimum": 0.005, "maximum": 0.5 },
+          "length_m":            { "type": "number", "minimum": 0.1,   "maximum": 5000 }
+        }
+      }
+    },
+    "zones": { "type": "array", "minItems": 1 },
+    "sensors": { "type": "array" },
+    "design_constraints": {
+      "type": "object",
+      "properties": {
+        "min_eu_pct": { "type": "number", "minimum": 70, "maximum": 100 }
+      }
+    }
+  }
+}
