@@ -12,6 +12,44 @@ Date format: YYYY-MM-DD.
 
 Changes merged to `master` but not yet assigned a release tag.
 
+### To be released in v0.5.0 (engine modules restored after merge — 2026-06-30)
+
+#### Added — engine modules (were emptied during a merge conflict)
+
+- `engine/krishiflow/quality.py` — QARTOD-style B1–B6 data-quality gate
+  (gross-range, climatological range, spike, rate-of-change, flat-line, Hampel
+  median±k·MAD), `run_b6_gate`, battery-health and adaptive spike-threshold
+  calibration. Dependency-free, edge-runnable.
+- `engine/krishiflow/commissioning.py` — `register_sensor_from_deveui`
+  (DevEUI QR onboarding) and a measured-vs-designed commissioning sign-off.
+- `engine/krishiflow/transient.py` — pure-NumPy MOC water-hammer reference
+  (validated vs Joukowsky); optional **TSNet** backend for full-network transients.
+- `engine/krishiflow/richards.py` — van Genuchten–Mualem closures + mass-
+  conservative method-of-lines column (openRE); optional SciPy BDF integrator.
+- `engine/krishiflow/agronomy.py` — GDD phenology + FAO-33 yield + Maas-Hoffman
+  salinity.
+- `engine/krishiflow/surface.py` — Kostiakov-Lewis infiltration + volume-balance
+  advance (Walker).
+
+#### Added — schema, BoM, EPANET I/O
+
+- `preprocess.py` — `load_fts_json` + `validate_fts_json` (rules V01–V18),
+  KoboToolbox→FTS converter, and EPANET `.inp` import now using **WNTR** when
+  installed (falls back to a built-in minimal parser).
+- `postprocess.py` — `generate_bom` (pipes by material/diameter + component counts).
+
+#### Changed — technology decisions (SSOT)
+
+- `docs/requirements.md` §5.2–5.4 / §9.2 / §15: transient, surface, Richards and
+  QC now ship as Python references with validated OSS wired in as an optional
+  `[pro]` extra (`wntr`, `tsnet`, `pymoo`, `pyfao56`, `ioos-qc`); dedicated C
+  kernels deferred until profiling shows the Python/OSS path misses targets.
+- Removed the duplicate lowercase `changelog.md` (case-collision with `CHANGELOG.md`).
+
+#### Fixed
+
+- Full engine test suite green again: **69 passed** (was 6 failed / 54 skipped).
+
 ### To be released in v0.4.0 (this session — 2026-06-29)
 
 #### Added — CI / Code Review / TDD / Schema
