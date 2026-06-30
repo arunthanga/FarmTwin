@@ -9,5 +9,5 @@ pytest-cov>=5.0
 pytest-xdist>=3.5
 anthropic>=0.25
 PyGithub>=2.3
-matplotlib>=3.8     # postprocess plots
-reportlab>=4.1      # BoM PDF generation
+scipy>=1.12,<2.0    # exercise the richards integrator in tests/demo
+matplotlib>=3.8     # exercise postprocess plots in tests/demo

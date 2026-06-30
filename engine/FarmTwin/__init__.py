@@ -6,6 +6,26 @@ a FAO-56 agronomy layer, and pre/post-processing for irrigation design and
 digital-twin operation.
 """
 
+# Domain submodules — the implemented engine surface. Imported here so the
+# public package API matches the implemented structure. Each only hard-imports
+# NumPy at module load; SciPy/matplotlib/WNTR/TSNet are lazy-imported on use.
+from . import (
+    agronomy,
+    commissioning,
+    components,
+    emitters,
+    fao56,
+    headloss,
+    network,
+    params,
+    postprocess,
+    preprocess,
+    quality,
+    richards,
+    solver,
+    surface,
+    transient,
+)
 from .components import (
     K_LIBRARY,
     MOTOR_CATALOG_HP,
@@ -28,6 +48,7 @@ from .network import (
 from .solver import SolveResult, solve
 
 __all__ = [
+    # Hydraulic network model + solver (top-level convenience exports)
     "Network",
     "Junction",
     "Reservoir",
@@ -45,6 +66,22 @@ __all__ = [
     "MOTOR_CATALOG_HP",
     "solve",
     "SolveResult",
+    # Implemented domain submodules
+    "agronomy",
+    "commissioning",
+    "components",
+    "emitters",
+    "fao56",
+    "headloss",
+    "network",
+    "params",
+    "postprocess",
+    "preprocess",
+    "quality",
+    "richards",
+    "solver",
+    "surface",
+    "transient",
 ]
 
 __version__ = "0.2.0"
