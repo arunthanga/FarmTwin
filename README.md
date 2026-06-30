@@ -22,7 +22,7 @@ FarmTwin/
 ├── engine/                        # Shared physics core (FarmTwin)
 │   ├── FarmTwin/                # Python package — all solvers
 │   │   ├── __init__.py
-│   │   ├── params.py              # Live ParameterSet (A0 principle)
+│   │   ├── params.py              # Live ParameterSet (A0) + LiveParameter metadata
 │   │   ├── solver.py              # GGA hydraulic solver (Todini & Pilati 1988)
 │   │   ├── headloss.py            # Hazen-Williams + Darcy-Weisbach
 │   │   ├── components.py          # Pumps, valves, filters, venturi
@@ -36,6 +36,7 @@ FarmTwin/
 │   │   ├── surface.py             # Kostiakov-Lewis + volume-balance advance
 │   │   ├── richards.py            # van Genuchten–Mualem soil column (SciPy optional)
 │   │   ├── commissioning.py       # DevEUI → FTS registration + sign-off
+│   │   ├── assimilation.py        # Digital-twin EKF: fine-tune params from sensors
 │   │   └── schemas/
 │   │       └── fts_survey_schema.json   # JSON Schema for FTS v1.0
 │   │

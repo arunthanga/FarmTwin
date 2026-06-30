@@ -11,6 +11,7 @@ digital-twin operation.
 # NumPy at module load; SciPy/matplotlib/WNTR/TSNet are lazy-imported on use.
 from . import (
     agronomy,
+    assimilation,
     commissioning,
     components,
     emitters,
@@ -25,6 +26,12 @@ from . import (
     solver,
     surface,
     transient,
+)
+from .assimilation import (
+    AssimilationResult,
+    CalibrationTarget,
+    HydraulicTwin,
+    Observation,
 )
 from .components import (
     K_LIBRARY,
@@ -45,6 +52,7 @@ from .network import (
     Valve,
     VenturiLink,
 )
+from .params import LiveParameter, ParameterSet
 from .solver import SolveResult, solve
 
 __all__ = [
@@ -66,8 +74,16 @@ __all__ = [
     "MOTOR_CATALOG_HP",
     "solve",
     "SolveResult",
+    # Live parametrization + digital-twin assimilation
+    "ParameterSet",
+    "LiveParameter",
+    "HydraulicTwin",
+    "CalibrationTarget",
+    "Observation",
+    "AssimilationResult",
     # Implemented domain submodules
     "agronomy",
+    "assimilation",
     "commissioning",
     "components",
     "emitters",
