@@ -1,25 +1,15 @@
-# FarmTwin engine — Python dependencies
+# FarmTwin engine — core Python dependencies
 # Primary source: pyproject.toml [project.dependencies].
-# Keep this legacy requirements file in sync for direct pip users.
+# Keep this legacy mirror in sync for direct pip users.
+#
+# The core engine stays lean (R-NFR-9): only what the implemented engine
+# imports at runtime. Optional features live in pyproject extras:
+#   pip install -e ".[science]"  # scipy — richards adaptive ODE integrator
+#   pip install -e ".[viz]"      # matplotlib — postprocess plots
+#   pip install -e ".[pro]"      # wntr, tsnet, pymoo, pyfao56, ioos-qc backends
 
 # ── Numerics (solver core) ──────────────────────────────────────────
 numpy>=1.26,<2.0
-scipy>=1.12,<2.0
 
-# ── Data quality ────────────────────────────────────────────────────
-ioos-qc>=2.1
-
-# ── HTTP (weather APIs) ─────────────────────────────────────────────
-httpx>=0.27
-
-# ── Schema validation ───────────────────────────────────────────────
+# ── Schema validation (FTS survey schema) ───────────────────────────
 jsonschema>=4.22
-
-# ── Time-series DB client ───────────────────────────────────────────
-psycopg2-binary>=2.9
-
-# ── Optimisation (NSGA-II) ──────────────────────────────────────────
-pymoo>=0.6
-
-# ── Dev / test ──────────────────────────────────────────────────────
-# Install with: pip install -r requirements.txt -r requirements-dev.txt

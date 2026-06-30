@@ -30,12 +30,12 @@ FarmTwin/
 │   │   ├── preprocess.py          # FTS JSON → solver network
 │   │   ├── postprocess.py         # Results → EU/DU and optional plots
 │   │   ├── fao56.py               # FAO-56 Penman-Monteith ET₀ + dual Kc
-│   │   ├── quality.py             # B6 QC gate (QARTOD + Hampel) [planned]
-│   │   ├── agronomy.py            # Crop catalogue, FAO-33 yield model [planned]
-│   │   ├── transient.py           # MOC water-hammer solver [planned]
-│   │   ├── surface.py             # Zero-inertia Saint-Venant [planned]
-│   │   ├── richards.py            # Richards unsaturated flow [planned]
-│   │   ├── commissioning.py       # QR-scan DevEUI → FTS registration [planned]
+│   │   ├── quality.py             # B1–B6 QC gate (QARTOD + Hampel)
+│   │   ├── agronomy.py            # GDD phenology + FAO-33 yield + Maas-Hoffman
+│   │   ├── transient.py           # MOC water-hammer reference (TSNet optional)
+│   │   ├── surface.py             # Kostiakov-Lewis + volume-balance advance
+│   │   ├── richards.py            # van Genuchten–Mualem soil column (SciPy optional)
+│   │   ├── commissioning.py       # DevEUI → FTS registration + sign-off
 │   │   └── schemas/
 │   │       └── fts_survey_schema.json   # JSON Schema for FTS v1.0
 │   │
@@ -76,10 +76,8 @@ FarmTwin/
 │   │   ├── 0001-two-product-one-engine.md
 │   │   ├── 0002-c-solver-cores.md
 │   │   └── 0003-lorawan-in865.md
-│   ├── examples/
-│   │   └── eruthempathy_pilot.fts.json   # Pilot farm survey (valid FTS v1.0)
-│   ├── business/                  # Business docs (grants, MoUs, funding)
-│   └── whitepapers/               # Cached PDFs of reference white papers
+│   └── examples/
+│       └── eruthempathy_pilot.fts.json   # Pilot farm survey (valid FTS v1.0)
 │
 ├── mvp/                           # Browser-based MVP demo (no build step)
 │   └── index.html
