@@ -457,17 +457,17 @@ and the demo).
 | Zero-flow regularization | `headloss.py` | **Partial** | Confirm Elhay–Simpson |
 | Control valves PRV/PSV/FCV | `solver.py` | **Planned** | TCV + open/closed done |
 | Live parameters | `params.py` | **Planned** | Underpins twin write-back |
-| Transient / water hammer | `transient.py` | **Planned** | C++ + MOC/FVM |
-| Surface irrigation | `surface.py` | **Planned** | C++ + Preissmann |
-| Soil water (Richards) | `richards.py` | **Planned** | Python→C++ |
-| Agronomy + yield | `agronomy/` | **Planned** | Crop DB, GDD, FAO-33 |
+| Transient / water hammer | `transient.py` | **Partial** | Python MOC ref (vs Joukowsky); optional TSNet; C deferred |
+| Surface irrigation | `surface.py` | **Partial** | Python ref: Kostiakov-Lewis + volume-balance; C/Preissmann deferred |
+| Soil water (Richards) | `richards.py` | **Partial** | Python ref: van Genuchten + method-of-lines (SciPy) |
+| Agronomy + yield | `agronomy.py` | **Partial** | GDD + FAO-33 + Maas-Hoffman |
 | Component CFD (offline) | OpenFOAM | **Planned** | Feeds K/emitter library |
 | Optimizer | `optimize.py` | **Planned** | pymoo NSGA-II/III |
 | Digital twin / assimilation | `twin/` | **Planned** | EKF/EnKF |
-| QC | `quality/qc.py` | **Planned** | `ioos_qc` (QARTOD) |
+| QC | `quality.py` | **Done** | B1-B6 + Hampel; `ioos_qc` optional backend |
 | Weather providers | `weather/` | **Planned** | POWER/Open-Meteo/IMD |
 | Edge / IoT / control | `edge/`, `control/`, `cloud/` | **Planned** | LoRa, MQTT, solar |
-| EPANET `.inp` I/O | — | **Planned** | Interop + validation |
+| EPANET `.inp` I/O | `preprocess.py` | **Partial** | WNTR-backed when installed; minimal built-in parser fallback |
 | FreeCAD workbench | — | **Planned** | JSON round-trip → viewer → workbench |
 | Pre/post PWA + i18n | — | **Planned** | Farmer + installer UX |
 

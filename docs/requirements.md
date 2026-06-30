@@ -220,11 +220,11 @@ The shared engine (`engine/krishiflow`) is the single versioned library that bot
 
 **Live parameters (A0):** Hazen-Williams C per pipe, Darcy roughness ε per pipe, minor-loss K per fitting, pump curve coefficients, valve Cv, nodal demand, background leakage.
 
-### 5.2 Transient Solver — MOC (transient.py, planned)
+### 5.2 Transient Solver — MOC (transient.py — Python reference done; optional TSNet)
 
 **Algorithm:** Method of Characteristics (MOC), fixed grid with Courant condition.
 
-**Technology:** **C** (standalone library, linked into the Python engine via cffi). MOC is time-critical for surge sizing and must run faster than real-time. SuiteSparse not required here; MOC is an explicit march with only device-equation solves at boundaries.
+**Technology:** A pure-NumPy MOC reference is implemented (`transient.py`) for single-pipe surge sizing and is validated against the Joukowsky head rise. For full-network transients (bursts, surge tanks, unsteady friction) the engine uses the open-source **TSNet** package (Python MOC on a WNTR/EPANET model) as an optional `[pro]` backend. A dedicated **C** kernel (cffi) is deferred until profiling shows the Python/TSNet path misses the timing target — MOC is an explicit march with only device-equation solves at boundaries.
 
 **Mathematical reference:**
 - Wylie & Streeter (1993) *Fluid Transients in Systems*: MOC derivation, C+/C- compatibility equations, Courant stability, boundary device equations (valve closure law, pump trip with inertia, surge tank, air/relief valve)
@@ -243,11 +243,11 @@ The shared engine (`engine/krishiflow`) is the single versioned library that bot
 
 **Live parameters (A0):** wave celerity `a` (pipe material and age), unsteady-friction coefficient.
 
-### 5.3 Surface Irrigation Solver — Zero-Inertia Saint-Venant (surface.py, planned)
+### 5.3 Surface Irrigation Solver — Zero-Inertia Saint-Venant (surface.py — Python reference done)
 
 **Algorithm:** Zero-inertia simplification of 1-D Saint-Venant; Preissmann four-point implicit; Kostiakov-Lewis infiltration.
 
-**Technology:** **C** (standalone library). The Preissmann scheme requires solving a tridiagonal system per time step — trivially fast in C, but the iterative advance/recession phase and volume-balance closure loop benefit from low-overhead tight loops.
+**Technology:** A Python reference is implemented (`surface.py`): Kostiakov-Lewis infiltration with a volume-balance advance model (Walker). The full zero-inertia Preissmann scheme and a **C** kernel are the production upgrade — the tridiagonal solve per step and the iterative advance/recession loop benefit from low-overhead tight loops — validated against **WinSRFR**; deferred until needed.
 
 **Mathematical reference:**
 - Strelkoff & Katopodes (1977) *J. Irrig. Drain. Div.* ASCE 103(IR3):257-269: foundational paper deriving zero-inertia simplification for border irrigation; justifies dropping acceleration terms at low Froude number (all practical fields)
@@ -268,11 +268,11 @@ The shared engine (`engine/krishiflow`) is the single versioned library that bot
 
 **Live parameters (A0):** Kostiakov-Lewis k, a, b; Manning n; inflow rate Q₀.
 
-### 5.4 Soil Water Solver — Richards Equation (richards.py, planned)
+### 5.4 Soil Water Solver — Richards Equation (richards.py — Python reference done)
 
-**Algorithm:** Mixed-form Richards, Modified Picard iteration, van Genuchten–Mualem retention/conductivity, 1-D vertical FV/FE per zone.
+**Algorithm:** Mixed-form Richards, van Genuchten–Mualem retention/conductivity, 1-D vertical column. Reference uses a mass-conservative method of lines (openRE); Modified Picard (Celia) is the alternative implicit form.
 
-**Technology:** **C** (standalone library). Modified Picard with lumped time matrix requires a tridiagonal solve per iteration per zone. Performance is critical for the real-time twin assimilation loop (many zones, many daily steps).
+**Technology:** A Python reference is implemented (`richards.py`): van Genuchten-Mualem closures with a mass-conservative method-of-lines column, using SciPy's adaptive integrator when available (else an explicit fallback). A **C** Modified-Picard kernel (tridiagonal solve per iteration per zone) for the real-time multi-zone twin loop is deferred until profiling requires it; validate against HYDRUS-1D.
 
 **Mathematical reference:**
 - Richards (1931) *Physics* 1(5):318-333: original unsaturated flow equation
@@ -420,9 +420,9 @@ The shared engine (`engine/krishiflow`) is the single versioned library that bot
 - Parameter promotion: estimated parameters that pass a confidence check (uncertainty σ < threshold AND stable for > 7 days) are promoted to the shared core as updated priors, with governance log entry
 - Twin state logged to time-series database (TimescaleDB or InfluxDB); queryable for retrospective analysis
 
-### 9.2 Data Quality (quality/qc.py)
+### 9.2 Data Quality (quality.py)
 
-**Technology:** Python 3.11; can import `ioos_qc` package directly.
+**Technology:** Implemented in `quality.py` as a dependency-free, edge-runnable reference (the six B1–B6 checks + Hampel filter, QARTOD PASS/SUSPECT/FAIL flags). The `ioos_qc` package (QARTOD) is wired as an optional `[pro]` validation backend rather than a hard dependency, to keep the edge footprint small.
 
 **Mathematical reference:**
 - IOOS QARTOD real-time QC manuals https://ioos.noaa.gov/project/qartod/: gross-range, spike/rate-of-change, flatline, and climatology tests with PASS/SUSPECT/FAIL flags — the authoritative framework
@@ -578,9 +578,9 @@ All six must pass for PASS flag. Any failure → SUSPECT or FAIL; FAIL data excl
 | Pre-processing | Network pre-processor | Python 3.11 | Rapid prototyping; preprocess.py already exists |
 | Pre-processing | Component library | Python 3.11 | Same |
 | Solver — GGA | Core solver | **C** (libkrishiflow.so) | Performance on RPi edge; SuiteSparse CHOLMOD |
-| Solver — MOC | Transient | **C** (standalone lib) | Explicit time march; deterministic timing |
-| Solver — Surface | Zero-inertia Saint-Venant | **C** (standalone lib) | Tight advance/recession loops |
-| Solver — Richards | Soil water | **C** (standalone lib) | Tridiagonal solves; real-time twin loop |
+| Solver — MOC | Transient | Python reference (done) → **TSNet** (OSS) ; C deferred | Validated vs Joukowsky; TSNet = MOC on WNTR/EPANET for full nets |
+| Solver — Surface | Zero-inertia Saint-Venant | Python reference (done); C/Preissmann deferred | Kostiakov-Lewis + volume-balance; validate vs WinSRFR |
+| Solver — Richards | Soil water | Python reference (done, SciPy) ; C deferred | van Genuchten + method-of-lines (openRE); validate vs HYDRUS |
 | Solver — FAO-56 | ET & crop water | Python 3.11 + C (edge) | Python for Studio; C for edge runtime |
 | Optimization | NSGA-II | Python 3.11 + pymoo | Mature library; parallel eval via multiprocessing |
 | Component CFD | Offline emitter/fitting CFD | OpenFOAM 10+ | Industry-standard FVM; open source; HPC-ready |

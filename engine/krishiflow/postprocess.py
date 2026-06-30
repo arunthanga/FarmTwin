@@ -145,6 +145,45 @@ def report(net, result) -> str:
     return "\n".join(L)
 
 
+def generate_bom(fts: dict) -> dict:
+    """Generate a Bill of Materials from an FTS survey/design document (R-PRE-5).
+
+    Pipes are aggregated by ``(material, nominal_diameter_mm)`` with their total
+    length; nodes are tallied by type (pumps, valves, filters, etc.). This is
+    the procurable list the installer quotes from.
+
+    Args:
+        fts: A parsed FTS JSON document.
+
+    Returns:
+        A dict with ``pipes`` (list of aggregated pipe lines) and ``components``
+        (count per node type).
+    """
+    pipe_index: dict[tuple, dict] = {}
+    for link in fts.get("links", []):
+        material = link.get("material", "unknown")
+        dn = link.get("nominal_diameter_mm")
+        key = (material, dn)
+        entry = pipe_index.setdefault(key, {
+            "material": material,
+            "nominal_diameter_mm": dn,
+            "total_length_m": 0.0,
+            "count": 0,
+        })
+        entry["total_length_m"] += float(link.get("length_m", 0.0) or 0.0)
+        entry["count"] += 1
+
+    components: dict[str, int] = {}
+    for node in fts.get("nodes", []):
+        ntype = node.get("type", "junction")
+        components[ntype] = components.get(ntype, 0) + 1
+
+    return {
+        "pipes": list(pipe_index.values()),
+        "components": components,
+    }
+
+
 def plot_lateral_profile(net, result, path="lateral_profile.png"):
     """Plot pressure & emitter flow along an ordered E1..En lateral. Optional."""
     try:
