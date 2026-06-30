@@ -134,6 +134,39 @@ class PumpCurve:
         r_p = (h0 - h_design) / q_design**c
         return cls(h0=h0, r_p=r_p, c=c, pump_eff=pump_eff, motor_eff=motor_eff)
 
+    @classmethod
+    def from_three_points(cls, h0, q_design, h_design, pump_eff=0.70, motor_eff=0.90, c=2.0):
+        """Build a curve with a known shutoff head h0 fitted through the duty point.
+
+        With the exponent ``c`` fixed (default 2), solves ``r_p`` so the curve
+        ``h0 - r_p*Q^c`` passes through ``(q_design, h_design)``. A runout point
+        can be used by the caller to sanity-check; here it is implied by the fit.
+        """
+        if q_design <= 0:
+            raise ValueError("q_design must be > 0")
+        r_p = max((h0 - h_design) / q_design**c, 0.0)
+        return cls(h0=h0, r_p=r_p, c=c, pump_eff=pump_eff, motor_eff=motor_eff)
+
+    @classmethod
+    def from_fts(cls, attributes: dict):
+        """Build a PumpCurve from an FTS pump node's ``attributes`` block.
+
+        Uses ``curve_shutoff_m`` + ``curve_design_q_m3s``/``curve_design_h_m``
+        when available (a true shutoff-anchored fit); falls back to a single
+        design point. Nameplate efficiencies (``*_efficiency_pct``) are carried
+        through for motor sizing.
+        """
+        h0 = attributes.get("curve_shutoff_m")
+        qd = attributes.get("curve_design_q_m3s")
+        hd = attributes.get("curve_design_h_m")
+        pump_eff = float(attributes.get("pump_efficiency_pct", 70.0)) / 100.0
+        motor_eff = float(attributes.get("motor_efficiency_pct", 90.0)) / 100.0
+        if qd is None or hd is None:
+            raise ValueError("FTS pump attributes need curve_design_q_m3s and curve_design_h_m")
+        if h0 is not None:
+            return cls.from_three_points(h0, qd, hd, pump_eff=pump_eff, motor_eff=motor_eff)
+        return cls.from_design_point(qd, hd, pump_eff=pump_eff, motor_eff=motor_eff)
+
     def head_gain(self, flow):
         q = max(flow, 0.0)
         return self.h0 - self.r_p * q**self.c
