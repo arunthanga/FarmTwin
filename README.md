@@ -11,8 +11,14 @@ application. It contains the business/application artifacts and a working MVP.
 
 ## What's here
 
+Start with **[requirements.md](requirements.md)** — the single source of truth for scope,
+per-solver technology choices, white-paper references (original + latest), and the
+pre/post-processing UX. Release history is in **[changelog.md](changelog.md)**.
+
 | Path | Purpose | Plan to-do |
 | --- | --- | --- |
+| [requirements.md](requirements.md) | Single source of truth: tech per solver, white papers, personas, UX | spec |
+| [changelog.md](changelog.md) | Notable changes per release | changelog |
 | [docs/01-venture-decision.md](docs/01-venture-decision.md) | Lead-venture decision + rationale | choose-lead |
 | [docs/02-problem-statement.md](docs/02-problem-statement.md) | Problem, target user, CAE-to-agri skill map | sharpen-problem |
 | [docs/03-dpiit-ksum-registration.md](docs/03-dpiit-ksum-registration.md) | Step-by-step DPIIT + KSUM Unique ID guide | dpiit-ksum |
