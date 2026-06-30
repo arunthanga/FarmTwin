@@ -14,6 +14,7 @@ from dataclasses import dataclass
 import math
 
 from .headloss import G, resistance
+from .params import ParameterSet
 
 # 1 horsepower in kilowatts
 HP_KW = 0.7457
@@ -56,29 +57,36 @@ def sum_k(*names: str) -> float:
     return sum(k_of(n) for n in names)
 
 
-def minor_loss_m(total_k: float, diameter: float) -> float:
+def minor_loss_m(total_k: float, diameter: float, params: ParameterSet | None = None) -> float:
     """Convert total K into the coefficient m such that h_minor = m * Q*|Q|.
 
     h_minor = K * V^2 / (2 g) = K / (2 g A^2) * Q^2,  A = pi d^2 / 4.
     """
+    p = params or ParameterSet()
     area = math.pi * diameter**2 / 4.0
-    return total_k / (2.0 * G * area**2)
+    return total_k / (2.0 * p.gravity_ms2 * area**2)
 
 
 # ---------------------------------------------------------------------------
 # Pipe link evaluation (friction + minor losses)
 # ---------------------------------------------------------------------------
-def pipe_headloss_gradient(flow, length, diameter, coeff, model, total_k):
+def pipe_headloss_gradient(flow, length, diameter, coeff, model, total_k, params=None):
     """Return (headloss, gradient) for a pipe carrying signed `flow`.
 
     headloss = r*Q*|Q|^(n-1) + m*Q*|Q|   (signed, loss in direction of flow)
     gradient = n*r*|Q|^(n-1) + 2*m*|Q|    (EPANET eq. 12.8 form)
+
+    The gradient evaluates |Q| at no less than ``zero_flow_eps_m3s`` so it stays
+    bounded as Q -> 0 (Elhay-Simpson regularization); for physical flows this is
+    a no-op since the threshold (~1e-6 m^3/s) is far below any solved flow.
     """
-    r, n = resistance(model, flow, length, diameter, coeff)
-    m = minor_loss_m(total_k, diameter)
+    p = params or ParameterSet()
+    r, n = resistance(model, flow, length, diameter, coeff, p)
+    m = minor_loss_m(total_k, diameter, p)
     aq = abs(flow)
+    aq_grad = max(aq, p.zero_flow_eps_m3s)
     headloss = r * flow * aq ** (n - 1.0) + m * flow * aq
-    gradient = n * r * aq ** (n - 1.0) + 2.0 * m * aq
+    gradient = n * r * aq_grad ** (n - 1.0) + 2.0 * m * aq_grad
     # floor the gradient to avoid divide-by-zero at Q=0 in the GGA
     return headloss, max(gradient, 1e-8)
 

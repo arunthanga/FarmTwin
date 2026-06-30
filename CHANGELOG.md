@@ -31,6 +31,29 @@ Changes merged to `master` but not yet assigned a release tag.
 - `engine/FarmTwin/surface.py` — Kostiakov-Lewis infiltration + volume-balance
   advance (Walker).
 
+#### Added — live parametrization (A0) & digital-twin assimilation
+
+- `engine/FarmTwin/params.py` — `ParameterSet` is now **wired into the solver and
+  head-loss** (gravity, viscosity, Hazen-Williams factor/exponents, zero-flow
+  epsilon), removing the previously hard-coded constants; added `LiveParameter`
+  carrying value/prior/uncertainty/source/version/updated_at for governed
+  write-back (R-NFR-1).
+- `solver.solve(net, *, params=...)` and `headloss`/`components` now accept a
+  `ParameterSet`, so the digital twin can recalibrate coefficients and re-solve.
+  Default values are unchanged, so existing solutions are numerically identical.
+- Zero-flow (Elhay–Simpson) regularization applied in the pipe gradient via
+  `zero_flow_eps_m3s` (no effect on converged physical flows).
+- `engine/FarmTwin/assimilation.py` — digital-twin parameter calibration: a
+  solver-in-the-loop **iterated EKF (Gauss-Newton MAP)** that fine-tunes live
+  parameters (pipe roughness/C-factor, junction demand, emitter `k`) from sensor
+  pressures/flows. Includes QC fail-safe (drops B6 `FAIL` readings), chi-square
+  innovation gating, and `promote()` governed write-back to `LiveParameter`
+  (R-TWIN-1..3). Pure NumPy.
+- `engine/tests/test_assimilation.py` — proves `ParameterSet` changes the solved
+  head loss (A0 wiring), the EKF recovers known two-pipe roughness from synthetic
+  sensors, QC-failed readings are ignored, outliers are gated, and write-back
+  promotes only confident estimates.
+
 #### Added — schema, BoM, EPANET I/O
 
 - `preprocess.py` — `load_fts_json` + `validate_fts_json` (rules V01–V18),

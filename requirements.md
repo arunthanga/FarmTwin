@@ -69,7 +69,7 @@ Two products on **one shared, live-parametrized core** ([engine/docs/19](engine/
   products (no forked copies). *(Done for the implemented modules.)*
 - `R-PROD-2` Every physical coefficient MUST be an externally supplied, versioned
   **parameter** (the live-parametrization principle, [engine/docs/12 §A0](engine/docs/12-solver-mathematics.md)),
-  never a hard-coded constant — so the Runtime twin can re-estimate it and feed Studio. *(Planned: `params.py`.)*
+  never a hard-coded constant — so the Runtime twin can re-estimate it and feed Studio. *(Done: `params.py` `ParameterSet` is wired into the solver/head-loss.)*
 - `R-PROD-3` A Studio design MUST serialize (network JSON via `preprocess.py`) into a Runtime
   baseline config including device positions/addresses, crop assignment, and setpoints.
 
@@ -285,7 +285,7 @@ expensive yield/hydraulic objectives to cut runtime.
 - *Original:* Deb, Pratap, Agarwal & Meyarivan (2002) **NSGA-II**; Savic & Walters (1997) GANET least-cost design.
 - *Latest improvements:* Deb & Jain (2014) **NSGA-III** (many-objective); **surrogate-assisted** MO frameworks for precision-ag irrigation/fertigation, *Sci. Rep.* 13 (2023, doi:10.1038/s41598-023-27990-w); **Kriging-assisted NSGA-III** for expensive many-objective problems (2023); **NSGA-III + ANN** irrigation-limit optimization, *Water* 15(4) 783 (2023); Reca & Martínez (2006) GESTAR.
 
-### 4.12 Digital twin / data assimilation — `twin/assimilation.py` · **Planned**
+### 4.12 Digital twin / data assimilation — `assimilation.py` · **Partial**
 
 - `R-TWIN-1` Formulate a state-space model from the hydraulic+soil+agronomy equations;
   treat parameters (roughness, clog, demand, θ, Kc, van Genuchten, Ky) as **augmented states**;
@@ -454,16 +454,16 @@ and the demo).
 | Pre-processor (JSON + lateral generator) | `preprocess.py` | **Done** | JSON round-trip |
 | Post-processor (report + uniformity + duty/HP) | `postprocess.py` | **Done** | Plots optional |
 | FAO-56 ET / dual-Kc / balance | `fao56.py` | **Done** | ASCE form |
-| Zero-flow regularization | `headloss.py` | **Partial** | Confirm Elhay–Simpson |
+| Zero-flow regularization | `headloss.py` / `components.py` | **Done** | Elhay–Simpson |Q| floor at `zero_flow_eps_m3s` in the pipe gradient |
 | Control valves PRV/PSV/FCV | `solver.py` | **Planned** | TCV + open/closed done |
-| Live parameters | `params.py` | **Planned** | Underpins twin write-back |
+| Live parameters | `params.py` | **Done** | `ParameterSet` wired into solver/head-loss (A0); `LiveParameter` carries write-back provenance |
 | Transient / water hammer | `transient.py` | **Partial** | Python MOC ref (vs Joukowsky); optional TSNet; C deferred |
 | Surface irrigation | `surface.py` | **Partial** | Python ref: Kostiakov-Lewis + volume-balance; C/Preissmann deferred |
 | Soil water (Richards) | `richards.py` | **Partial** | Python ref: van Genuchten + method-of-lines (SciPy) |
 | Agronomy + yield | `agronomy.py` | **Partial** | GDD + FAO-33 + Maas-Hoffman |
 | Component CFD (offline) | OpenFOAM | **Planned** | Feeds K/emitter library |
 | Optimizer | `optimize.py` | **Planned** | pymoo NSGA-II/III |
-| Digital twin / assimilation | `twin/` | **Planned** | EKF/EnKF |
+| Digital twin / assimilation | `assimilation.py` | **Partial** | Iterated-EKF parameter calibration from sensor pressures/flows, QC fail-safe + innovation gating + governed write-back; EnKF deferred |
 | QC | `quality.py` | **Done** | B1-B6 + Hampel; `ioos_qc` optional backend |
 | Weather providers | `weather/` | **Planned** | POWER/Open-Meteo/IMD |
 | Edge / IoT / control | `edge/`, `control/`, `cloud/` | **Planned** | LoRa, MQTT, solar |

@@ -25,6 +25,7 @@ import numpy as np
 
 from . import components as comp
 from .emitters import expand_emitters
+from .params import ParameterSet
 
 
 @dataclass
@@ -38,21 +39,21 @@ class SolveResult:
     pc_warnings: list  # PC emitters outside their pressure band
 
 
-def _link_evaluator(kind, link):
+def _link_evaluator(kind, link, params):
     """Return f(Q) -> (headloss, gradient) for a real network link."""
     if kind == "pipe":
         total_k = float(link.minor_loss) + comp.sum_k(*link.fittings)
 
         def f(flow, link=link, total_k=total_k):
             return comp.pipe_headloss_gradient(
-                flow, link.length, link.diameter, link.coeff, link.model, total_k
+                flow, link.length, link.diameter, link.coeff, link.model, total_k, params
             )
 
         return f
     if kind == "pump":
         return lambda flow, link=link: link.curve.headloss_gradient(flow)
     if kind == "valve":
-        m = comp.minor_loss_m(link.k, link.diameter)
+        m = comp.minor_loss_m(link.k, link.diameter, params)
 
         def f(flow, m=m):
             aq = abs(flow)
@@ -64,13 +65,16 @@ def _link_evaluator(kind, link):
     raise ValueError(f"Unknown link kind: {kind}")
 
 
-def solve(net, *, tol=1e-8, max_iter=200, damping=1.0):
+def solve(net, *, params=None, tol=1e-8, max_iter=200, damping=1.0):
     """Solve the network. Returns a SolveResult.
 
+    params   ParameterSet of live physical constants (A0); defaults applied if
+             None, so the twin can recalibrate HW/DW coefficients and re-solve
     tol      convergence tolerance on max |dQ| (m^3/s)
     max_iter iteration cap
     damping  under-relaxation factor in (0, 1] for difficult networks
     """
+    params = params or ParameterSet()
     net.validate()
 
     # ---- assemble fixed (known-head) and unknown nodes ----
@@ -86,7 +90,7 @@ def solve(net, *, tol=1e-8, max_iter=200, damping=1.0):
     # ---- assemble link list with evaluators ----
     links = []  # (id, start, end, evaluator)
     for lid, kind, link in net.active_links():
-        links.append((lid, link.start, link.end, _link_evaluator(kind, link)))
+        links.append((lid, link.start, link.end, _link_evaluator(kind, link, params)))
     for lid, s, e, f in emit_links:
         links.append((lid, s, e, f))
     nl = len(links)
