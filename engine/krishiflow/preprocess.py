@@ -336,12 +336,23 @@ def load_fts_file(path: str) -> dict:
         return load_fts_json(json.load(fh))
 
 
-def load_epanet_inp(path: str) -> dict:
-    """Parse a minimal EPANET 2.x ``.inp`` file into a network dict.
+def epanet_backend_available() -> bool:
+    """Return True if the optional WNTR (EPANET) backend is importable."""
+    try:
+        import wntr  # noqa: F401
+    except ImportError:
+        return False
+    return True
 
-    Supports the ``[JUNCTIONS]``, ``[RESERVOIRS]`` and ``[PIPES]`` sections;
-    other sections (water quality, patterns) are ignored. This is enough to
-    round-trip steady designs from EPANET-compatible tools (IRRICAD/IrriPro).
+
+def load_epanet_inp(path: str) -> dict:
+    """Parse an EPANET 2.x ``.inp`` file into a network dict.
+
+    Uses the open-source **WNTR** package (EPANET's C engine wrapped in Python)
+    when it is installed for robust, fully-featured parsing; otherwise falls
+    back to a built-in minimal parser covering the ``[JUNCTIONS]``,
+    ``[RESERVOIRS]`` and ``[PIPES]`` sections. Either way the result lets
+    existing designs from EPANET-compatible tools (IRRICAD/IrriPro) round-trip.
 
     Args:
         path: Path to an EPANET ``.inp`` file.
@@ -349,6 +360,44 @@ def load_epanet_inp(path: str) -> dict:
     Returns:
         A dict ``{"nodes": [...], "links": [...]}``.
     """
+    if epanet_backend_available():
+        try:
+            return _load_epanet_inp_wntr(path)
+        except Exception:  # noqa: BLE001 - any WNTR parse issue -> minimal fallback
+            return _load_epanet_inp_minimal(path)
+    return _load_epanet_inp_minimal(path)
+
+
+def _load_epanet_inp_wntr(path: str) -> dict:
+    """Parse an EPANET ``.inp`` via WNTR into the FarmTwin network dict."""
+    import wntr
+
+    wn = wntr.network.WaterNetworkModel(path)
+    nodes: list[dict] = []
+    for name, node in wn.nodes():
+        node_type = type(node).__name__.replace("Node", "").lower()
+        nodes.append({
+            "id": name,
+            "type": "reservoir" if node_type == "reservoir" else (
+                "reservoir" if node_type == "tank" else "junction"),
+            "elevation_m": float(getattr(node, "elevation", 0.0) or 0.0),
+        })
+    links: list[dict] = []
+    for name, link in wn.links():
+        if type(link).__name__ != "Pipe":
+            continue
+        links.append({
+            "id": name, "from_node": link.start_node_name,
+            "to_node": link.end_node_name, "type": "pipe",
+            "length_m": float(link.length),
+            "diameter_m": float(link.diameter),
+            "c_factor": float(link.roughness),
+        })
+    return {"nodes": nodes, "links": links}
+
+
+def _load_epanet_inp_minimal(path: str) -> dict:
+    """Built-in fallback EPANET parser (JUNCTIONS/RESERVOIRS/PIPES only)."""
     nodes: list[dict] = []
     links: list[dict] = []
     section = None
