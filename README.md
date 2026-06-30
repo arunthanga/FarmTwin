@@ -142,6 +142,7 @@ CI automatically sets `FARMTWIN_TDD_MODE=on` on `tdd/**` branches and `off` on `
 | [`docs/requirements.md`](docs/requirements.md) | Single source of truth — all solver specs, tech choices, white-paper refs |
 | [`docs/coding-standards.md`](docs/coding-standards.md) | Ruff, clang-tidy, ESLint rules; TDD workflow |
 | [`docs/survey-schema.md`](docs/survey-schema.md) | FTS JSON schema; mobile survey UX design |
+| [`specifications.md`](specifications.md) | Survey (GPS + pump) → optimized pipe/valve/fitting design: gap analysis + implementation plan |
 | [`CHANGELOG.md`](CHANGELOG.md) | Version history and roadmap |
 | [`engine/docs/`](engine/docs/) | Deep-dive solver mathematics (docs 10–22) |
 
