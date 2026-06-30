@@ -29,7 +29,7 @@ install:
 	$(PIP) install -e ".[dev]"
 
 lint:
-	$(PYTHON) -m ruff check $(ENGINE_DIR)/krishiflow $(ENGINE_DIR)/tests --output-format full
+	$(PYTHON) -m ruff check $(ENGINE_DIR)/FarmTwin $(ENGINE_DIR)/tests --output-format full
 	$(PYTHON) -m ruff format --check $(ENGINE_DIR)/
 
 format:
@@ -41,7 +41,7 @@ test: test-unit
 test-unit:
 	FARMTWIN_TDD_MODE=off \
 	$(PYTHON) -m pytest $(TESTS_DIR)/ -m "unit and not tdd" \
-	  --cov=krishiflow --cov-report=term-missing --tb=short -v
+	  --cov=FarmTwin --cov-report=term-missing --tb=short -v
 
 test-tdd:
 	FARMTWIN_TDD_MODE=on \
@@ -55,7 +55,7 @@ test-regression:
 
 validate-schema:
 	$(PYTHON) scripts/validate_schema.py \
-	  --schema $(ENGINE_DIR)/krishiflow/schemas/fts_survey_schema.json \
+	  --schema $(ENGINE_DIR)/FarmTwin/schemas/fts_survey_schema.json \
 	  --docs   docs/examples/eruthempathy_pilot.fts.json
 
 baselines:

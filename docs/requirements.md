@@ -14,7 +14,7 @@
 2. [User Personas](#2-user-personas)
 3. [System Architecture](#3-system-architecture)
 4. [Pre-Processing — FarmTwin Studio](#4-pre-processing--farmtwin-studio)
-5. [Solvers — Shared Physics Core (krishiflow)](#5-solvers--shared-physics-core-krishiflow)
+5. [Solvers — Shared Physics Core (FarmTwin)](#5-solvers--shared-physics-core-FarmTwin)
 6. [Post-Processing — FarmTwin Studio Output](#6-post-processing--farmtwin-studio-output)
 7. [Runtime — FarmTwin Runtime](#7-runtime--farmtwin-runtime)
 8. [IoT & Edge Control Layer](#8-iot--edge-control-layer)
@@ -39,7 +39,7 @@ FarmTwin is a deeptech agri-digital-twin platform that applies hydraulic simulat
 | **FarmTwin Studio** | Pre-installation (one-off per farm) | Installation person / agronomist / dealer |
 | **FarmTwin Runtime** | Post-installation (continuous, always-on) | Farmer / FPO operator |
 
-The shared engine (`engine/krishiflow`) is the single versioned library that both products pin. Every physical coefficient and modeling constant in the engine is a live, externally supplied parameter — never a hard-coded value. The Runtime continuously re-estimates these parameters from field data and feeds improved priors back to the shared core; this calibration feedback loop is the venture's primary technical moat.
+The shared engine (`engine/FarmTwin`) is the single versioned library that both products pin. Every physical coefficient and modeling constant in the engine is a live, externally supplied parameter — never a hard-coded value. The Runtime continuously re-estimates these parameters from field data and feeds improved priors back to the shared core; this calibration feedback loop is the venture's primary technical moat.
 
 **Competitive positioning:** Open alternative to IRRICAD, IrriPro, WCADI (Rivulis), and HydroCalc 3.0 (Netafim) for pressurized irrigation network design, plus a WinSRFR-class surface irrigation track.
 
@@ -99,7 +99,7 @@ The shared engine (`engine/krishiflow`) is the single versioned library that bot
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                        Shared Core (engine/krishiflow)              │
+│                        Shared Core (engine/FarmTwin)              │
 │  GGA Solver | Head-Loss | Components | Emitters | FAO-56 | Params   │
 │  QC Guards  | Agronomy  | Surface    | Richards | Transient         │
 └────────────────────────┬────────────────────────┬───────────────────┘
@@ -190,7 +190,7 @@ The shared engine (`engine/krishiflow`) is the single versioned library that bot
 
 ---
 
-## 5. Solvers — Shared Physics Core (krishiflow)
+## 5. Solvers — Shared Physics Core (FarmTwin)
 
 ### 5.1 Network Hydraulic Solver — GGA (solver.py, headloss.py)
 
@@ -341,7 +341,7 @@ The shared engine (`engine/krishiflow`) is the single versioned library that bot
 
 ### 7.1 Edge Decision Engine (edge/)
 
-**Technology:** **C++ 17** executable on Raspberry Pi 4 / CM4 or equivalent ARM SBC running Debian/Raspbian. C++ chosen over Python for deterministic real-time control loop, low latency on sensor data ingest, and embeddability on ARM without full CPython. Links against the C solver core (`libkrishiflow.so`) and the C FAO-56 module.
+**Technology:** **C++ 17** executable on Raspberry Pi 4 / CM4 or equivalent ARM SBC running Debian/Raspbian. C++ chosen over Python for deterministic real-time control loop, low latency on sensor data ingest, and embeddability on ARM without full CPython. Links against the C solver core (`libFarmTwin.so`) and the C FAO-56 module.
 
 **Functional requirements:**
 
@@ -577,7 +577,7 @@ All six must pass for PASS flag. Any failure → SUSPECT or FAIL; FAIL data excl
 | Pre-processing | Farm survey app | React Native + Mapbox GL | Offline maps, GPS, cross-platform tablet |
 | Pre-processing | Network pre-processor | Python 3.11 | Rapid prototyping; preprocess.py already exists |
 | Pre-processing | Component library | Python 3.11 | Same |
-| Solver — GGA | Core solver | **C** (libkrishiflow.so) | Performance on RPi edge; SuiteSparse CHOLMOD |
+| Solver — GGA | Core solver | **C** (libFarmTwin.so) | Performance on RPi edge; SuiteSparse CHOLMOD |
 | Solver — MOC | Transient | **C** (standalone lib) | Explicit time march; deterministic timing |
 | Solver — Surface | Zero-inertia Saint-Venant | **C** (standalone lib) | Tight advance/recession loops |
 | Solver — Richards | Soil water | **C** (standalone lib) | Tridiagonal solves; real-time twin loop |

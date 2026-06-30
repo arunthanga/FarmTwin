@@ -10,7 +10,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from krishiflow import (  # noqa: E402
+from FarmTwin import (  # noqa: E402
     Emitter,
     Junction,
     Network,
@@ -24,7 +24,7 @@ from krishiflow import (  # noqa: E402
     fao56,  # noqa: E402
     solve,
 )
-from krishiflow.postprocess import plot_lateral_profile, report  # noqa: E402
+from FarmTwin.postprocess import plot_lateral_profile, report  # noqa: E402
 
 
 def build_system():
@@ -55,7 +55,7 @@ def build_system():
     )
 
     # Disc filter modeled as a valve-type minor loss (clean K ~ disc_filter).
-    from krishiflow.components import k_of
+    from FarmTwin.components import k_of
 
     net.add_valve(
         Valve(

@@ -1,4 +1,4 @@
-"""Tests for FTS survey schema validation (engine/krishiflow/schemas/).
+"""Tests for FTS survey schema validation (engine/FarmTwin/schemas/).
 
 Covers:
   - JSON schema structure validation (all required fields)
@@ -19,7 +19,7 @@ from pathlib import Path
 import pytest
 
 try:
-    from krishiflow.preprocess import (
+    from FarmTwin.preprocess import (
         load_fts_json,
         validate_fts_json,
     )
@@ -348,7 +348,7 @@ class TestFTSSchemaTDD:
 
         Not yet implemented: EPANET .inp → FTS converter in preprocess.py.
         """
-        from krishiflow.preprocess import load_epanet_inp  # type: ignore[import]
+        from FarmTwin.preprocess import load_epanet_inp  # type: ignore[import]
 
         inp_file = tmp_path / "test_network.inp"  # type: ignore[operator]
         inp_file.write_text("""\
@@ -378,7 +378,7 @@ P2    J1    R2    800     150    100
 
         Not yet implemented: POST /api/v1/surveys/kobo-ingest endpoint.
         """
-        from krishiflow.preprocess import convert_kobo_to_fts  # type: ignore[import]
+        from FarmTwin.preprocess import convert_kobo_to_fts  # type: ignore[import]
 
         kobo_payload = {
             "_id": 12345,
@@ -398,7 +398,7 @@ P2    J1    R2    800     150    100
 
         Not yet implemented: commissioning_app/qr_scanner.py → FTS sensor registration.
         """
-        from krishiflow.commissioning import register_sensor_from_deveui  # type: ignore[import]
+        from FarmTwin.commissioning import register_sensor_from_deveui  # type: ignore[import]
 
         fts = copy.deepcopy(_EXAMPLE_DOC)
         updated_fts = register_sensor_from_deveui(
@@ -417,7 +417,7 @@ P2    J1    R2    800     150    100
 
         Not yet implemented: BoM generator in postprocess.py.
         """
-        from krishiflow.postprocess import generate_bom  # type: ignore[import]
+        from FarmTwin.postprocess import generate_bom  # type: ignore[import]
 
         bom = generate_bom(valid_fts)
         materials_in_fts = {ln["material"] for ln in valid_fts["links"]}

@@ -1,6 +1,6 @@
 # FarmTwin Edge Decision Engine
 
-C++17 runtime for Raspberry Pi 4 / CM4. Links against `libkrishiflow.so`.
+C++17 runtime for Raspberry Pi 4 / CM4. Links against `libFarmTwin.so`.
 
 ## Responsibilities
 - FAO-56 daily balance + irrigation trigger decision

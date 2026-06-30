@@ -1,4 +1,4 @@
-"""Tests for krishiflow.quality (B6 data quality gate — QARTOD + Hampel).
+"""Tests for FarmTwin.quality (B6 data quality gate — QARTOD + Hampel).
 
 All six QC checks must be individually testable:
   B1 — Gross-range check
@@ -19,7 +19,7 @@ from __future__ import annotations
 import pytest
 
 try:
-    from krishiflow.quality import (
+    from FarmTwin.quality import (
         QCFlag,
         b1_gross_range,
         b2_climatological_range,
@@ -390,7 +390,7 @@ class TestQualityTDD:
 
         Not yet implemented: battery health check in quality.py.
         """
-        from krishiflow.quality import check_battery_health  # type: ignore[import]
+        from FarmTwin.quality import check_battery_health  # type: ignore[import]
 
         result = check_battery_health(voltage_v=3.1, min_voltage_v=3.2)
         assert result["alert_required"] is True
@@ -406,7 +406,7 @@ class TestQualityTDD:
         # 30 days of 15-min readings with σ ≈ 0.015 m³/m³
         import numpy as np
 
-        from krishiflow.quality import calibrate_spike_threshold  # type: ignore[import]
+        from FarmTwin.quality import calibrate_spike_threshold  # type: ignore[import]
 
         rng = np.random.default_rng(42)
         history = (0.30 + rng.normal(0, 0.015, 2880)).tolist()

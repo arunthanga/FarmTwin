@@ -3,7 +3,7 @@
 
 Usage:
     python scripts/validate_schema.py \
-        --schema engine/krishiflow/schemas/fts_survey_schema.json \
+        --schema engine/FarmTwin/schemas/fts_survey_schema.json \
         --docs   docs/examples/eruthempathy_pilot.fts.json [more...]
 """
 

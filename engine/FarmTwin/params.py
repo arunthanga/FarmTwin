@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 @dataclass
 class ParameterSet:
-    """Named physical constants for the krishiflow engine.
+    """Named physical constants for the FarmTwin engine.
 
     Every field is a live parameter — replaceable at runtime by the digital
     twin assimilation loop (see docs/requirements.md §9).

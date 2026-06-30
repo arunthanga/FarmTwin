@@ -65,7 +65,7 @@ SEQUENCING:
 ([13-...](13-sensors-and-instrumentation.md)); on missing/failed critical inputs the
 engine **fails safe** (hold or conservative schedule), never actuating on bad data.
 
-**Module:** reuses [`fao56.py`](../krishiflow/fao56.py) + [`solver.py`](../krishiflow/solver.py)
+**Module:** reuses [`fao56.py`](../FarmTwin/fao56.py) + [`solver.py`](../FarmTwin/solver.py)
 in a planned `edge/` runtime.
 
 ## E3. Wireless link (~500 m)
@@ -93,7 +93,7 @@ defaults (valves close / hold last-safe state on link loss), hardware watchdog.
   valves** (latching = near-zero idle power), optional local flow/pressure sensing,
   solar + Li-ion, IP65.
 - **Pump/motor controller:** contactor/DOL starter or Modbus-RTU VFD for 1-50 HP motors
-  (ties to motor sizing in [`components.py`](../krishiflow/components.py)). **Safety
+  (ties to motor sizing in [`components.py`](../FarmTwin/components.py)). **Safety
   interlocks:** dry-run protection (sump level/inlet pressure), thermal overload,
   phase-failure, and pump<->valve sequencing (open a zone valve before pump start; stop
   the pump before closing the last valve) to prevent deadheading and water hammer
@@ -106,7 +106,7 @@ defaults (valves close / hold last-safe state on link loss), hardware watchdog.
 A peer IoT node co-located with irrigation control.
 
 - **Hardware:** injection by venturi (modeled in
-  [`components.py`](../krishiflow/components.py)) or a dosing pump
+  [`components.py`](../FarmTwin/components.py)) or a dosing pump
   (peristaltic/diaphragm), multi-channel for N-P-K + acid; inline EC + pH probes
   downstream of the mixing point; mainline flow meter.
 - **Control:** target EC/pH and N-P-K split per crop stage come from the agronomy

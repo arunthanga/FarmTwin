@@ -34,7 +34,7 @@ The venture is two products on one shared, self-calibrating engine — see
 ## What works today (MVP)
 
 - **Steady network solver** via the Global Gradient Algorithm (Todini-Pilati),
-  the EPANET core method — `krishiflow/solver.py`.
+  the EPANET core method — `FarmTwin/solver.py`.
 - **Head loss**: Hazen-Williams and Darcy-Weisbach (Swamee-Jain `f`) —
   `headloss.py`.
 - **Component library** — `components.py`:
@@ -53,7 +53,7 @@ The venture is two products on one shared, self-calibrating engine — see
 
 ```
 engine/
-  krishiflow/        core package (solver, components, emitters, fao56, pre/post)
+  FarmTwin/        core package (solver, components, emitters, fao56, pre/post)
   examples/          demo_drip_system.py  (pump+filter+valve+venturi+lateral)
   tests/             pytest suite for solver, FAO-56, FTS schema, and QC stubs
   docs/              design docs 10-22 (architecture, math, sensors, twin, IoT,

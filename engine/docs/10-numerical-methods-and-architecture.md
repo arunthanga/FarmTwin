@@ -229,7 +229,7 @@ flowchart TB
 ## 6. Build order (what this repo delivers now)
 
 1. **GGA network solver** (steady, HW + DW) handling pipes, **pumps, valves and
-   minor losses** as generic links — `krishiflow/solver.py`.
+   minor losses** as generic links — `FarmTwin/solver.py`.
 2. **Component library**: fittings/accessories K-table (tees, elbows, valves,
    filters), pump-curve + motor-HP sizing, venturi loss element —
    `components.py`.

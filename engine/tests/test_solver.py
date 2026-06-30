@@ -11,7 +11,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from krishiflow import (  # noqa: E402
+from FarmTwin import (  # noqa: E402
     Emitter,
     Junction,
     Network,
@@ -21,7 +21,7 @@ from krishiflow import (  # noqa: E402
     Reservoir,
     solve,
 )
-from krishiflow.components import pipe_headloss_gradient  # noqa: E402
+from FarmTwin.components import pipe_headloss_gradient  # noqa: E402
 
 pytestmark = pytest.mark.unit
 

@@ -18,6 +18,6 @@ labels: enhancement
 ## Which product does this affect?
 - [ ] FarmTwin Studio (pre-install)
 - [ ] FarmTwin Runtime (operations)
-- [ ] Shared engine (krishiflow)
+- [ ] Shared engine (FarmTwin)
 - [ ] IoT / Edge firmware
 - [ ] Cloud / Dashboard

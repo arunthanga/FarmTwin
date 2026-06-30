@@ -1,7 +1,7 @@
 # 19 — Two-Product Architecture (Design Studio + Runtime) on One Shared Engine
 
 Goal: define how the venture ships as **two distinct products** built on **one shared
-physics/agronomy core** (`engine/krishiflow`), why the engine is kept shared rather
+physics/agronomy core** (`engine/FarmTwin`), why the engine is kept shared rather
 than split, and the data that flows between the products.
 
 > **Headline.** Product 1 (**FarmTwin Studio**) is used once, *before*
@@ -29,7 +29,7 @@ speak the same language.
 ## 2. Shared core vs split product layers
 
 ```
-                    Shared core (engine/krishiflow)  <----------------------------+
+                    Shared core (engine/FarmTwin)  <----------------------------+
    GGA solver | components/emitters | FAO-56 | head loss | params | qc | agronomy  |
             |                                                   |                  |  calibrated params
             v                                                   v                  |  (emitter curves,
@@ -42,9 +42,9 @@ speak the same language.
 ```
 
 **Kept shared (one versioned library):** the physics and agronomy core —
-[`solver.py`](../krishiflow/solver.py), [`components.py`](../krishiflow/components.py),
-[`emitters.py`](../krishiflow/emitters.py), [`headloss.py`](../krishiflow/headloss.py),
-[`fao56.py`](../krishiflow/fao56.py), plus the planned `params.py`, `quality/qc.py` and
+[`solver.py`](../FarmTwin/solver.py), [`components.py`](../FarmTwin/components.py),
+[`emitters.py`](../FarmTwin/emitters.py), [`headloss.py`](../FarmTwin/headloss.py),
+[`fao56.py`](../FarmTwin/fao56.py), plus the planned `params.py`, `quality/qc.py` and
 `agronomy/`. Published with **semantic versioning**; both products pin a version.
 
 **Split (product-specific layers):**
@@ -69,7 +69,7 @@ reviewable, not a silent mutation.
 
 ### 4a. Downstream: Design Studio -> Runtime (at install)
 The chosen design is serialized (network JSON via
-[`preprocess.py`](../krishiflow/preprocess.py)) and becomes the Runtime's **baseline
+[`preprocess.py`](../FarmTwin/preprocess.py)) and becomes the Runtime's **baseline
 model and configuration**:
 
 - Network topology, pipe sizes, pump curve, valve/zone layout.

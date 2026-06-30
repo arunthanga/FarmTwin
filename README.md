@@ -19,8 +19,8 @@ FarmTwin applies hydraulic simulation, agronomy science, and a digital-twin cali
 ```
 FarmTwin/
 │
-├── engine/                        # Shared physics core (krishiflow)
-│   ├── krishiflow/                # Python package — all solvers
+├── engine/                        # Shared physics core (FarmTwin)
+│   ├── FarmTwin/                # Python package — all solvers
 │   │   ├── __init__.py
 │   │   ├── params.py              # Live ParameterSet (A0 principle)
 │   │   ├── solver.py              # GGA hydraulic solver (Todini & Pilati 1988)
@@ -129,7 +129,7 @@ FARMTWIN_TDD_MODE=on  pytest tests/ -m tdd -v
 FARMTWIN_TDD_MODE=off pytest tests/ -m tdd -v
 
 # Full test run (skip TDD stubs)
-FARMTWIN_TDD_MODE=off pytest tests/ -m "unit and not tdd" --cov=krishiflow
+FARMTWIN_TDD_MODE=off pytest tests/ -m "unit and not tdd" --cov=FarmTwin
 ```
 
 CI automatically sets `FARMTWIN_TDD_MODE=on` on `tdd/**` branches and `off` on `master`.

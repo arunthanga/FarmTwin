@@ -7,7 +7,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from krishiflow import fao56  # noqa: E402
+from FarmTwin import fao56  # noqa: E402
 
 pytestmark = pytest.mark.unit
 

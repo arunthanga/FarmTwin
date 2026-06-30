@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "farmtwin-engine"
 version = "0.2.0"
-description = "FarmTwin agri-digital-twin irrigation engine (krishiflow core)"
+description = "FarmTwin agri-digital-twin irrigation engine (FarmTwin core)"
 requires-python = ">=3.11"
 readme = "engine/README.md"
 license = { text = "Proprietary" }
@@ -38,7 +38,7 @@ package-dir = { "" = "engine" }
 
 [tool.setuptools.packages.find]
 where = ["engine"]
-include = ["krishiflow*"]
+include = ["FarmTwin*"]
 
 # ─── Ruff ────────────────────────────────────────────────────────────
 
@@ -76,7 +76,7 @@ max-complexity = 10
 convention = "google"
 
 [tool.ruff.lint.isort]
-known-first-party = ["krishiflow"]
+known-first-party = ["FarmTwin"]
 force-sort-within-sections = true
 
 [tool.ruff.lint.per-file-ignores]
@@ -105,7 +105,7 @@ filterwarnings = ["error::DeprecationWarning", "error::RuntimeWarning"]
 # ─── Coverage ────────────────────────────────────────────────────────
 
 [tool.coverage.run]
-source   = ["engine/krishiflow"]
+source   = ["engine/FarmTwin"]
 omit     = ["engine/tests/*", "scripts/*"]
 branch   = true
 

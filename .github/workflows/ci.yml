@@ -36,7 +36,7 @@ jobs:
       - run: pip install -e ".[dev]"
       - id: ruff
         run: |
-          python -m ruff check engine/krishiflow engine/tests --output-format github \
+          python -m ruff check engine/FarmTwin engine/tests --output-format github \
             2>&1 | tee ruff_output.txt
           echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
         continue-on-error: true
@@ -131,7 +131,7 @@ jobs:
         run: |
           cd engine
           python -m pytest tests/ -m "unit and not tdd" \
-            --cov=krishiflow --cov-report=xml --cov-report=term-missing \
+            --cov=FarmTwin --cov-report=xml --cov-report=term-missing \
             --cov-fail-under=55 --tb=short -n auto --junitxml=unit_results.xml
       - uses: actions/upload-artifact@v4
         if: always()
@@ -167,7 +167,7 @@ jobs:
       - run: pip install -e .
       - run: |
           python scripts/validate_schema.py \
-            --schema engine/krishiflow/schemas/fts_survey_schema.json \
+            --schema engine/FarmTwin/schemas/fts_survey_schema.json \
             --docs   docs/examples/eruthempathy_pilot.fts.json
 
   # ── 7. Summary ───────────────────────────────────────────────────

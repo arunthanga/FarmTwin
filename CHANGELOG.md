@@ -86,7 +86,7 @@ Changes merged to `master` but not yet assigned a release tag.
 
 - `requirements.md` — single source of truth requirements document covering all solvers, components, UX personas, and technology choices (this session)
 - `changelog.md` — this file; established Keep-a-Changelog format
-- Specification for C-language GGA solver core (`libkrishiflow.so`) as a CPython extension for edge and high-performance Studio use
+- Specification for C-language GGA solver core (`libFarmTwin.so`) as a CPython extension for edge and high-performance Studio use
 - Specification for C-language MOC transient solver (`transient.py` backend)
 - Specification for C-language zero-inertia Saint-Venant surface irrigation solver (`surface.py` backend)
 - Specification for C-language Richards equation soil-water solver (`richards.py` backend) with Modified Picard (Celia 1990) and van Genuchten (1980) retention/conductivity
@@ -111,13 +111,13 @@ Initial engine design documents and MVP committed to `master`.
 ### Added
 
 - `engine/README.md` — engine overview: GGA solver, FAO-56 agronomy, design-doc index (docs 10–22), install/run instructions
-- `engine/krishiflow/solver.py` — steady-state GGA (Todini & Pilati 1988 / EPANET 2 method); Newton-Raphson with sparse SPD solve; validation target: two-reservoir analytic case H_J = 90 m
-- `engine/krishiflow/headloss.py` — Hazen-Williams (n=1.852) and Darcy-Weisbach (Swamee-Jain friction factor) head-loss laws
-- `engine/krishiflow/components.py` — pumps/motors (curve fitting, 1–50 HP sizing); ball/gate/check valves; filters; tees/elbows via minor-loss K library; venturi fertigation injector
-- `engine/krishiflow/emitters.py` — non-PC power-law emitters (virtual-link method) and pressure-compensating emitters
-- `engine/krishiflow/preprocess.py` — JSON network I/O; drip-lateral auto-generator
-- `engine/krishiflow/postprocess.py` — pressures, flows, velocities, emitter discharges, EU/DU(lq)/CV uniformity, pump duty + HP; optional Matplotlib plots
-- `engine/krishiflow/fao56.py` — FAO Penman-Monteith ET₀; dual crop coefficient (Kcb + Ke); root-zone water balance; net/gross irrigation requirement; emitter design flow
+- `engine/FarmTwin/solver.py` — steady-state GGA (Todini & Pilati 1988 / EPANET 2 method); Newton-Raphson with sparse SPD solve; validation target: two-reservoir analytic case H_J = 90 m
+- `engine/FarmTwin/headloss.py` — Hazen-Williams (n=1.852) and Darcy-Weisbach (Swamee-Jain friction factor) head-loss laws
+- `engine/FarmTwin/components.py` — pumps/motors (curve fitting, 1–50 HP sizing); ball/gate/check valves; filters; tees/elbows via minor-loss K library; venturi fertigation injector
+- `engine/FarmTwin/emitters.py` — non-PC power-law emitters (virtual-link method) and pressure-compensating emitters
+- `engine/FarmTwin/preprocess.py` — JSON network I/O; drip-lateral auto-generator
+- `engine/FarmTwin/postprocess.py` — pressures, flows, velocities, emitter discharges, EU/DU(lq)/CV uniformity, pump duty + HP; optional Matplotlib plots
+- `engine/FarmTwin/fao56.py` — FAO Penman-Monteith ET₀; dual crop coefficient (Kcb + Ke); root-zone water balance; net/gross irrigation requirement; emitter design flow
 - `engine/examples/demo_drip_system.py` — full demo: pump + filter + valve + venturi + lateral; generates `lateral_profile.png`
 - `engine/tests/test_solver.py` — GGA validation against hand calculations (two-reservoir analytic check)
 - `engine/tests/test_fao56.py` — FAO-56 validation
@@ -167,7 +167,7 @@ Items not yet in scope for v0.3.0 but formally planned in the design documents.
 
 ### v0.4.0 — Solver C Cores (planned)
 
-- Implement and unit-test `libkrishiflow.so` C GGA solver; cross-validate against EPANET 2 on published `.inp` test networks
+- Implement and unit-test `libFarmTwin.so` C GGA solver; cross-validate against EPANET 2 on published `.inp` test networks
 - Implement MOC transient C library; validate against Wylie & Streeter example problems and published surge-test data
 - Python cffi bindings for both C libs; replace NumPy GGA in solver.py with C backend call
 - Implement zero-flow Elhay-Simpson regularization in C core

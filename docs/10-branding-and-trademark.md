@@ -6,7 +6,7 @@
 - **Product 1 (pre-install design + optimization):** **FarmTwin Studio**
 - **Product 2 (runtime control + digital twin + fertigation):** **FarmTwin Runtime**
 - **Shared engine / core:** **FarmTwin Engine** (Python package identifier kept as
-  `krishiflow` internally to avoid breaking imports; brand-facing name is FarmTwin Engine)
+  `FarmTwin` internally to avoid breaking imports; brand-facing name is FarmTwin Engine)
 
 > Status: **chosen with a known, accepted risk** (see "FarmTwin" row below). A formal
 > trademark clearance search by a registered TM agent is still recommended before filing.
