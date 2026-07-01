@@ -12,18 +12,23 @@ digital-twin operation.
 from . import (
     agronomy,
     assimilation,
+    catalog,
     commissioning,
     components,
     emitters,
+    evaluate,
     fao56,
+    geo,
     headloss,
     network,
+    optimize,
     params,
     postprocess,
     preprocess,
     quality,
     richards,
     solver,
+    studio_design,
     surface,
     transient,
 )
@@ -33,6 +38,7 @@ from .assimilation import (
     HydraulicTwin,
     Observation,
 )
+from .catalog import DEFAULT_COSTS, PIPE_CATALOG, CostModel, PipeSpec
 from .components import (
     K_LIBRARY,
     MOTOR_CATALOG_HP,
@@ -42,6 +48,7 @@ from .components import (
     select_motor_hp,
     sum_k,
 )
+from .evaluate import DesignConstraints, DesignObjectives, DesignReport, build_scenarios
 from .network import (
     Emitter,
     Junction,
@@ -52,8 +59,11 @@ from .network import (
     Valve,
     VenturiLink,
 )
+from .optimize import RankedDesign, optimize_design
 from .params import LiveParameter, ParameterSet
+from .preprocess import fts_to_network
 from .solver import SolveResult, solve
+from .studio_design import design_from_fts, twin_from_design
 
 __all__ = [
     # Hydraulic network model + solver (top-level convenience exports)
@@ -81,21 +91,40 @@ __all__ = [
     "CalibrationTarget",
     "Observation",
     "AssimilationResult",
+    # Studio design optimization (survey -> best pipe/valve/fitting config)
+    "design_from_fts",
+    "optimize_design",
+    "fts_to_network",
+    "build_scenarios",
+    "twin_from_design",
+    "RankedDesign",
+    "DesignConstraints",
+    "DesignObjectives",
+    "DesignReport",
+    "PipeSpec",
+    "PIPE_CATALOG",
+    "CostModel",
+    "DEFAULT_COSTS",
     # Implemented domain submodules
     "agronomy",
     "assimilation",
+    "catalog",
     "commissioning",
     "components",
     "emitters",
+    "evaluate",
     "fao56",
+    "geo",
     "headloss",
     "network",
+    "optimize",
     "params",
     "postprocess",
     "preprocess",
     "quality",
     "richards",
     "solver",
+    "studio_design",
     "surface",
     "transient",
 ]

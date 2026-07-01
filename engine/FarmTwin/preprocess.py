@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import re
 
+from . import geo
 from .components import PumpCurve, Venturi
 from .network import (
     Emitter,
@@ -25,6 +26,10 @@ from .network import (
     Valve,
     VenturiLink,
 )
+
+# Pressure-head conversion: 1 kPa of water column = 1000 / (rho * g) metres.
+_G = 9.80665
+KPA_TO_M = 1000.0 / (1000.0 * _G)
 
 
 def network_from_dict(d: dict) -> Network:
@@ -392,6 +397,147 @@ def load_fts_file(path: str) -> dict:
         return load_fts_json(json.load(fh))
 
 
+# ===========================================================================
+# FTS -> solvable Network bridge (specifications.md §3.2, Stage D)
+# ===========================================================================
+
+
+def zone_emitter_count(zone: dict) -> int:
+    """Number of emitters in a zone (plants x emitters/plant, area fallback)."""
+    layout = zone.get("emitter_layout") or {}
+    crop = zone.get("crop") or {}
+    epp = int(layout.get("emitters_per_plant", 1) or 1)
+    plants = crop.get("plant_count")
+    if plants is None:
+        area = float(zone.get("area_m2", 0.0) or 0.0)
+        rs = crop.get("row_spacing_m")
+        ps = crop.get("plant_spacing_m")
+        plants = area / (float(rs) * float(ps)) if rs and ps else 0.0
+    return max(1, int(round(float(plants) * epp)))
+
+
+def zone_nominal_flow_m3s(zone: dict) -> float:
+    """Nominal zone flow (m^3/s) from emitter count x rated emitter flow."""
+    layout = zone.get("emitter_layout") or {}
+    flow_lh = float(layout.get("flow_rate_lh", 4.0) or 4.0)
+    return zone_emitter_count(zone) * flow_lh / 1000.0 / 3600.0
+
+
+def fts_to_network(
+    fts: dict,
+    *,
+    active_zones: list[str] | None = None,
+    zone_flows: dict[str, float] | None = None,
+    source_head_m: float | None = None,
+) -> Network:
+    """Build a solver ``Network`` from an FTS survey/design document.
+
+    Topology mapping (specifications.md §3.2):
+
+    - a ``reservoir`` node becomes a fixed-head ``Reservoir`` (head from
+      ``attributes.head_m``, else ``source_head_m``, else the water source);
+    - a ``pump`` node is split into ``<id>__in``/``<id>__out`` junctions joined
+      by a ``Pump`` link whose curve comes from the node attributes; links into
+      the pump attach to ``__in`` and links out attach to ``__out``;
+    - every other node becomes a ``Junction`` at its elevation;
+    - each link becomes a ``Pipe`` with its diameter / Hazen-Williams C and the
+      summed ``minor_losses`` K;
+    - each active zone is represented by a non-PC ``Emitter`` at its
+      ``valve_node`` whose ``k`` delivers the zone design flow at the layout's
+      operating pressure, so inter-zone uniformity (EU/DU) emerges from the
+      solved pressures.
+
+    Args:
+        fts: FTS document (ideally validated and length-filled, see ``geo``).
+        active_zones: zone IDs to energise (default: all zones).
+        zone_flows: optional per-zone design flow (m^3/s) overriding the nominal
+            emitter-count estimate (supplied by the demand model in Phase 2).
+        source_head_m: optional explicit source head (m).
+
+    Returns:
+        A :class:`~FarmTwin.network.Network` ready for :func:`FarmTwin.solver.solve`.
+    """
+    nodes = {n["id"]: n for n in fts.get("nodes", [])}
+    water_source = fts.get("water_source") or {}
+    net = Network()
+
+    def elevation_of(nid: str) -> float:
+        loc = nodes[nid].get("location") or {}
+        return float(loc.get("elevation_m", 0.0) or 0.0)
+
+    pump_split: dict[str, tuple[str, str]] = {}
+    for nid, node in nodes.items():
+        ntype = node.get("type", "junction")
+        elev = elevation_of(nid)
+        if ntype == "reservoir":
+            attrs = node.get("attributes") or {}
+            head = attrs.get("head_m")
+            if head is None:
+                head = source_head_m
+            if head is None:
+                head = geo.source_head_m(water_source) if water_source else elev
+            net.add_reservoir(Reservoir(id=nid, head=float(head)))
+        elif ntype == "pump":
+            in_id, out_id = f"{nid}__in", f"{nid}__out"
+            net.add_junction(Junction(id=in_id, elevation=elev))
+            net.add_junction(Junction(id=out_id, elevation=elev))
+            curve = PumpCurve.from_fts(node.get("attributes") or {})
+            net.add_pump(Pump(id=f"PUMP_{nid}", start=in_id, end=out_id, curve=curve))
+            pump_split[nid] = (in_id, out_id)
+        else:
+            net.add_junction(Junction(id=nid, elevation=elev))
+
+    for link in fts.get("links", []):
+        start = link.get("from_node")
+        end = link.get("to_node")
+        if start in pump_split:
+            start = pump_split[start][1]  # leaving a pump -> discharge node
+        if end in pump_split:
+            end = pump_split[end][0]  # entering a pump -> suction node
+        diameter = link.get("internal_diameter_m")
+        length = link.get("length_m")
+        if diameter is None or length is None:
+            raise FTSValidationError(
+                f"link {link.get('id')} needs internal_diameter_m and length_m "
+                f"(run geo.fill_link_lengths first)"
+            )
+        total_k = sum(
+            float(f.get("k", 0.0)) * float(f.get("count", 1) or 1)
+            for f in (link.get("minor_losses") or [])
+        )
+        net.add_pipe(
+            Pipe(
+                id=link["id"],
+                start=start,
+                end=end,
+                length=float(length),
+                diameter=float(diameter),
+                coeff=float(link.get("hazen_williams_c", 140.0) or 140.0),
+                minor_loss=total_k,
+                model="HW",
+            )
+        )
+
+    active = set(active_zones) if active_zones is not None else None
+    for zone in fts.get("zones", []):
+        zid = zone.get("id")
+        if active is not None and zid not in active:
+            continue
+        vnode = zone.get("valve_node")
+        if vnode not in net.junctions:
+            continue
+        q = (zone_flows or {}).get(zid)
+        if q is None:
+            q = zone_nominal_flow_m3s(zone)
+        layout = zone.get("emitter_layout") or {}
+        p_op_m = float(layout.get("operating_pressure_kpa", 100.0) or 100.0) * KPA_TO_M
+        x = 0.5  # turbulent power-law emitter exponent (network-level zone proxy)
+        k = q / (p_op_m**x) if p_op_m > 0 else 0.0
+        net.junctions[vnode].emitter = Emitter(k=k, x=x)
+
+    return net
+
+
 def epanet_backend_available() -> bool:
     """Return True if the optional WNTR (EPANET) backend is importable."""
     try:
@@ -502,6 +648,29 @@ def _load_epanet_inp_minimal(path: str) -> dict:
                     }
                 )
     return {"nodes": nodes, "links": links}
+
+
+def export_epanet_inp(net: Network, path: str) -> None:
+    """Write a solver ``Network`` as an EPANET 2.x ``.inp`` (specifications.md §3.9).
+
+    Emits the ``[JUNCTIONS]``, ``[RESERVOIRS]`` and ``[PIPES]`` sections (diameter
+    in mm, Hazen-Williams C as roughness) so a design can be verified in EPANET
+    2.2 / IRRICAD and round-trips through :func:`load_epanet_inp`.
+    """
+    lines = ["[TITLE]", "FarmTwin design export", "", "[JUNCTIONS]", ";ID\tElev"]
+    for jid, j in net.junctions.items():
+        lines.append(f"{jid}\t{j.elevation:.4f}")
+    lines += ["", "[RESERVOIRS]", ";ID\tHead"]
+    for rid, r in net.reservoirs.items():
+        lines.append(f"{rid}\t{r.head:.4f}")
+    lines += ["", "[PIPES]", ";ID\tNode1\tNode2\tLength\tDiameter\tRoughness"]
+    for pid, p in net.pipes.items():
+        lines.append(
+            f"{pid}\t{p.start}\t{p.end}\t{p.length:.4f}\t{p.diameter * 1000.0:.3f}\t{p.coeff:.1f}"
+        )
+    lines += ["", "[END]", ""]
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines))
 
 
 def convert_kobo_to_fts(payload: dict) -> dict:

@@ -184,3 +184,35 @@ def emitter_design_flow(
     volume_m3 = gross_mm / 1000.0 * area_per_emitter_m2  # m^3/day per emitter
     seconds = hours_per_day * 3600.0
     return volume_m3 / seconds if seconds > 0 else 0.0
+
+
+def zone_design_flow(
+    zone: dict,
+    *,
+    et0_peak_mm_day: float,
+    hours_per_day: float = 2.0,
+    efficiency: float = 0.9,
+    kcb: float | None = None,
+) -> float:
+    """Peak design flow (m^3/s) a zone must receive (specifications.md §3.4).
+
+    Uses the peak-season crop ET (``ETc = Kcb * ET0_peak``, rainfall ignored for
+    the design case), the zone area, and the application efficiency to size the
+    flow that the network + pump must deliver within the watering window.
+
+    Args:
+        zone: an FTS zone object (``area_m2``, ``agronomy.kcb_mid``).
+        et0_peak_mm_day: peak reference ET (mm/day) for the site.
+        hours_per_day: watering hours available to this zone in its slot.
+        efficiency: application/uniformity efficiency.
+        kcb: basal crop coefficient; defaults to the zone's ``agronomy.kcb_mid``.
+    """
+    agro = zone.get("agronomy") or {}
+    if kcb is None:
+        kcb = float(agro.get("kcb_mid", 1.0) or 1.0)
+    etc_mm = kcb * et0_peak_mm_day
+    gross_mm = gross_irrigation_depth(etc_mm, efficiency)
+    area_m2 = float(zone.get("area_m2", 0.0) or 0.0)
+    volume_m3_day = gross_mm / 1000.0 * area_m2
+    seconds = max(hours_per_day, 1e-6) * 3600.0
+    return volume_m3_day / seconds
